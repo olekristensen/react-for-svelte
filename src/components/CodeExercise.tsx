@@ -4,79 +4,109 @@ import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
-function Confetti() {
-  // Separate X (linear deceleration) and Y (parabolic arc) animations
-  // so gravity is smooth, not a hard direction change
-  const particles = Array.from({ length: 120 }, (_, i) => {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = 250 + Math.random() * 350;
-    const dx = Math.cos(angle) * speed;
-    const vy = Math.sin(angle) * speed * 0.6 - 200; // initial upward bias
-    const w = 3 + Math.random() * 5;
-    const h = w * (0.4 + Math.random() * 0.6);
-    const delay = Math.random() * 0.08;
-    const duration = 2.0 + Math.random() * 1.0;
-    const hue = 125 + Math.random() * 35;
-    const sat = 50 + Math.random() * 20;
-    const lightness = 35 + Math.random() * 30;
-    const rotation = Math.random() * 720 - 360;
-    return { dx, vy, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
-  });
+function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const box = boxRef.current;
+    if (!canvas || !box) return;
+
+    const rect = box.getBoundingClientRect();
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    // Origin: just below center of the box in viewport coords
+    const ox = rect.left + rect.width / 2;
+    const oy = rect.top + rect.height * 0.6;
+
+    const gravity = 400;
+    const friction = 0.98;
+
+    interface P {
+      x: number; y: number; vx: number; vy: number;
+      w: number; h: number; r: number; vr: number;
+      color: string; life: number; maxLife: number;
+    }
+
+    const particles: P[] = Array.from({ length: 100 }, () => {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4; // upward fan
+      const speed = 500 + Math.random() * 500;
+      const hue = 125 + Math.random() * 35;
+      const lightness = 35 + Math.random() * 30;
+      return {
+        x: ox, y: oy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        w: 3 + Math.random() * 5,
+        h: 2 + Math.random() * 4,
+        r: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 12,
+        color: `hsl(${hue}, ${55 + Math.random() * 15}%, ${lightness}%)`,
+        life: 0,
+        maxLife: 1.5 + Math.random() * 1.5,
+      };
+    });
+
+    let lastTime = performance.now();
+    let running = true;
+
+    function frame(now: number) {
+      if (!running || !canvas) return;
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.clearRect(0, 0, W, H);
+
+      // Clear the box area so particles appear behind it
+      // (we'll let the box DOM element cover this naturally)
+
+      let alive = 0;
+      for (const p of particles) {
+        p.life += dt;
+        if (p.life > p.maxLife) continue;
+        alive++;
+
+        p.vy += gravity * dt;
+        p.vx *= friction;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.r += p.vr * dt;
+
+        const alpha = Math.max(0, 1 - p.life / p.maxLife);
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.r);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+
+      if (alive > 0) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+    return () => { running = false; };
+  }, [boxRef]);
 
   return (
-    <>
-      <style>{`
-        @keyframes confetti-x {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(var(--dx)); }
-        }
-        @keyframes confetti-y {
-          0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-          100% { transform: translateY(var(--dy-end)) rotate(var(--dr)) scale(0.7); opacity: 0; }
-        }
-      `}</style>
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: 0,
-        height: 0,
-        zIndex: -1,
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
         pointerEvents: 'none',
-      }}>
-        {particles.map(p => {
-          // Parabolic Y: starts with upward velocity, gravity pulls down
-          // At t=1: y = vy*t + 0.5*g*t^2. With vy negative (up) and g positive (down)
-          // We simulate by setting the end Y and using a cubic-bezier that
-          // starts fast upward and curves into downward
-          const g = 800;
-          const dyEnd = p.vy + g; // vy + gravity over full duration
-          return (
-            // Outer div: horizontal movement (linear ease-out)
-            <div
-              key={p.id}
-              style={{
-                position: 'absolute',
-                animation: `confetti-x ${p.duration}s cubic-bezier(0, 0, 0.3, 1) ${p.delay}s forwards`,
-                '--dx': `${p.dx}px`,
-              } as React.CSSProperties}
-            >
-              {/* Inner div: vertical movement + rotation (parabolic via ease-in) */}
-              <div
-                style={{
-                  width: p.w,
-                  height: p.h,
-                  background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
-                  animation: `confetti-y ${p.duration}s cubic-bezier(0.1, 0, 0.9, 1) ${p.delay}s forwards`,
-                  '--dy-end': `${dyEnd}px`,
-                  '--dr': `${p.rotation}deg`,
-                } as React.CSSProperties}
-              />
-            </div>
-          );
-        })}
-      </div>
-    </>
+        zIndex: 0,
+      }}
+    />
   );
 }
 
@@ -634,6 +664,7 @@ export function CodeExercise({
   const [isModal, setIsModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   // Auto-save user code on change
   useEffect(() => {
@@ -784,9 +815,9 @@ export function CodeExercise({
 
   // Inline view
   return (
-    <div style={{ margin: '1.5rem 0', position: 'relative', zIndex: 0 }}>
-      {showConfetti && <Confetti />}
-      <div style={{ position: 'relative', zIndex: 1 }}>
+    <div style={{ margin: '1.5rem 0', position: 'relative' }}>
+      {showConfetti && <Confetti boxRef={boxRef} />}
+      <div ref={boxRef} style={{ position: 'relative' }}>
         <ExerciseContent
           {...sharedProps}
           isModal={false}
