@@ -9,44 +9,45 @@ interface CodeComparisonProps {
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
     <div style={{
-      marginBottom: '1.5rem',
-      marginLeft: '-1rem',
-      marginRight: '-1rem',
+      margin: '1.5rem 0',
     }}>
+      {/* Labels */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '1px',
-        background: 'var(--color-border)',
+        gap: '1.5rem',
+        marginBottom: '0.35rem',
       }}>
-        <div style={{ background: 'var(--color-bg)' }}>
-          <div style={{
-            padding: '0.4rem 0.75rem',
-            fontSize: '0.7rem',
-            fontWeight: 500,
-            color: 'var(--color-text-muted)',
-            background: 'var(--color-bg-tertiary)',
-            borderBottom: '1px solid var(--color-border)',
-          }}>
-            {svelte.filename || 'Svelte'}
-          </div>
+        <div style={{
+          fontSize: '0.72rem',
+          fontWeight: 500,
+          color: 'var(--color-text-muted)',
+        }}>
+          {svelte.filename || 'Svelte'}
+        </div>
+        <div style={{
+          fontSize: '0.72rem',
+          fontWeight: 500,
+          color: 'var(--color-text-muted)',
+        }}>
+          {react.filename || 'React'}
+        </div>
+      </div>
+
+      {/* Code blocks side by side */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '1.5rem',
+      }}>
+        <div>
           <CodeBlock
             code={svelte.code}
             language={svelte.language || 'svelte'}
             highlight={svelte.highlight}
           />
         </div>
-        <div style={{ background: 'var(--color-bg)' }}>
-          <div style={{
-            padding: '0.4rem 0.75rem',
-            fontSize: '0.7rem',
-            fontWeight: 500,
-            color: 'var(--color-text-muted)',
-            background: 'var(--color-bg-tertiary)',
-            borderBottom: '1px solid var(--color-border)',
-          }}>
-            {react.filename || 'React'}
-          </div>
+        <div>
           <CodeBlock
             code={react.code}
             language={react.language || 'tsx'}
@@ -54,15 +55,24 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
           />
         </div>
       </div>
+
+      {/* Insight note — sits directly below as a continuation */}
       {note && (
         <div style={{
-          padding: '0.75rem 1rem',
-          background: 'var(--color-accent-dim)',
-          fontSize: '0.82rem',
+          marginTop: '-0.5rem',
+          paddingTop: '0.6rem',
+          borderTop: '1px solid var(--color-accent)',
+          fontSize: '0.85rem',
           color: 'var(--color-text-secondary)',
-          lineHeight: 1.65,
+          lineHeight: 1.7,
         }}>
-          <span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--color-accent)', marginRight: '0.4rem', letterSpacing: '0.02em' }}>Insight</span>
+          <span style={{
+            fontSize: '0.7rem',
+            fontWeight: 500,
+            color: 'var(--color-accent)',
+            marginRight: '0.5rem',
+            letterSpacing: '0.02em',
+          }}>Insight</span>
           {note}
         </div>
       )}

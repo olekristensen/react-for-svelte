@@ -28,12 +28,10 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
           display: 'flex',
           alignItems: 'baseline',
           justifyContent: 'space-between',
-          padding: '0.4rem 0.75rem',
-          fontSize: '0.7rem',
+          padding: '0 0 0.3rem 0',
+          fontSize: '0.72rem',
           fontFamily: 'var(--font-mono)',
           color: 'var(--color-text-muted)',
-          background: 'var(--color-bg-tertiary)',
-          borderBottom: '1px solid var(--color-border)',
         }}>
           <span>{filename}</span>
           <button
