@@ -5,6 +5,7 @@ const STORAGE_KEY = 'rfsd-progress';
 interface ExerciseData {
   solved: boolean;
   userCode: string;
+  initialCode?: string;
   attempts: number;
 }
 

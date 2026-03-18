@@ -684,7 +684,12 @@ export function CodeExercise({
   const { saveExercise, getExercise } = useProgress();
   const savedData = getExercise(id);
 
-  const [userCode, setUserCode] = useState(savedData?.userCode || initialCode);
+  // Invalidate saved code if the template changed (e.g., exercise was updated)
+  const savedCodeIsStale = savedData?.userCode && savedData?.initialCode && savedData.initialCode !== initialCode && !savedData.solved;
+
+  const [userCode, setUserCode] = useState(
+    savedCodeIsStale ? initialCode : (savedData?.userCode || initialCode)
+  );
   const [status, setStatus] = useState<'idle' | 'correct' | 'incorrect'>(
     savedData?.solved ? 'correct' : 'idle'
   );
@@ -703,6 +708,7 @@ export function CodeExercise({
     const timer = setTimeout(() => {
       saveExercise(id, {
         userCode,
+        initialCode,
         solved: status === 'correct',
         attempts,
       });
@@ -762,12 +768,12 @@ export function CodeExercise({
       setStatus('correct');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
-      saveExercise(id, { userCode, solved: true, attempts: newAttempts });
+      saveExercise(id, { userCode, initialCode, solved: true, attempts: newAttempts });
     } else {
       setStatus('incorrect');
       setShaking(true);
       setTimeout(() => setShaking(false), 500);
-      saveExercise(id, { userCode, solved: false, attempts: newAttempts });
+      saveExercise(id, { userCode, initialCode, solved: false, attempts: newAttempts });
     }
   };
 
@@ -783,7 +789,7 @@ export function CodeExercise({
     setUserCode(primary);
     setShowSolution(true);
     setStatus('correct');
-    saveExercise(id, { userCode: primary, solved: true, attempts });
+    saveExercise(id, { userCode: primary, initialCode, solved: true, attempts });
   };
 
   const handleHint = () => {
