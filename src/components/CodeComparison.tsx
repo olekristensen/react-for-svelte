@@ -9,7 +9,8 @@ interface CodeComparisonProps {
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
     <div style={{
-      margin: '1.5rem 0',
+      margin: '1.5rem -2rem',
+      padding: '0 2rem',
       borderBottom: '1px solid var(--color-border)',
       paddingBottom: note ? 0 : '0.5rem',
     }}>
