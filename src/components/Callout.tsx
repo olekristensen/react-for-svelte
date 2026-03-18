@@ -37,7 +37,7 @@ export function Callout({ type = 'info', title, children }: CalloutProps) {
       <style>{`
         .callout-aside code {
           color: inherit !important;
-          background: none !important;
+          background: color-mix(in srgb, currentColor 8%, transparent) !important;
         }
       `}</style>
       <div style={{
