@@ -64,8 +64,8 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
       // Restore original velocity so gravity arc starts fresh from edge
       p.vx = savedVx;
       p.vy = savedVy;
-      // Stagger over ~250ms
-      p.life = -(Math.random() * 0.25);
+      // Stagger over ~750ms
+      p.life = -(Math.random() * 0.75);
 
       return p;
     });
@@ -767,7 +767,7 @@ export function CodeExercise({
     if (passed) {
       setStatus('correct');
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 1500);
+      setTimeout(() => setShowConfetti(false), 2500);
       saveExercise(id, { userCode, initialCode, solved: true, attempts: newAttempts });
     } else {
       setStatus('incorrect');
