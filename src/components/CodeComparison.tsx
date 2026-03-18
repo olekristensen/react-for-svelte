@@ -16,15 +16,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
       }}>
         <div>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
             marginBottom: '0.5rem',
-            fontSize: '0.8rem',
-            fontWeight: 600,
+            fontSize: '0.75rem',
+            fontWeight: 500,
             color: 'var(--color-text-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
           }}>
             Svelte
           </div>
@@ -37,15 +32,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         </div>
         <div>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
             marginBottom: '0.5rem',
-            fontSize: '0.8rem',
-            fontWeight: 600,
+            fontSize: '0.75rem',
+            fontWeight: 500,
             color: 'var(--color-text-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
           }}>
             React
           </div>
@@ -59,15 +49,14 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
       </div>
       {note && (
         <div style={{
-          padding: '0.75rem 1rem',
-          background: 'rgba(56, 189, 248, 0.08)',
-          border: '1px solid rgba(56, 189, 248, 0.2)',
-          borderRadius: 'var(--radius-sm)',
-          fontSize: '0.85rem',
+          paddingTop: '0.6rem',
+          marginTop: '0.5rem',
+          borderTop: '1px solid var(--color-border)',
+          fontSize: '0.82rem',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.6,
         }}>
-          <strong style={{ color: 'var(--color-accent)' }}>Insight: </strong><span style={{ color: 'var(--color-text-secondary)' }}>{note}</span>
+          <span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--color-accent)', marginRight: '0.4rem', letterSpacing: '0.02em' }}>Insight</span>{note}
         </div>
       )}
     </div>

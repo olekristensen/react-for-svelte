@@ -108,7 +108,7 @@ function ExerciseContent({
           background: '#011627',
           color: '#637777',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.82rem',
+          fontSize: '0.78rem',
           lineHeight: 1.65,
           textAlign: 'right' as const,
           userSelect: 'none' as const,
@@ -135,7 +135,7 @@ function ExerciseContent({
             background: '#011627',
             color: '#d6deeb',
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.82rem',
+            fontSize: '0.78rem',
             lineHeight: 1.65,
             padding: '1rem',
             border: 'none',
@@ -211,7 +211,7 @@ function ExerciseContent({
           </div>
           {hints.slice(0, hintIndex).map((hint, i) => (
             <div key={i} style={{
-              fontSize: '0.82rem',
+              fontSize: '0.78rem',
               color: 'var(--color-text-secondary)',
               padding: '0.2rem 0',
               paddingLeft: '1rem',
@@ -366,11 +366,11 @@ function ExerciseContent({
           style={{
             padding: '0.4rem 1rem',
             background: status === 'correct' ? 'var(--color-bg-tertiary)' : 'var(--color-accent)',
-            color: status === 'correct' ? 'var(--color-text-muted)' : '#0f172a',
+            color: status === 'correct' ? 'var(--color-text-muted)' : '#ffffff',
             border: 'none',
             borderRadius: 'var(--radius-sm)',
             fontFamily: 'var(--font-sans)',
-            fontSize: '0.82rem',
+            fontSize: '0.78rem',
             fontWeight: 600,
             cursor: status === 'correct' ? 'default' : 'pointer',
             transition: 'opacity 0.2s',
@@ -388,7 +388,7 @@ function ExerciseContent({
             border: 'none',
             borderRadius: 'var(--radius-sm)',
             fontFamily: 'var(--font-sans)',
-            fontSize: '0.82rem',
+            fontSize: '0.78rem',
             fontWeight: 500,
             cursor: hintIndex >= hints.length ? 'default' : 'pointer',
           }}
@@ -404,7 +404,7 @@ function ExerciseContent({
             border: 'none',
             borderRadius: 'var(--radius-sm)',
             fontFamily: 'var(--font-sans)',
-            fontSize: '0.82rem',
+            fontSize: '0.78rem',
             fontWeight: 500,
             cursor: 'pointer',
           }}
@@ -421,7 +421,7 @@ function ExerciseContent({
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-sm)',
               fontFamily: 'var(--font-sans)',
-              fontSize: '0.82rem',
+              fontSize: '0.78rem',
               fontWeight: 500,
               cursor: 'pointer',
               marginLeft: 'auto',

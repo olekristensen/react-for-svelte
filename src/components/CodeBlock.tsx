@@ -27,14 +27,12 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
       {filename && (
         <div style={{
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'baseline',
           justifyContent: 'space-between',
-          padding: '0.5rem 1rem',
-          background: 'var(--color-bg-tertiary)',
-          borderBottom: '1px solid var(--color-border)',
-          fontSize: '0.8rem',
+          padding: '0 0 0.3rem 0',
+          fontSize: '0.72rem',
           fontFamily: 'var(--font-mono)',
-          color: 'var(--color-text-secondary)',
+          color: 'var(--color-text-muted)',
         }}>
           <span>{filename}</span>
           <button
@@ -44,14 +42,10 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
               border: 'none',
               color: 'var(--color-text-muted)',
               cursor: 'pointer',
-              fontSize: '0.75rem',
+              fontSize: '0.72rem',
               fontFamily: 'var(--font-sans)',
-              padding: '2px 8px',
-              borderRadius: 4,
-              transition: 'color 0.2s',
+              padding: 0,
             }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
           >
             {copied ? 'Copied!' : 'Copy'}
           </button>
@@ -63,7 +57,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
             ...style,
             margin: 0,
             padding: '1rem',
-            fontSize: '0.85rem',
+            fontSize: '0.78rem',
             lineHeight: 1.65,
             overflow: 'auto',
             background: '#011627',

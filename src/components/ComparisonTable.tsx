@@ -6,12 +6,11 @@ interface ComparisonTableProps {
 
 export function ComparisonTable({ headers, rows, caption }: ComparisonTableProps) {
   return (
-    <div style={{ marginBottom: '1.5rem', overflow: 'auto' }}>
+    <div style={{ margin: '1.5rem 0', overflowX: 'auto' }}>
       {caption && (
         <div style={{
-          fontSize: '0.85rem',
-          fontWeight: 600,
-          color: 'var(--color-text-secondary)',
+          fontSize: '0.75rem',
+          color: 'var(--color-text-muted)',
           marginBottom: '0.5rem',
         }}>
           {caption}
@@ -21,19 +20,17 @@ export function ComparisonTable({ headers, rows, caption }: ComparisonTableProps
         width: '100%',
         borderCollapse: 'collapse',
         fontSize: '0.85rem',
-        lineHeight: 1.6,
       }}>
         <thead>
           <tr>
             {headers.map((h, i) => (
               <th key={i} style={{
-                padding: '0.6rem 1rem',
                 textAlign: 'left',
-                background: 'var(--color-bg-tertiary)',
-                borderBottom: '2px solid var(--color-border)',
-                fontWeight: 600,
+                padding: '0.5rem 0.75rem 0.5rem 0',
+                fontWeight: 500,
                 color: 'var(--color-text)',
-                whiteSpace: 'nowrap',
+                borderBottom: '1px solid var(--color-text-muted)',
+                fontSize: '0.82rem',
               }}>
                 {h}
               </th>
@@ -41,16 +38,17 @@ export function ComparisonTable({ headers, rows, caption }: ComparisonTableProps
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, i) => (
-            <tr key={i}>
-              {row.map((cell, j) => (
-                <td key={j} style={{
-                  padding: '0.6rem 1rem',
+          {rows.map((row, ri) => (
+            <tr key={ri}>
+              {row.map((cell, ci) => (
+                <td key={ci} style={{
+                  padding: '0.5rem 0.75rem 0.5rem 0',
+                  color: ci === 0 ? 'var(--color-text)' : 'var(--color-text-secondary)',
                   borderBottom: '1px solid var(--color-border)',
-                  color: j === 0 ? 'var(--color-text)' : 'var(--color-text-secondary)',
-                  fontWeight: j === 0 ? 500 : 400,
-                  fontFamily: j > 0 ? 'var(--font-mono)' : undefined,
-                  fontSize: j > 0 ? '0.8rem' : undefined,
+                  fontFamily: ci > 0 ? 'var(--font-mono)' : 'inherit',
+                  fontSize: ci > 0 ? '0.8rem' : '0.85rem',
+                  verticalAlign: 'top',
+                  lineHeight: 1.5,
                 }}>
                   {cell}
                 </td>

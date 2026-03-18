@@ -6,39 +6,46 @@ interface CalloutProps {
   children: ReactNode;
 }
 
-const config = {
-  info: { bg: 'rgba(96, 165, 250, 0.05)', border: 'var(--color-accent)', color: 'var(--color-accent)' },
-  warning: { bg: 'rgba(251, 191, 36, 0.05)', border: 'var(--color-warning)', color: 'var(--color-warning)' },
-  insight: { bg: 'rgba(96, 165, 250, 0.05)', border: 'var(--color-accent)', color: 'var(--color-accent)' },
-  gotcha: { bg: 'rgba(192, 96, 80, 0.05)', border: 'var(--color-error)', color: 'var(--color-error)' },
+const typeLabels: Record<string, string> = {
+  info: 'Note',
+  warning: 'Warning',
+  insight: 'Insight',
+  gotcha: 'Gotcha',
+};
+
+const typeColors: Record<string, string> = {
+  info: 'var(--color-accent)',
+  warning: 'var(--color-warning)',
+  insight: 'var(--color-accent)',
+  gotcha: 'var(--color-error)',
 };
 
 export function Callout({ type = 'info', title, children }: CalloutProps) {
-  const c = config[type];
+  const label = title || typeLabels[type];
+  const color = typeColors[type] || typeColors.info;
+
   return (
-    <div style={{
-      padding: '1rem 1.25rem',
-      background: c.bg,
-      border: 'none',
-      borderLeft: `3px solid ${c.border}`,
-      borderRadius: 'var(--radius-sm)',
-      marginBottom: '1.5rem',
-      fontSize: '0.9rem',
-      lineHeight: 1.7,
+    <aside style={{
+      margin: '1.5rem 0',
+      paddingTop: '0.75rem',
+      borderTop: `1px solid ${color}`,
     }}>
-      {title && (
-        <div style={{
-          fontWeight: 600,
-          color: c.color,
-          marginBottom: '0.35rem',
-          fontSize: '0.85rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
-        }}>
-          {title}
-        </div>
-      )}
-      <div style={{ color: 'var(--color-text-secondary)' }}>{children}</div>
-    </div>
+      <div style={{
+        fontSize: '0.7rem',
+        fontWeight: 500,
+        color,
+        marginBottom: '0.4rem',
+        letterSpacing: '0.02em',
+      }}>
+        {label}
+      </div>
+      <div style={{
+        fontSize: '0.88rem',
+        color: 'var(--color-text-secondary)',
+        lineHeight: 1.75,
+      }}>
+        {children}
+      </div>
+    </aside>
   );
 }

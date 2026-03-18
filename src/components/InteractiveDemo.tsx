@@ -10,63 +10,63 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
   const [showCode, setShowCode] = useState(false);
 
   return (
-    <div style={{
-      border: '1px solid var(--color-border)',
-      borderRadius: 'var(--radius-md)',
-      overflow: 'hidden',
-      marginBottom: '1.5rem',
-    }}>
+    <div style={{ margin: '1.5rem 0' }}>
       <div style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'baseline',
         justifyContent: 'space-between',
-        padding: '0.6rem 1rem',
-        background: 'var(--color-bg-tertiary)',
-        borderBottom: '1px solid var(--color-border)',
-        fontSize: '0.8rem',
-        fontWeight: 600,
-        color: 'var(--color-text-muted)',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
+        borderTop: '1px solid var(--color-accent)',
+        paddingTop: '0.5rem',
+        marginBottom: '0.75rem',
       }}>
-        <span>Try it: {title}</span>
+        <span style={{
+          fontSize: '0.7rem',
+          fontWeight: 500,
+          color: 'var(--color-accent)',
+          letterSpacing: '0.02em',
+        }}>
+          {title}
+        </span>
         {code && (
           <button
             onClick={() => setShowCode(v => !v)}
             style={{
               background: 'none',
-              border: '1px solid var(--color-border)',
-              color: 'var(--color-text-secondary)',
+              border: 'none',
+              color: 'var(--color-text-muted)',
               cursor: 'pointer',
-              fontSize: '0.75rem',
               fontFamily: 'var(--font-sans)',
-              padding: '3px 10px',
-              borderRadius: 4,
+              fontSize: '0.72rem',
+              padding: 0,
             }}
           >
-            {showCode ? 'Hide Code' : 'View Code'}
+            {showCode ? 'Hide code' : 'View code'}
           </button>
         )}
       </div>
+
       <div style={{
-        padding: '1.25rem',
-        background: 'var(--color-surface)',
+        padding: '1rem',
+        border: '1px solid var(--color-border)',
       }}>
         {children}
       </div>
+
       {showCode && code && (
         <pre style={{
+          marginTop: '-1px',
           padding: '1rem',
           background: '#011627',
-          fontSize: '0.8rem',
-          lineHeight: 1.6,
-          overflow: 'auto',
-          borderTop: '1px solid var(--color-border)',
+          border: '1px solid var(--color-border)',
+          borderTop: 'none',
           fontFamily: 'var(--font-mono)',
+          fontSize: '0.8rem',
+          lineHeight: 1.65,
           color: '#d6deeb',
-          margin: 0,
+          overflow: 'auto',
+          whiteSpace: 'pre-wrap',
         }}>
-          {code.trim()}
+          {code}
         </pre>
       )}
     </div>

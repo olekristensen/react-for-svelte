@@ -43,10 +43,8 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
     <article style={{ maxWidth: 'var(--content-max-width)', margin: '0 auto', width: '100%' }}>
       <header style={{ marginBottom: '2.5rem' }}>
         <div style={{
-          fontSize: '0.8rem',
+          fontSize: '0.75rem',
           color: 'var(--color-text-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
           marginBottom: '0.5rem',
         }}>
           {chapter?.section}
@@ -84,42 +82,34 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
           <button
             onClick={() => navigate(`/${prev.id}`)}
             style={{
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-md)',
-              padding: '0.75rem 1.25rem',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
               textAlign: 'left',
-              color: 'var(--color-text)',
+              color: 'var(--color-text-secondary)',
               fontFamily: 'var(--font-sans)',
-              transition: 'border-color 0.2s',
+              padding: 0,
             }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--color-accent)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
           >
-            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Previous</div>
-            <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{prev.title}</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Previous</div>
+            <div style={{ fontSize: '0.88rem' }}>{prev.title}</div>
           </button>
         ) : <div />}
         {next ? (
           <button
             onClick={() => navigate(`/${next.id}`)}
             style={{
-              background: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-md)',
-              padding: '0.75rem 1.25rem',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
               textAlign: 'right',
-              color: 'var(--color-text)',
+              color: 'var(--color-text-secondary)',
               fontFamily: 'var(--font-sans)',
-              transition: 'border-color 0.2s',
+              padding: 0,
             }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--color-accent)')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
           >
-            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Next</div>
-            <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{next.title}</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Next</div>
+            <div style={{ fontSize: '0.88rem' }}>{next.title}</div>
           </button>
         ) : <div />}
       </nav>

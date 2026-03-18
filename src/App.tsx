@@ -112,33 +112,11 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           flexShrink: 0,
         }}>
           <div style={{
-            fontWeight: 700,
-            fontSize: '1rem',
+            fontWeight: 500,
+            fontSize: '0.95rem',
             color: 'var(--color-text)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
           }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 28,
-              height: 28,
-              borderRadius: 0,
-              background: 'var(--color-accent)',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              color: '#0f172a',
-            }}>R</span>
             React for Svelte Devs
-          </div>
-          <div style={{
-            fontSize: '0.75rem',
-            color: 'var(--color-text-muted)',
-            marginTop: '0.35rem',
-          }}>
-            A comprehensive interactive guide
           </div>
         </div>
 
@@ -148,9 +126,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
               <div style={{
                 padding: '0.4rem 1.25rem',
                 fontSize: '0.7rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
+                fontWeight: 500,
                 color: section.color,
               }}>
                 {section.title}
@@ -169,21 +145,14 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                       width: '100%',
                       textAlign: 'left',
                       padding: '0.4rem 1.25rem 0.4rem 1.75rem',
-                      background: isActive ? 'var(--color-accent-dim)' : 'transparent',
+                      background: 'transparent',
                       border: 'none',
-                      borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
-                      color: isActive ? 'var(--color-text)' : 'var(--color-text-secondary)',
+                      borderLeft: isActive ? '1px solid var(--color-accent)' : '1px solid transparent',
+                      color: isActive ? 'var(--color-text)' : 'var(--color-text-muted)',
                       fontSize: '0.82rem',
                       fontFamily: 'var(--font-sans)',
                       cursor: 'pointer',
                       lineHeight: 1.5,
-                      transition: 'all 0.15s',
-                    }}
-                    onMouseEnter={e => {
-                      if (!isActive) e.currentTarget.style.background = 'var(--color-surface-hover)';
-                    }}
-                    onMouseLeave={e => {
-                      if (!isActive) e.currentTarget.style.background = 'transparent';
                     }}
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -199,11 +168,8 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                         return (
                           <span style={{
                             fontSize: '0.6rem',
-                            padding: '1px 5px',
-                            borderRadius: 10,
-                            background: allDone ? 'rgba(74, 222, 128, 0.15)' : 'var(--color-bg-tertiary)',
                             color: allDone ? 'var(--color-success)' : 'var(--color-text-muted)',
-                            fontWeight: 600,
+                            fontWeight: 400,
                             flexShrink: 0,
                           }}>
                             {solved}/{total}
@@ -342,9 +308,8 @@ export default function App() {
         top: 3,
         left: sidebarOpen ? 'var(--sidebar-width)' : 0,
         right: 0,
-        height: 'var(--header-height)',
+        height: 48,
         background: 'var(--color-bg)',
-        borderBottom: '1px solid var(--color-border)',
         display: 'flex',
         alignItems: 'center',
         padding: '0 1.5rem',
@@ -381,17 +346,13 @@ export default function App() {
           style={{
             background: 'none',
             border: 'none',
-            color: 'var(--color-text-secondary)',
+            color: 'var(--color-text-muted)',
             cursor: 'pointer',
             fontSize: '1.1rem',
             padding: '0.25rem 0.5rem',
             display: 'flex',
             alignItems: 'center',
-            borderRadius: 'var(--radius-sm)',
-            transition: 'color 0.2s',
           }}
-          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
         >
           <ThemeIcon preference={preference} />
         </button>
@@ -399,7 +360,7 @@ export default function App() {
 
       <main style={{
         marginLeft: sidebarOpen ? 'var(--sidebar-width)' : 0,
-        paddingTop: 'calc(var(--header-height) + 3px)',
+        paddingTop: 'calc(48px + 3px)',
         transition: 'margin-left 0.25s ease',
         minHeight: '100vh',
       }}>
