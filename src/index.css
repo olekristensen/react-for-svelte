@@ -1,5 +1,6 @@
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Source Serif 4', 'Georgia', serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Dark theme (default) */
@@ -87,6 +88,10 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
 }
 
 a {

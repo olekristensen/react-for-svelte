@@ -33,13 +33,12 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
           {chapter?.section}
         </div>
         <h1 style={{
-          fontSize: '2rem',
+          fontSize: '2.2rem',
           fontWeight: 700,
+          fontFamily: 'var(--font-serif)',
           lineHeight: 1.2,
           marginBottom: '0.75rem',
-          background: 'linear-gradient(135deg, var(--color-text), var(--color-accent))',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          color: 'var(--color-text)',
         }}>
           {chapter?.title}
         </h1>
