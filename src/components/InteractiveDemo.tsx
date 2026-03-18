@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { CodeBlock } from './CodeBlock';
 
 interface InteractiveDemoProps {
   title: string;
@@ -53,21 +54,9 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
       </div>
 
       {showCode && code && (
-        <pre style={{
-          marginTop: '-1px',
-          padding: '1rem',
-          background: 'var(--color-code-bg)',
-          border: '1px solid var(--color-border)',
-          borderTop: 'none',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.8rem',
-          lineHeight: 1.65,
-          color: 'var(--color-code-text)',
-          overflow: 'auto',
-          whiteSpace: 'pre-wrap',
-        }}>
-          {code}
-        </pre>
+        <div style={{ marginTop: '-1px' }}>
+          <CodeBlock code={code} language="tsx" />
+        </div>
       )}
     </div>
   );
