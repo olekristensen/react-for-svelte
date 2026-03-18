@@ -13,7 +13,7 @@ function Column({ label, code, language, highlight }: {
   highlight?: number[];
 }) {
   return (
-    <div style={{ minWidth: 0, flex: 1 }}>
+    <div style={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
       <div style={{
         fontSize: '0.72rem',
         fontWeight: 500,
@@ -22,7 +22,9 @@ function Column({ label, code, language, highlight }: {
       }}>
         {label}
       </div>
-      <CodeBlock code={code} language={language} highlight={highlight} noMargin />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <CodeBlock code={code} language={language} highlight={highlight} noMargin stretch />
+      </div>
     </div>
   );
 }

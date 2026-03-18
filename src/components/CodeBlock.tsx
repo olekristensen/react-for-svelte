@@ -7,9 +7,10 @@ interface CodeBlockProps {
   filename?: string;
   highlight?: number[];
   noMargin?: boolean;
+  stretch?: boolean;
 }
 
-export function CodeBlock({ code, language = 'tsx', filename, highlight = [], noMargin }: CodeBlockProps) {
+export function CodeBlock({ code, language = 'tsx', filename, highlight = [], noMargin, stretch }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -23,6 +24,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
       overflow: 'hidden',
       border: '1px solid var(--color-border)',
       marginBottom: noMargin ? 0 : '1rem',
+      ...(stretch ? { flex: 1, display: 'flex', flexDirection: 'column' as const } : {}),
     }}>
       {filename && (
         <div style={{
@@ -61,6 +63,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
             lineHeight: 1.65,
             overflow: 'auto',
             background: '#011627',
+            ...(stretch ? { flex: 1 } : {}),
           }}>
             {tokens.map((line, i) => {
               const lineProps = getLineProps({ line });
