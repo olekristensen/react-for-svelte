@@ -480,8 +480,8 @@ function ExerciseContent({
     </div>
   ) : null;
 
-  // When solved, override all accent/code colors to green tones
-  const solvedOverrides = status === 'correct' ? {
+  // Override accent/code colors based on status
+  const statusOverrides = status === 'correct' ? {
     '--color-accent': isLightMode ? '#2a7a2a' : '#5aaa5a',
     '--color-accent-dim': isLightMode ? '#e0f0e0' : '#1a2e1a',
     '--color-code-keyword': isLightMode ? '#1a6a1a' : '#50c050',
@@ -489,6 +489,14 @@ function ExerciseContent({
     '--color-code-string': isLightMode ? '#3a6a3a' : '#40a040',
     '--color-code-comment': isLightMode ? '#508050' : '#4a8a5a',
     '--color-code-text': isLightMode ? '#1a1c1a' : '#b8d0b8',
+  } as React.CSSProperties : status === 'incorrect' ? {
+    '--color-accent': isLightMode ? '#a04030' : '#c06050',
+    '--color-accent-dim': isLightMode ? '#f0e0e0' : '#2e1a1a',
+    '--color-code-keyword': isLightMode ? '#a03020' : '#d06050',
+    '--color-code-function': isLightMode ? '#b04030' : '#e07060',
+    '--color-code-string': isLightMode ? '#8a3a2a' : '#b05040',
+    '--color-code-comment': isLightMode ? '#805050' : '#8a5a5a',
+    '--color-code-text': isLightMode ? '#1a1c1a' : '#d0b8b8',
   } as React.CSSProperties : {};
 
   return (
@@ -501,7 +509,7 @@ function ExerciseContent({
       display: 'flex',
       flexDirection: 'column' as const,
       height: isModal ? '100%' : undefined,
-      ...solvedOverrides,
+      ...statusOverrides,
     }}>
       <style>{`
         @keyframes shake {
