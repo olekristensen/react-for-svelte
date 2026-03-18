@@ -127,13 +127,14 @@ function App() {
 }`;
 
 function BuggyThemeDemo() {
-  const [theme, setTheme] = useState('light');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_theme, setTheme] = useState('light');
   return (
     <div>
       <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>Toggle Theme</button>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
-        <p style={{ color: 'var(--color-text)' }}>Current: light <span style={{ color: '#ef4444' }}>(always light — no Provider!)</span></p>
-        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Button says: {theme}, but child reads default</p>
+        <p style={{ color: 'var(--color-text)' }}>Current: light <span style={{ color: '#ef4444' }}>(theme does not change)</span></p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Toggle button works, but the child ignores it</p>
       </div>
     </div>
   );

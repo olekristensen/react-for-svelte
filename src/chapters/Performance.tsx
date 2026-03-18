@@ -58,7 +58,7 @@ function FixedExpensiveParent() {
       </button>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
         <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
-        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>No flash — memoized props prevent re-render</p>
+        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>No flash — list stays stable</p>
       </div>
     </div>
   );

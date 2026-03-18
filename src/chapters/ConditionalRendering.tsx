@@ -216,7 +216,7 @@ function BuggyNotifications() {
       </div>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
         {count && <p style={{ color: 'var(--color-text)' }}>You have {count} new messages</p>}
-        {count === 0 && <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>Bug: renders "0" instead of nothing</p>}
+        {count === 0 && <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>Shows a stray value when there are no messages</p>}
       </div>
     </div>
   );

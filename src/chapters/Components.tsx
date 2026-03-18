@@ -23,7 +23,7 @@ function BuggyUserList() {
           <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: 'var(--color-error)', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
         </div>
       ))}
-      <p style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.4rem' }}>Notes stay in the wrong row after deleting — key=index shuffles DOM</p>
+      <p style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.4rem' }}>Notes stay in the wrong row after deleting</p>
     </div>
   );
 }
@@ -45,7 +45,7 @@ function FixedUserList() {
           <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: 'var(--color-error)', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
         </div>
       ))}
-      <p style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Notes stay with the correct person — key=id is stable</p>
+      <p style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Notes stay with the correct person</p>
     </div>
   );
 }
