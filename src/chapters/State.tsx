@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo } from 'react';
+import { useState } from 'react';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 interface CalloutProps {
   type?: 'info' | 'warning' | 'insight' | 'gotcha';

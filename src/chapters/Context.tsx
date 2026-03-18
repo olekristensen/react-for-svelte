@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useMemo, useCallback, ReactNode } from 'react';
+import { useState, createContext, useContext, useMemo, useCallback, type ReactNode } from 'react';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';

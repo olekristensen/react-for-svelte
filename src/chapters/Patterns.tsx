@@ -1,5 +1,4 @@
 import { ChapterLayout } from '../components/ChapterLayout';
-import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
