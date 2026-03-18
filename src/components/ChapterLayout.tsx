@@ -50,7 +50,9 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
           overflow: hidden;
           opacity: 0;
           transition: width 0.2s ease, opacity 0.2s ease;
-          vertical-align: baseline;
+          vertical-align: text-bottom;
+          position: relative;
+          top: -0.05em;
         }
         .nav-link:hover .nav-arrow {
           opacity: 1;
