@@ -396,28 +396,19 @@ function ExerciseContent({
           flexShrink: 0,
         }}>
           <div>Not quite — try again. {attempts >= 2 && hints.length > hintIndex && 'Try using a hint!'}</div>
-          {testErrors.length > 0 && (
-            <div style={{ marginTop: '0.4rem', fontSize: '0.78rem', fontWeight: 400 }}>
-              {testErrors.map((err, i) => (
-                <div key={i} style={{ marginTop: '0.3rem', display: 'flex', gap: '0.4rem', alignItems: 'baseline' }}>
-                  <span style={{
-                    fontSize: '0.6rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.05em',
-                    lineHeight: 1,
-                    color: 'var(--color-error)',
-                    background: 'color-mix(in srgb, var(--color-error) 12%, transparent)',
-                    padding: '0.2em 0.4em 0.15em',
-                    flexShrink: 0,
-                    verticalAlign: 'baseline',
-                    position: 'relative',
-                    top: '-0.05em',
-                  }}>FAILED</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>{err}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          {testErrors.length > 0 && (() => {
+            // Extract only runtime errors (not test names) for a vaguer, educational message
+            const runtimeErrors = testErrors
+              .map(e => { const m = e.match(/— (.+)/); return m ? m[1] : null; })
+              .filter((e): e is string => e !== null && e !== 'did not produce the expected result');
+            return runtimeErrors.length > 0 ? (
+              <div style={{ marginTop: '0.4rem', fontSize: '0.78rem', fontWeight: 400, fontFamily: 'var(--font-mono)', color: 'var(--color-text-secondary)' }}>
+                {runtimeErrors.map((err, i) => (
+                  <div key={i} style={{ marginTop: '0.15rem' }}>{err}</div>
+                ))}
+              </div>
+            ) : null;
+          })()}
         </div>
       )}
 
