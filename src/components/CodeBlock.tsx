@@ -108,15 +108,15 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
                       const isPunctuation = types.includes('punctuation') || types.includes('plain');
 
                       if (isComment) {
-                        tokenProps.style = { color: 'var(--color-text-muted)', fontStyle: 'italic', fontWeight: 400 };
+                        tokenProps.style = { color: 'var(--color-code-comment)', fontStyle: 'italic', fontWeight: 400 };
                       } else if (isKeyword) {
-                        tokenProps.style = { color: 'var(--color-accent)', fontWeight: 700 };
+                        tokenProps.style = { color: 'var(--color-code-keyword)', fontWeight: 700 };
                       } else if (isFunction) {
-                        tokenProps.style = { color: 'var(--color-accent)', fontWeight: 500 };
+                        tokenProps.style = { color: 'var(--color-code-function)', fontWeight: 500 };
                       } else if (isString) {
-                        tokenProps.style = { color: 'var(--color-code-text)', fontWeight: 400 };
+                        tokenProps.style = { color: 'var(--color-code-string)', fontWeight: 400 };
                       } else if (isPunctuation) {
-                        tokenProps.style = { color: 'var(--color-text-muted)', fontWeight: 400 };
+                        tokenProps.style = { color: 'var(--color-code-comment)', fontWeight: 400 };
                       } else {
                         tokenProps.style = { color: 'var(--color-code-text)', fontWeight: 400 };
                       }
