@@ -100,13 +100,25 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
                   >
                     {line.map((token, key) => {
                       const tokenProps = getTokenProps({ token });
-                      const isComment = token.types.includes('comment');
+                      const types = token.types;
+                      const isComment = types.includes('comment');
+                      const isKeyword = types.includes('keyword') || types.includes('tag') || types.includes('builtin') || types.includes('operator') || types.includes('boolean') || types.includes('important');
+                      const isString = types.includes('string') || types.includes('attr-value') || types.includes('template-string');
+                      const isFunction = types.includes('function') || types.includes('class-name');
+                      const isPunctuation = types.includes('punctuation') || types.includes('plain');
+
                       if (isComment) {
-                        tokenProps.style = {
-                          ...tokenProps.style,
-                          color: isLight ? '#3a7a3a' : '#50a0e0',
-                          fontStyle: 'italic',
-                        };
+                        tokenProps.style = { color: 'var(--color-text-muted)', fontStyle: 'italic', fontWeight: 400 };
+                      } else if (isKeyword) {
+                        tokenProps.style = { color: 'var(--color-accent)', fontWeight: 700 };
+                      } else if (isFunction) {
+                        tokenProps.style = { color: 'var(--color-accent)', fontWeight: 500 };
+                      } else if (isString) {
+                        tokenProps.style = { color: 'var(--color-code-text)', fontWeight: 400 };
+                      } else if (isPunctuation) {
+                        tokenProps.style = { color: 'var(--color-text-muted)', fontWeight: 400 };
+                      } else {
+                        tokenProps.style = { color: 'var(--color-code-text)', fontWeight: 400 };
                       }
                       return <span key={key} {...tokenProps} />;
                     })}
