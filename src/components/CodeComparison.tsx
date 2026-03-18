@@ -33,8 +33,14 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
     <div style={{
       margin: '1.5rem 0',
-      marginLeft: 'min(-3rem, calc((100% - 100vw + var(--sidebar-width) + 5rem) / 2))',
-      marginRight: 'min(-3rem, calc((100% - 100vw + var(--sidebar-width) + 5rem) / 2))',
+      width: 'fit-content',
+      minWidth: '100%',
+      maxWidth: 'calc(100% + 6rem)',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      position: 'relative',
+      left: '50%',
+      transform: 'translateX(-50%)',
     }}>
       {/* Code columns */}
       <div style={{
