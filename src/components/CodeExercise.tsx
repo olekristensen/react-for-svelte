@@ -5,64 +5,55 @@ import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 function Confetti() {
-  // Spawn particles along the box edges so they're immediately
-  // visible on the background — no delay crossing the box interior
+  // Spawn at center, fast initial burst to clear the box quickly,
+  // then slow drift + gravity once outside
   const particles = Array.from({ length: 120 }, (_, i) => {
-    // Pick a random edge: 0=top, 1=right, 2=bottom, 3=left
-    const edge = Math.floor(Math.random() * 4);
-    // Start position relative to center, just inside the edge
-    // Box is roughly 100% wide × ~400px tall; use percentages
-    let startX = 0, startY = 0;
-    if (edge === 0) { startX = (Math.random() - 0.5) * 100; startY = -50; } // top
-    else if (edge === 1) { startX = 50; startY = (Math.random() - 0.5) * 100; } // right
-    else if (edge === 2) { startX = (Math.random() - 0.5) * 100; startY = 50; } // bottom
-    else { startX = -50; startY = (Math.random() - 0.5) * 100; } // left
-
-    // Fly outward from the edge + fall with gravity
-    const outward = 80 + Math.random() * 200;
-    const dx = (startX > 0 ? 1 : startX < 0 ? -1 : (Math.random() - 0.5)) * outward;
-    const dyUp = -(50 + Math.random() * 150);
-    const dyDown = 150 + Math.random() * 350;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 300 + Math.random() * 400;
+    const dx = Math.cos(angle) * speed;
+    const dyLaunch = Math.sin(angle) * speed * 0.7 - 150; // bias upward
+    const dyGravity = 200 + Math.random() * 400;
 
     const w = 3 + Math.random() * 5;
     const h = w * (0.4 + Math.random() * 0.6);
-    const delay = Math.random() * 0.15;
-    const duration = 1.4 + Math.random() * 1.2;
+    const delay = Math.random() * 0.08; // very tight stagger for explosive feel
+    const duration = 1.6 + Math.random() * 1.0;
     const hue = 125 + Math.random() * 35;
     const sat = 50 + Math.random() * 20;
     const lightness = 35 + Math.random() * 30;
     const rotation = Math.random() * 720 - 360;
 
-    return { startX, startY, dx, dyUp, dyDown, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
+    return { dx, dyLaunch, dyGravity, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
   });
 
   return (
     <>
       <style>{`
-        @keyframes confetti-edge {
+        @keyframes confetti-burst {
           0% {
             transform: translate(0, 0) rotate(0deg);
             opacity: 1;
           }
-          20% {
-            transform: translate(calc(var(--dx) * 0.3), var(--dy-up)) rotate(calc(var(--dr) * 0.3));
+          10% {
+            transform: translate(calc(var(--dx) * 0.5), calc(var(--dy-launch) * 0.5)) rotate(calc(var(--dr) * 0.2));
             opacity: 1;
           }
-          80% {
-            opacity: 0.7;
+          40% {
+            transform: translate(var(--dx), var(--dy-launch)) rotate(calc(var(--dr) * 0.6));
+            opacity: 1;
           }
           100% {
-            transform: translate(var(--dx), var(--dy-down)) rotate(var(--dr));
+            transform: translate(var(--dx), calc(var(--dy-launch) + var(--dy-gravity))) rotate(var(--dr));
             opacity: 0;
           }
         }
       `}</style>
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
+        top: '50%',
+        left: '50%',
+        width: 0,
+        height: 0,
         zIndex: -1,
         pointerEvents: 'none',
       }}>
@@ -71,15 +62,13 @@ function Confetti() {
             key={p.id}
             style={{
               position: 'absolute',
-              left: `calc(50% + ${p.startX}%)`,
-              top: `calc(50% + ${p.startY}%)`,
               width: p.w,
               height: p.h,
               background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
-              animation: `confetti-edge ${p.duration}s cubic-bezier(0.1, 0, 0.7, 1) ${p.delay}s forwards`,
+              animation: `confetti-burst ${p.duration}s cubic-bezier(0.05, 0.8, 0.3, 1) ${p.delay}s forwards`,
               '--dx': `${p.dx}px`,
-              '--dy-up': `${p.dyUp}px`,
-              '--dy-down': `${p.dyDown}px`,
+              '--dy-launch': `${p.dyLaunch}px`,
+              '--dy-gravity': `${p.dyGravity}px`,
               '--dr': `${p.rotation}deg`,
             } as React.CSSProperties}
           />
