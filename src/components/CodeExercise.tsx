@@ -5,19 +5,19 @@ import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 function Confetti() {
-  const particles = Array.from({ length: 60 }, (_, i) => {
-    // Spread particles across the full width, biased to edges
-    const xSpread = (Math.random() - 0.5) * 800;
-    // Initial upward velocity then gravity pulls down
-    const yLaunch = -(100 + Math.random() * 200); // up
-    const yGravity = 300 + Math.random() * 400;     // fall distance
-    const size = 3 + Math.random() * 5;
-    const delay = Math.random() * 0.4;
-    const duration = 1.8 + Math.random() * 1.2;
-    const hue = 130 + Math.random() * 30;
-    const lightness = 40 + Math.random() * 25;
-    const rotation = Math.random() * 720 - 360;
-    return { xSpread, yLaunch, yGravity, size, delay, duration, hue, lightness, rotation, id: i };
+  const particles = Array.from({ length: 100 }, (_, i) => {
+    const xSpread = (Math.random() - 0.5) * 1200;
+    const yLaunch = -(200 + Math.random() * 350);
+    const yGravity = 400 + Math.random() * 600;
+    const w = 4 + Math.random() * 6;
+    const h = w * (0.4 + Math.random() * 0.6);
+    const delay = Math.random() * 0.3;
+    const duration = 2.0 + Math.random() * 1.5;
+    const hue = 125 + Math.random() * 35;
+    const sat = 50 + Math.random() * 20;
+    const lightness = 35 + Math.random() * 30;
+    const rotation = Math.random() * 1080 - 540;
+    return { xSpread, yLaunch, yGravity, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
   });
 
   return (
@@ -25,30 +25,33 @@ function Confetti() {
       <style>{`
         @keyframes confetti-fall {
           0% {
-            transform: translate(0, 0) rotate(0deg);
+            transform: translate(0, 0) rotate(0deg) scale(1);
             opacity: 1;
           }
-          30% {
-            transform: translate(calc(var(--cx) * 0.5), var(--cy-up)) rotate(calc(var(--cr) * 0.4));
+          25% {
+            transform: translate(calc(var(--cx) * 0.4), var(--cy-up)) rotate(calc(var(--cr) * 0.3));
             opacity: 1;
+          }
+          75% {
+            opacity: 0.8;
           }
           100% {
-            transform: translate(var(--cx), var(--cy-down)) rotate(var(--cr));
+            transform: translate(var(--cx), var(--cy-down)) rotate(var(--cr)) scale(0.6);
             opacity: 0;
           }
         }
       `}</style>
       <div style={{
         position: 'absolute',
-        inset: 0,
+        inset: '-200px -400px',
         zIndex: -1,
         pointerEvents: 'none',
         overflow: 'visible',
       }}>
         <div style={{
           position: 'absolute',
-          top: '40%',
-          left: '50%',
+          top: 'calc(50% + 200px)',
+          left: 'calc(50% + 400px)',
           width: 0,
           height: 0,
         }}>
@@ -57,10 +60,10 @@ function Confetti() {
               key={p.id}
               style={{
                 position: 'absolute',
-                width: p.size,
-                height: p.size * (0.6 + Math.random() * 0.8),
-                background: `hsl(${p.hue}, 55%, ${p.lightness}%)`,
-                animation: `confetti-fall ${p.duration}s cubic-bezier(0.2, 0, 0.8, 1) ${p.delay}s forwards`,
+                width: p.w,
+                height: p.h,
+                background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
+                animation: `confetti-fall ${p.duration}s cubic-bezier(0.15, 0, 0.75, 1) ${p.delay}s forwards`,
                 '--cx': `${p.xSpread}px`,
                 '--cy-up': `${p.yLaunch}px`,
                 '--cy-down': `${p.yGravity}px`,
@@ -766,13 +769,15 @@ export function CodeExercise({
 
   // Inline view
   return (
-    <div style={{ margin: '1.5rem 0', position: 'relative' }}>
+    <div style={{ margin: '1.5rem 0', position: 'relative', zIndex: 0 }}>
       {showConfetti && <Confetti />}
-      <ExerciseContent
-        {...sharedProps}
-        isModal={false}
-        onToggleModal={() => setIsModal(true)}
-      />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <ExerciseContent
+          {...sharedProps}
+          isModal={false}
+          onToggleModal={() => setIsModal(true)}
+        />
+      </div>
     </div>
   );
 }
