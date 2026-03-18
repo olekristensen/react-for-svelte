@@ -1,7 +1,20 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
+
+function useIsLightMode() {
+  const [light, setLight] = useState(() => document.documentElement.getAttribute('data-theme') === 'light');
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setLight(document.documentElement.getAttribute('data-theme') === 'light');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+  return light;
+}
 
 interface CodeExerciseProps {
   id: string;
@@ -77,6 +90,7 @@ function ExerciseContent({
   onToggleModal: () => void;
 }) {
   const lineCount = userCode.split('\n').length;
+  const isLightMode = useIsLightMode();
   const hasPreview = !!(buggyPreview || solvedPreview);
 
   const typeBadgeStyle = {
@@ -121,45 +135,107 @@ function ExerciseContent({
           ))}
         </div>
 
-        {/* Textarea */}
-        <textarea
-          ref={textareaRef}
-          value={userCode}
-          onChange={(e) => {
-            setUserCode(e.target.value);
-            if (status !== 'idle') setStatus('idle');
-          }}
-          spellCheck={false}
-          style={{
-            flex: 1,
-            background: 'var(--color-code-bg)',
-            color: 'var(--color-text)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.78rem',
-            lineHeight: 1.65,
-            padding: '1rem',
-            border: 'none',
-            outline: 'none',
-            resize: 'none' as const,
-            overflow: isModal ? 'auto' : 'hidden',
-            minHeight: isModal ? 0 : '120px',
-            tabSize: 2,
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Tab') {
-              e.preventDefault();
-              const start = e.currentTarget.selectionStart;
-              const end = e.currentTarget.selectionEnd;
-              const newCode = userCode.substring(0, start) + '  ' + userCode.substring(end);
-              setUserCode(newCode);
-              requestAnimationFrame(() => {
-                if (textareaRef.current) {
-                  textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
-                }
-              });
-            }
-          }}
-        />
+        {/* Highlighted editor: pre behind transparent textarea */}
+        <div style={{ flex: 1, position: 'relative', minHeight: isModal ? 0 : '120px' }}>
+          <Highlight
+            theme={isLightMode ? themes.github : themes.nightOwl}
+            code={userCode}
+            language="tsx"
+          >
+            {({ tokens, getLineProps, getTokenProps }) => (
+              <pre
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  margin: 0,
+                  padding: '1rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.78rem',
+                  lineHeight: 1.65,
+                  background: 'var(--color-code-bg)',
+                  overflow: 'hidden',
+                  pointerEvents: 'none',
+                  tabSize: 2,
+                  whiteSpace: 'pre',
+                }}
+              >
+                {tokens.map((line, i) => {
+                  const lineProps = getLineProps({ line });
+                  return (
+                    <div key={i} {...lineProps} style={{ ...lineProps.style, background: 'transparent' }}>
+                      {line.map((token, key) => {
+                        const tokenProps = getTokenProps({ token });
+                        const isComment = token.types.includes('comment');
+                        if (isComment) {
+                          tokenProps.style = {
+                            ...tokenProps.style,
+                            color: isLightMode ? '#3a7a3a' : '#50a0e0',
+                            fontStyle: 'italic',
+                          };
+                        }
+                        return <span key={key} {...tokenProps} />;
+                      })}
+                    </div>
+                  );
+                })}
+              </pre>
+            )}
+          </Highlight>
+          <textarea
+            ref={textareaRef}
+            value={userCode}
+            onChange={(e) => {
+              setUserCode(e.target.value);
+              if (status !== 'idle') setStatus('idle');
+            }}
+            spellCheck={false}
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              background: 'transparent',
+              color: 'transparent',
+              caretColor: isLightMode ? '#1a1c1a' : '#e8eae6',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.78rem',
+              lineHeight: 1.65,
+              padding: '1rem',
+              border: 'none',
+              outline: 'none',
+              resize: 'none' as const,
+              overflow: isModal ? 'auto' : 'hidden',
+              minHeight: isModal ? 0 : '120px',
+              tabSize: 2,
+              whiteSpace: 'pre',
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = e.currentTarget.selectionStart;
+                const end = e.currentTarget.selectionEnd;
+                const newCode = userCode.substring(0, start) + '  ' + userCode.substring(end);
+                setUserCode(newCode);
+                requestAnimationFrame(() => {
+                  if (textareaRef.current) {
+                    textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
+                  }
+                });
+              }
+            }}
+            onScroll={(e) => {
+              // Sync scroll between textarea and highlighted pre
+              const pre = e.currentTarget.previousElementSibling as HTMLElement;
+              if (pre) {
+                pre.scrollTop = e.currentTarget.scrollTop;
+                pre.scrollLeft = e.currentTarget.scrollLeft;
+              }
+            }}
+          />
+        </div>
       </div>
 
       {/* Feedback */}
