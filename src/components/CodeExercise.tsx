@@ -4,6 +4,55 @@ import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
+function Confetti() {
+  const particles = Array.from({ length: 24 }, (_, i) => {
+    const angle = (i / 24) * 360 + (Math.random() * 30 - 15);
+    const distance = 80 + Math.random() * 120;
+    const size = 3 + Math.random() * 4;
+    const dx = Math.cos((angle * Math.PI) / 180) * distance;
+    const dy = Math.sin((angle * Math.PI) / 180) * distance - 40;
+    const delay = Math.random() * 0.15;
+    const hue = 130 + Math.random() * 30; // green range
+    const lightness = 40 + Math.random() * 25;
+    return { dx, dy, size, delay, hue, lightness, id: i };
+  });
+
+  return (
+    <>
+      <style>{`
+        @keyframes confetti-burst {
+          0% { transform: translate(0, 0) scale(1); opacity: 1; }
+          100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        }
+      `}</style>
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        width: 0,
+        height: 0,
+        zIndex: 10,
+        pointerEvents: 'none',
+      }}>
+        {particles.map(p => (
+          <div
+            key={p.id}
+            style={{
+              position: 'absolute',
+              width: p.size,
+              height: p.size,
+              background: `hsl(${p.hue}, 60%, ${p.lightness}%)`,
+              animation: `confetti-burst 1.2s cubic-bezier(0.2, 0.8, 0.3, 1) ${p.delay}s forwards`,
+              '--dx': `${p.dx}px`,
+              '--dy': `${p.dy}px`,
+            } as React.CSSProperties}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
 function useIsLightMode() {
   const [light, setLight] = useState(() => document.documentElement.getAttribute('data-theme') === 'light');
   useEffect(() => {
@@ -544,6 +593,7 @@ export function CodeExercise({
   const [showSolution, setShowSolution] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-save user code on change
@@ -590,6 +640,8 @@ export function CodeExercise({
 
     if (validate(userCode, validationPatterns)) {
       setStatus('correct');
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 1500);
       saveExercise(id, { userCode, solved: true, attempts: newAttempts });
     } else {
       setStatus('incorrect');
@@ -693,7 +745,8 @@ export function CodeExercise({
 
   // Inline view
   return (
-    <div style={{ margin: '1.5rem 0' }}>
+    <div style={{ margin: '1.5rem 0', position: 'relative' }}>
+      {showConfetti && <Confetti />}
       <ExerciseContent
         {...sharedProps}
         isModal={false}
