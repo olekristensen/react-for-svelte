@@ -14,7 +14,7 @@ function BuggyPostsPage() {
     <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
       <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: '0 0 0.3rem' }}>Blog Posts</h3>
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>Loading...</p>
-      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ No fetch call — data never loads</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>No fetch call — data never loads</p>
     </div>
   );
 }
@@ -27,7 +27,7 @@ function FixedPostsPage() {
       <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
         {posts.map(post => <li key={post.id} style={{ color: 'var(--color-text-secondary)', fontSize: '0.85rem', padding: '0.1rem 0' }}>{post.title}</li>)}
       </ul>
-      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Data fetched and rendered on the server</p>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Data fetched and rendered on the server</p>
     </div>
   );
 }

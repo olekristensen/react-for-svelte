@@ -14,7 +14,7 @@ export interface Section {
 export const sections: Section[] = [
   {
     title: 'Foundations',
-    color: 'var(--color-react)',
+    color: 'var(--color-accent)',
     chapters: [
       { id: 'welcome', title: 'Welcome', section: 'Foundations', description: 'Why this guide exists and how to use it' },
       { id: 'mental-model', title: 'The Mental Model Shift', section: 'Foundations', description: 'From compiler-first to runtime-first thinking' },
@@ -39,7 +39,7 @@ export const sections: Section[] = [
   },
   {
     title: 'Advanced React',
-    color: 'var(--color-success)',
+    color: 'var(--color-accent)',
     chapters: [
       { id: 'custom-hooks', title: 'Custom Hooks', section: 'Advanced React', description: 'Composable logic extraction — React\'s killer feature' },
       { id: 'performance', title: 'Performance & Memoization', section: 'Advanced React', description: 'useMemo, useCallback, React.memo — what Svelte gives you free' },
@@ -50,9 +50,9 @@ export const sections: Section[] = [
   },
   {
     title: 'React Ecosystem',
-    color: 'var(--color-ecosystem)',
+    color: 'var(--color-accent)',
     chapters: [
-      { id: 'style-demo', title: '✦ Style Directions', section: 'React Ecosystem', description: 'Three design directions to choose from' },
+      { id: 'style-demo', title: 'Style Directions', section: 'React Ecosystem', description: 'Three design directions to choose from' },
       { id: 'ecosystem-state', title: 'State Management Libraries', section: 'React Ecosystem', description: 'Redux Toolkit, Zustand, Jotai, Valtio — choosing the right tool' },
       { id: 'ecosystem-data', title: 'Data Fetching Libraries', section: 'React Ecosystem', description: 'TanStack Query, SWR, tRPC — managing server state in React' },
       { id: 'ecosystem-forms', title: 'Form Libraries in Depth', section: 'React Ecosystem', description: 'React Hook Form, TanStack Form, Zod — beyond controlled components' },
@@ -63,7 +63,7 @@ export const sections: Section[] = [
   },
   {
     title: 'Next.js (React\'s SvelteKit)',
-    color: 'var(--color-next)',
+    color: 'var(--color-accent)',
     chapters: [
       { id: 'nextjs-intro', title: 'Next.js Overview', section: 'Next.js', description: 'App Router, file conventions, and the SvelteKit parallel' },
       { id: 'nextjs-routing', title: 'Routing & Layouts', section: 'Next.js', description: '+page.svelte vs page.tsx, nested layouts' },

@@ -15,7 +15,7 @@ function BuggyUserCard() {
     <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
       <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>User Card</h3>
       <input placeholder="Update name..." style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
-      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ Props typed as "any" — no autocomplete, no type safety</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>Props typed as "any" — no autocomplete, no type safety</p>
     </div>
   );
 }
@@ -26,7 +26,7 @@ function FixedUserCard() {
     <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
       <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>{name}</h3>
       <input value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
-      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Properly typed — full IntelliSense support</p>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Properly typed — full IntelliSense support</p>
     </div>
   );
 }

@@ -22,16 +22,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
             marginBottom: '0.5rem',
             fontSize: '0.8rem',
             fontWeight: 600,
-            color: 'var(--color-svelte)',
+            color: 'var(--color-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
           }}>
-            <span style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: 'var(--color-svelte)',
-            }} />
             Svelte
           </div>
           <CodeBlock
@@ -49,16 +43,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
             marginBottom: '0.5rem',
             fontSize: '0.8rem',
             fontWeight: 600,
-            color: 'var(--color-react)',
+            color: 'var(--color-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
           }}>
-            <span style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: 'var(--color-react)',
-            }} />
             React
           </div>
           <CodeBlock
@@ -79,7 +67,7 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
           color: 'var(--color-text-secondary)',
           lineHeight: 1.6,
         }}>
-          <strong style={{ color: 'var(--color-accent)' }}>Insight: </strong>{note}
+          <strong style={{ color: 'var(--color-accent)' }}>Insight: </strong><span style={{ color: 'var(--color-text-secondary)' }}>{note}</span>
         </div>
       )}
     </div>

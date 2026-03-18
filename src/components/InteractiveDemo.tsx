@@ -25,7 +25,7 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
         borderBottom: '1px solid var(--color-border)',
         fontSize: '0.8rem',
         fontWeight: 600,
-        color: 'var(--color-success)',
+        color: 'var(--color-text-muted)',
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
       }}>

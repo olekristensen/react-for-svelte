@@ -20,10 +20,10 @@ function BuggyUserList() {
         <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.35rem' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', width: '4rem' }}>{person.name}</span>
           <input placeholder="note..." style={inputStyle} />
-          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
+          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: 'var(--color-error)', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
         </div>
       ))}
-      <p style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ Notes stay in the wrong row after deleting — key=index shuffles DOM</p>
+      <p style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.4rem' }}>Notes stay in the wrong row after deleting — key=index shuffles DOM</p>
     </div>
   );
 }
@@ -42,10 +42,10 @@ function FixedUserList() {
         <div key={person.id} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.35rem' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', width: '4rem' }}>{person.name}</span>
           <input placeholder="note..." style={inputStyle} />
-          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
+          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: 'var(--color-error)', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
         </div>
       ))}
-      <p style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Notes stay with the correct person — key=id is stable</p>
+      <p style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Notes stay with the correct person — key=id is stable</p>
     </div>
   );
 }

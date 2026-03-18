@@ -7,10 +7,10 @@ interface CalloutProps {
 }
 
 const config = {
-  info: { bg: 'rgba(96, 165, 250, 0.08)', border: 'rgba(96, 165, 250, 0.3)', icon: 'i', color: '#60a5fa' },
-  warning: { bg: 'rgba(251, 191, 36, 0.08)', border: 'rgba(251, 191, 36, 0.3)', icon: '!', color: '#fbbf24' },
-  insight: { bg: 'rgba(74, 222, 128, 0.08)', border: 'rgba(74, 222, 128, 0.3)', icon: '*', color: '#4ade80' },
-  gotcha: { bg: 'rgba(251, 113, 133, 0.08)', border: 'rgba(251, 113, 133, 0.3)', icon: '~', color: '#fb7185' },
+  info: { bg: 'rgba(96, 165, 250, 0.05)', border: 'var(--color-accent)', color: 'var(--color-accent)' },
+  warning: { bg: 'rgba(251, 191, 36, 0.05)', border: 'var(--color-warning)', color: 'var(--color-warning)' },
+  insight: { bg: 'rgba(96, 165, 250, 0.05)', border: 'var(--color-accent)', color: 'var(--color-accent)' },
+  gotcha: { bg: 'rgba(192, 96, 80, 0.05)', border: 'var(--color-error)', color: 'var(--color-error)' },
 };
 
 export function Callout({ type = 'info', title, children }: CalloutProps) {
@@ -19,8 +19,8 @@ export function Callout({ type = 'info', title, children }: CalloutProps) {
     <div style={{
       padding: '1rem 1.25rem',
       background: c.bg,
-      border: `1px solid ${c.border}`,
-      borderLeft: `3px solid ${c.color}`,
+      border: 'none',
+      borderLeft: `3px solid ${c.border}`,
       borderRadius: 'var(--radius-sm)',
       marginBottom: '1.5rem',
       fontSize: '0.9rem',

@@ -42,7 +42,7 @@ function BuggyExpensiveParent() {
       <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
-      <FlashingList items={items} label="⚠ Red flash = unnecessary re-render!" color="#ef4444" />
+      <FlashingList items={items} label="Red flash = unnecessary re-render" color="#ef4444" />
       <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.3rem' }}>Click the button — the list flashes red every time even though it didn't change</p>
     </div>
   );
@@ -58,7 +58,7 @@ function FixedExpensiveParent() {
       </button>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
         <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
-        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>✓ No flash — memoized props prevent re-render</p>
+        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>No flash — memoized props prevent re-render</p>
       </div>
     </div>
   );

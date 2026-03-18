@@ -15,7 +15,7 @@ function BuggyNavigation() {
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>
-      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginLeft: 'auto' }}>⚠ Using &lt;a&gt; tags — full page reload</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginLeft: 'auto' }}>Using a tags — full page reload</p>
     </nav>
   );
 }
@@ -26,7 +26,7 @@ function FixedNavigation() {
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>
-      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginLeft: 'auto' }}>✓ Using &lt;Link&gt; — client-side navigation</p>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginLeft: 'auto' }}>Using Link — client-side navigation</p>
     </nav>
   );
 }

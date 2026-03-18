@@ -110,7 +110,7 @@ function BuggyTimer() {
       <button onClick={() => setActive(!active)} style={{ padding: '0.4rem 0.8rem', background: active ? '#ef4444' : 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>
         {active ? 'Unmount Timer' : 'Remount Timer'}
       </button>
-      {!active && <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem' }}>⚠ Timer keeps running after unmount! Check the console for errors.</p>}
+      {!active && <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem' }}>Timer keeps running after unmount</p>}
     </div>
   );
 }
@@ -129,7 +129,7 @@ function FixedTimer() {
       <button onClick={() => setActive(!active)} style={{ padding: '0.4rem 0.8rem', background: active ? '#ef4444' : 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>
         {active ? 'Unmount Timer' : 'Remount Timer'}
       </button>
-      {!active && <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>✓ Timer properly stopped on unmount</p>}
+      {!active && <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>Timer properly stopped on unmount</p>}
     </div>
   );
 }

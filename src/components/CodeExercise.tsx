@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useProgress } from '../hooks/useProgress';
+import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 interface CodeExerciseProps {
   id: string;
@@ -86,13 +87,13 @@ function ExerciseContent({
     fontWeight: 600 as const,
     textTransform: 'uppercase' as const,
     letterSpacing: '0.05em',
-    background: type === 'fix-the-bug' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-    color: type === 'fix-the-bug' ? '#ef4444' : '#38bdf8',
+    background: 'var(--color-accent-dim)',
+    color: 'var(--color-accent)',
   };
 
   const borderColor =
     status === 'correct' ? 'var(--color-success)' :
-    status === 'incorrect' ? '#ef4444' :
+    status === 'incorrect' ? 'var(--color-error)' :
     'var(--color-border)';
 
   const editorPanel = (
@@ -174,14 +175,14 @@ function ExerciseContent({
           gap: '0.5rem',
           flexShrink: 0,
         }}>
-          <span>✓</span> {showSolution ? 'Solution revealed' : 'Correct! Well done.'}
+          <IconCheck size={12} /> {showSolution ? 'Solution revealed' : 'Correct! Well done.'}
         </div>
       )}
       {status === 'incorrect' && (
         <div style={{
           padding: '0.5rem 1rem',
-          background: 'rgba(239, 68, 68, 0.1)',
-          color: '#ef4444',
+          background: 'rgba(192, 96, 80, 0.1)',
+          color: 'var(--color-error)',
           fontSize: '0.85rem',
           fontWeight: 500,
           flexShrink: 0,
@@ -245,7 +246,7 @@ function ExerciseContent({
         color: status === 'correct' ? 'var(--color-success)' : 'var(--color-text-muted)',
         flexShrink: 0,
       }}>
-        {status === 'correct' ? '✓ Preview — Fixed' : 'Preview — Current Behavior'}
+        {status === 'correct' ? 'Preview — Fixed' : 'Preview — Current Behavior'}
       </div>
       <div style={{
         flex: 1,
@@ -291,7 +292,7 @@ function ExerciseContent({
         flexShrink: 0,
       }}>
         <span style={typeBadgeStyle}>
-          {type === 'fix-the-bug' ? '🐛 Fix the Bug' : '✏️ Complete the Code'}
+          {type === 'fix-the-bug' ? 'Fix the Bug' : 'Complete the Code'}
         </span>
         <span style={{
           fontWeight: 600,
@@ -302,7 +303,7 @@ function ExerciseContent({
           {title}
         </span>
         {status === 'correct' && (
-          <span style={{ color: 'var(--color-success)', fontSize: '1.1rem' }} title="Solved!">✓</span>
+          <span style={{ color: 'var(--color-success)', fontSize: '1.1rem' }} title="Solved!"><IconCheck size={12} /></span>
         )}
         <button
           onClick={onToggleModal}
@@ -322,7 +323,7 @@ function ExerciseContent({
           onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}
           title={isModal ? 'Exit fullscreen' : 'Fullscreen'}
         >
-          {isModal ? '✕' : '⛶'}
+          {isModal ? <IconCollapse size={13} /> : <IconExpand size={13} />}
         </button>
       </div>
 

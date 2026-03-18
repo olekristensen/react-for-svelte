@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-
 import { sections, allChapters } from './data/chapters';
 import { useProgress } from './hooks/useProgress';
 import { totalExercisesForChapter } from './data/exercises';
+import { IconMenu, IconArrowLeft, IconSun, IconMoon, IconSystem, IconCheck } from './components/Icons';
 
 import Welcome from './chapters/Welcome';
 import MentalModel from './chapters/MentalModel';
@@ -124,8 +125,8 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
               justifyContent: 'center',
               width: 28,
               height: 28,
-              borderRadius: 6,
-              background: 'linear-gradient(135deg, var(--color-react), var(--color-accent))',
+              borderRadius: 0,
+              background: 'var(--color-accent)',
               fontSize: '0.8rem',
               fontWeight: 700,
               color: '#0f172a',
@@ -168,7 +169,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                       width: '100%',
                       textAlign: 'left',
                       padding: '0.4rem 1.25rem 0.4rem 1.75rem',
-                      background: isActive ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+                      background: isActive ? 'var(--color-accent-dim)' : 'transparent',
                       border: 'none',
                       borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
                       color: isActive ? 'var(--color-text)' : 'var(--color-text-secondary)',
@@ -187,7 +188,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                   >
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       {isVisited(ch.id) && (
-                        <span style={{ color: 'var(--color-success)', fontSize: '0.7rem', flexShrink: 0 }}>✓</span>
+                        <span style={{ color: 'var(--color-success)', fontSize: '0.7rem', flexShrink: 0 }}><IconCheck size={10} /></span>
                       )}
                       <span style={{ flex: 1 }}>{ch.title}</span>
                       {(() => {
@@ -268,7 +269,7 @@ function ProgressBar() {
       <div style={{
         height: '100%',
         width: `${progress}%`,
-        background: 'linear-gradient(90deg, var(--color-react), var(--color-accent))',
+        background: 'var(--color-accent)',
         transition: 'width 0.3s ease',
       }} />
     </div>
@@ -322,9 +323,9 @@ function useTheme() {
 }
 
 function ThemeIcon({ preference }: { preference: ThemePreference }) {
-  if (preference === 'light') return <span title="Light mode (click to switch)">&#9788;</span>;
-  if (preference === 'dark') return <span title="Dark mode (click to switch)">&#9790;</span>;
-  return <span title="System theme (click to switch)">&#9681;</span>;
+  if (preference === 'light') return <IconSun />;
+  if (preference === 'dark') return <IconMoon />;
+  return <IconSystem />;
 }
 
 export default function App() {
@@ -365,7 +366,7 @@ export default function App() {
           }}
           title={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
         >
-          {sidebarOpen ? '\u2190' : '\u2630'}
+          {sidebarOpen ? <IconArrowLeft size={16} /> : <IconMenu size={16} />}
         </button>
         <span style={{
           fontSize: '0.85rem',

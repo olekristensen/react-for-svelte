@@ -53,8 +53,7 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
         </div>
         <h1 style={{
           fontSize: '2.2rem',
-          fontWeight: 700,
-          fontFamily: 'var(--font-serif)',
+          fontWeight: 400,
           lineHeight: 1.2,
           marginBottom: '0.75rem',
           color: 'var(--color-text)',
