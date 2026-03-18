@@ -85,7 +85,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
                     if (isComment) {
                       tokenProps.style = {
                         ...tokenProps.style,
-                        color: '#7faacc',
+                        color: '#50a0e0',
                         fontStyle: 'italic',
                       };
                     }

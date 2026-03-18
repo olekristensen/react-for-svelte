@@ -25,15 +25,41 @@ export function Callout({ type = 'info', title, children }: CalloutProps) {
   const color = typeColors[type] || typeColors.info;
   const isInsight = type === 'insight';
 
+  if (isInsight) {
+    // Pull-quote style: indented with a left accent rule
+    return (
+      <aside style={{
+        margin: '2rem 0',
+        paddingLeft: '1.25rem',
+        borderLeft: `2px solid ${color}`,
+      }}>
+        <div style={{
+          fontSize: '0.7rem',
+          fontWeight: 500,
+          color,
+          marginBottom: '0.4rem',
+          letterSpacing: '0.02em',
+        }}>
+          {label}
+        </div>
+        <div style={{
+          fontSize: '0.92rem',
+          color: 'var(--color-text)',
+          lineHeight: 1.75,
+          fontWeight: 400,
+        }}>
+          {children}
+        </div>
+      </aside>
+    );
+  }
+
+  // Default callouts: thin top border
   return (
     <aside style={{
       margin: '1.5rem 0',
       paddingTop: '0.75rem',
-      paddingBottom: isInsight ? '0.85rem' : undefined,
-      paddingLeft: isInsight ? '1rem' : undefined,
-      paddingRight: isInsight ? '1rem' : undefined,
       borderTop: `1px solid ${color}`,
-      background: isInsight ? 'var(--color-accent-dim)' : undefined,
     }}>
       <div style={{
         fontSize: '0.7rem',
