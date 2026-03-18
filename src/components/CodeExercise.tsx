@@ -4,7 +4,7 @@ import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
-function RevealDown({ show, children }: { show: boolean; children: ReactNode }) {
+function RevealDown({ show, children, background }: { show: boolean; children: ReactNode; background?: string }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -41,6 +41,7 @@ function RevealDown({ show, children }: { show: boolean; children: ReactNode }) 
       maxHeight: height,
       overflow: 'hidden',
       transition: 'max-height 250ms ease',
+      background: show ? background : undefined,
     }}>
       <div ref={contentRef} style={{
         opacity: visible ? 1 : 0,
@@ -432,7 +433,7 @@ function ExerciseContent({
       </div>
 
       {/* Feedback */}
-      <RevealDown show={status === 'correct'}>
+      <RevealDown show={status === 'correct'} background="rgba(74, 222, 128, 0.1)">
         <div style={{
           padding: '0.5rem 1rem',
           background: 'rgba(74, 222, 128, 0.1)',
@@ -447,7 +448,7 @@ function ExerciseContent({
           <IconCheck size={12} /> {showSolution ? 'Solution revealed' : 'Correct! Well done.'}
         </div>
       </RevealDown>
-      <RevealDown show={status === 'incorrect'}>
+      <RevealDown show={status === 'incorrect'} background="rgba(192, 96, 80, 0.1)">
         <div style={{
           padding: '0.5rem 1rem',
           background: 'rgba(192, 96, 80, 0.1)',
@@ -474,7 +475,7 @@ function ExerciseContent({
       </RevealDown>
 
       {/* Hints */}
-      <RevealDown show={hintIndex > 0}>
+      <RevealDown show={hintIndex > 0} background="var(--color-bg-tertiary)">
         <div style={{
           padding: '0.75rem 1rem',
           background: 'var(--color-bg-tertiary)',
