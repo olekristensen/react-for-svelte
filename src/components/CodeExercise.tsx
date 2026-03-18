@@ -5,47 +5,34 @@ import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 function Confetti() {
-  // Spawn at center, fast initial burst to clear the box quickly,
-  // then slow drift + gravity once outside
+  // Separate X (linear deceleration) and Y (parabolic arc) animations
+  // so gravity is smooth, not a hard direction change
   const particles = Array.from({ length: 120 }, (_, i) => {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 300 + Math.random() * 400;
+    const speed = 250 + Math.random() * 350;
     const dx = Math.cos(angle) * speed;
-    const dyLaunch = Math.sin(angle) * speed * 0.7 - 150; // bias upward
-    const dyGravity = 200 + Math.random() * 400;
-
+    const vy = Math.sin(angle) * speed * 0.6 - 200; // initial upward bias
     const w = 3 + Math.random() * 5;
     const h = w * (0.4 + Math.random() * 0.6);
-    const delay = Math.random() * 0.08; // very tight stagger for explosive feel
-    const duration = 1.6 + Math.random() * 1.0;
+    const delay = Math.random() * 0.08;
+    const duration = 2.0 + Math.random() * 1.0;
     const hue = 125 + Math.random() * 35;
     const sat = 50 + Math.random() * 20;
     const lightness = 35 + Math.random() * 30;
     const rotation = Math.random() * 720 - 360;
-
-    return { dx, dyLaunch, dyGravity, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
+    return { dx, vy, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
   });
 
   return (
     <>
       <style>{`
-        @keyframes confetti-burst {
-          0% {
-            transform: translate(0, 0) rotate(0deg);
-            opacity: 1;
-          }
-          10% {
-            transform: translate(calc(var(--dx) * 0.5), calc(var(--dy-launch) * 0.5)) rotate(calc(var(--dr) * 0.2));
-            opacity: 1;
-          }
-          40% {
-            transform: translate(var(--dx), var(--dy-launch)) rotate(calc(var(--dr) * 0.6));
-            opacity: 1;
-          }
-          100% {
-            transform: translate(var(--dx), calc(var(--dy-launch) + var(--dy-gravity))) rotate(var(--dr));
-            opacity: 0;
-          }
+        @keyframes confetti-x {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(var(--dx)); }
+        }
+        @keyframes confetti-y {
+          0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+          100% { transform: translateY(var(--dy-end)) rotate(var(--dr)) scale(0.7); opacity: 0; }
         }
       `}</style>
       <div style={{
@@ -57,22 +44,37 @@ function Confetti() {
         zIndex: -1,
         pointerEvents: 'none',
       }}>
-        {particles.map(p => (
-          <div
-            key={p.id}
-            style={{
-              position: 'absolute',
-              width: p.w,
-              height: p.h,
-              background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
-              animation: `confetti-burst ${p.duration}s cubic-bezier(0.05, 0.8, 0.3, 1) ${p.delay}s forwards`,
-              '--dx': `${p.dx}px`,
-              '--dy-launch': `${p.dyLaunch}px`,
-              '--dy-gravity': `${p.dyGravity}px`,
-              '--dr': `${p.rotation}deg`,
-            } as React.CSSProperties}
-          />
-        ))}
+        {particles.map(p => {
+          // Parabolic Y: starts with upward velocity, gravity pulls down
+          // At t=1: y = vy*t + 0.5*g*t^2. With vy negative (up) and g positive (down)
+          // We simulate by setting the end Y and using a cubic-bezier that
+          // starts fast upward and curves into downward
+          const g = 800;
+          const dyEnd = p.vy + g; // vy + gravity over full duration
+          return (
+            // Outer div: horizontal movement (linear ease-out)
+            <div
+              key={p.id}
+              style={{
+                position: 'absolute',
+                animation: `confetti-x ${p.duration}s cubic-bezier(0, 0, 0.3, 1) ${p.delay}s forwards`,
+                '--dx': `${p.dx}px`,
+              } as React.CSSProperties}
+            >
+              {/* Inner div: vertical movement + rotation (parabolic via ease-in) */}
+              <div
+                style={{
+                  width: p.w,
+                  height: p.h,
+                  background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
+                  animation: `confetti-y ${p.duration}s cubic-bezier(0.1, 0, 0.9, 1) ${p.delay}s forwards`,
+                  '--dy-end': `${dyEnd}px`,
+                  '--dr': `${p.rotation}deg`,
+                } as React.CSSProperties}
+              />
+            </div>
+          );
+        })}
       </div>
     </>
   );
