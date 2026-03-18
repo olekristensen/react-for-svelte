@@ -44,10 +44,23 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
       <style>{`
         .nav-link { transition: color 0.2s ease; }
         .nav-link:hover { color: var(--color-accent) !important; }
-        .nav-link .nav-arrow { transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0; }
-        .nav-link:hover .nav-arrow { opacity: 1; }
-        .nav-link:hover .nav-arrow-left { transform: translateX(-3px); }
-        .nav-link:hover .nav-arrow-right { transform: translateX(3px); }
+        .nav-link .nav-arrow {
+          display: inline-block;
+          width: 0;
+          overflow: hidden;
+          opacity: 0;
+          transition: width 0.2s ease, opacity 0.2s ease;
+          vertical-align: baseline;
+        }
+        .nav-link:hover .nav-arrow {
+          opacity: 1;
+        }
+        .nav-link:hover .nav-arrow-left {
+          width: 1.1em;
+        }
+        .nav-link:hover .nav-arrow-right {
+          width: 1.1em;
+        }
       `}</style>
       <header style={{ marginBottom: '2.5rem' }}>
         <div style={{
@@ -102,7 +115,7 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
             }}
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>
-              <span className="nav-arrow nav-arrow-left" style={{ display: 'inline-block', marginRight: '0.25rem' }}>&larr;</span>
+              <span className="nav-arrow nav-arrow-left">&larr; </span>
               Previous
             </div>
             <div style={{ fontSize: '0.88rem' }}>{prev.title}</div>
@@ -124,7 +137,7 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
           >
             <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>
               Next
-              <span className="nav-arrow nav-arrow-right" style={{ display: 'inline-block', marginLeft: '0.25rem' }}>&rarr;</span>
+              <span className="nav-arrow nav-arrow-right"> &rarr;</span>
             </div>
             <div style={{ fontSize: '0.88rem' }}>{next.title}</div>
           </button>
