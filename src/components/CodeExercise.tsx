@@ -4,6 +4,31 @@ import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
+function RevealDown({ show, children }: { show: boolean; children: ReactNode }) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (show && contentRef.current) {
+      setHeight(contentRef.current.scrollHeight);
+    } else {
+      setHeight(0);
+    }
+  }, [show]);
+
+  return (
+    <div style={{
+      maxHeight: height,
+      overflow: 'hidden',
+      transition: 'max-height 250ms ease',
+    }}>
+      <div ref={contentRef}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -371,7 +396,7 @@ function ExerciseContent({
       </div>
 
       {/* Feedback */}
-      {status === 'correct' && (
+      <RevealDown show={status === 'correct'}>
         <div style={{
           padding: '0.5rem 1rem',
           background: 'rgba(74, 222, 128, 0.1)',
@@ -385,8 +410,8 @@ function ExerciseContent({
         }}>
           <IconCheck size={12} /> {showSolution ? 'Solution revealed' : 'Correct! Well done.'}
         </div>
-      )}
-      {status === 'incorrect' && (
+      </RevealDown>
+      <RevealDown show={status === 'incorrect'}>
         <div style={{
           padding: '0.5rem 1rem',
           background: 'rgba(192, 96, 80, 0.1)',
@@ -410,10 +435,10 @@ function ExerciseContent({
             ) : null;
           })()}
         </div>
-      )}
+      </RevealDown>
 
       {/* Hints */}
-      {hintIndex > 0 && (
+      <RevealDown show={hintIndex > 0}>
         <div style={{
           padding: '0.75rem 1rem',
           background: 'var(--color-bg-tertiary)',
@@ -443,7 +468,7 @@ function ExerciseContent({
             </div>
           ))}
         </div>
-      )}
+      </RevealDown>
     </div>
   );
 
