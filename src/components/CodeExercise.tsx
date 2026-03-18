@@ -5,49 +5,70 @@ import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 function Confetti() {
-  const particles = Array.from({ length: 24 }, (_, i) => {
-    const angle = (i / 24) * 360 + (Math.random() * 30 - 15);
-    const distance = 80 + Math.random() * 120;
-    const size = 3 + Math.random() * 4;
-    const dx = Math.cos((angle * Math.PI) / 180) * distance;
-    const dy = Math.sin((angle * Math.PI) / 180) * distance - 40;
-    const delay = Math.random() * 0.15;
-    const hue = 130 + Math.random() * 30; // green range
+  const particles = Array.from({ length: 60 }, (_, i) => {
+    // Spread particles across the full width, biased to edges
+    const xSpread = (Math.random() - 0.5) * 800;
+    // Initial upward velocity then gravity pulls down
+    const yLaunch = -(100 + Math.random() * 200); // up
+    const yGravity = 300 + Math.random() * 400;     // fall distance
+    const size = 3 + Math.random() * 5;
+    const delay = Math.random() * 0.4;
+    const duration = 1.8 + Math.random() * 1.2;
+    const hue = 130 + Math.random() * 30;
     const lightness = 40 + Math.random() * 25;
-    return { dx, dy, size, delay, hue, lightness, id: i };
+    const rotation = Math.random() * 720 - 360;
+    return { xSpread, yLaunch, yGravity, size, delay, duration, hue, lightness, rotation, id: i };
   });
 
   return (
     <>
       <style>{`
-        @keyframes confetti-burst {
-          0% { transform: translate(0, 0) scale(1); opacity: 1; }
-          100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        @keyframes confetti-fall {
+          0% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 1;
+          }
+          30% {
+            transform: translate(calc(var(--cx) * 0.5), var(--cy-up)) rotate(calc(var(--cr) * 0.4));
+            opacity: 1;
+          }
+          100% {
+            transform: translate(var(--cx), var(--cy-down)) rotate(var(--cr));
+            opacity: 0;
+          }
         }
       `}</style>
       <div style={{
         position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: 0,
-        height: 0,
-        zIndex: 10,
+        inset: 0,
+        zIndex: -1,
         pointerEvents: 'none',
+        overflow: 'visible',
       }}>
-        {particles.map(p => (
-          <div
-            key={p.id}
-            style={{
-              position: 'absolute',
-              width: p.size,
-              height: p.size,
-              background: `hsl(${p.hue}, 60%, ${p.lightness}%)`,
-              animation: `confetti-burst 1.2s cubic-bezier(0.2, 0.8, 0.3, 1) ${p.delay}s forwards`,
-              '--dx': `${p.dx}px`,
-              '--dy': `${p.dy}px`,
-            } as React.CSSProperties}
-          />
-        ))}
+        <div style={{
+          position: 'absolute',
+          top: '40%',
+          left: '50%',
+          width: 0,
+          height: 0,
+        }}>
+          {particles.map(p => (
+            <div
+              key={p.id}
+              style={{
+                position: 'absolute',
+                width: p.size,
+                height: p.size * (0.6 + Math.random() * 0.8),
+                background: `hsl(${p.hue}, 55%, ${p.lightness}%)`,
+                animation: `confetti-fall ${p.duration}s cubic-bezier(0.2, 0, 0.8, 1) ${p.delay}s forwards`,
+                '--cx': `${p.xSpread}px`,
+                '--cy-up': `${p.yLaunch}px`,
+                '--cy-down': `${p.yGravity}px`,
+                '--cr': `${p.rotation}deg`,
+              } as React.CSSProperties}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
@@ -641,7 +662,7 @@ export function CodeExercise({
     if (validate(userCode, validationPatterns)) {
       setStatus('correct');
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 1500);
+      setTimeout(() => setShowConfetti(false), 3500);
       saveExercise(id, { userCode, solved: true, attempts: newAttempts });
     } else {
       setStatus('incorrect');
