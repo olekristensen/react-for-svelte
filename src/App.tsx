@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { sections, allChapters } from './data/chapters';
 
@@ -234,8 +234,61 @@ function ProgressBar() {
   );
 }
 
+type ThemePreference = 'system' | 'light' | 'dark';
+
+function getEffectiveTheme(pref: ThemePreference): 'light' | 'dark' {
+  if (pref !== 'system') return pref;
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
+function useTheme() {
+  const [preference, setPreference] = useState<ThemePreference>(() => {
+    const stored = localStorage.getItem('theme-preference');
+    return (stored === 'light' || stored === 'dark') ? stored : 'system';
+  });
+
+  const applyTheme = useCallback((pref: ThemePreference) => {
+    const effective = getEffectiveTheme(pref);
+    document.documentElement.setAttribute('data-theme', effective);
+  }, []);
+
+  useEffect(() => {
+    applyTheme(preference);
+  }, [preference, applyTheme]);
+
+  // Listen for OS theme changes when preference is 'system'
+  useEffect(() => {
+    if (preference !== 'system') return;
+    const mq = window.matchMedia('(prefers-color-scheme: light)');
+    const handler = () => applyTheme('system');
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [preference, applyTheme]);
+
+  const cycle = useCallback(() => {
+    setPreference(prev => {
+      const next: ThemePreference = prev === 'system' ? 'light' : prev === 'light' ? 'dark' : 'system';
+      if (next === 'system') {
+        localStorage.removeItem('theme-preference');
+      } else {
+        localStorage.setItem('theme-preference', next);
+      }
+      return next;
+    });
+  }, []);
+
+  return { preference, cycle };
+}
+
+function ThemeIcon({ preference }: { preference: ThemePreference }) {
+  if (preference === 'light') return <span title="Light mode (click to switch)">&#9788;</span>;
+  if (preference === 'dark') return <span title="Dark mode (click to switch)">&#9790;</span>;
+  return <span title="System theme (click to switch)">&#9681;</span>;
+}
+
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { preference, cycle } = useTheme();
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -277,9 +330,29 @@ export default function App() {
           fontSize: '0.85rem',
           color: 'var(--color-text-muted)',
           fontWeight: 500,
+          flex: 1,
         }}>
           React for Svelte Developers
         </span>
+        <button
+          onClick={cycle}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--color-text-secondary)',
+            cursor: 'pointer',
+            fontSize: '1.1rem',
+            padding: '0.25rem 0.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: 'var(--radius-sm)',
+            transition: 'color 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text)')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}
+        >
+          <ThemeIcon preference={preference} />
+        </button>
       </header>
 
       <main style={{

@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { type ReactNode, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { allChapters } from '../data/chapters';
 
 interface ChapterLayoutProps {
@@ -9,6 +9,12 @@ interface ChapterLayoutProps {
 
 export function ChapterLayout({ id, children }: ChapterLayoutProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const idx = allChapters.findIndex(c => c.id === id);
   const prev = idx > 0 ? allChapters[idx - 1] : null;
   const next = idx < allChapters.length - 1 ? allChapters[idx + 1] : null;

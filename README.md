@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# React for Svelte Developers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive tutorial that teaches React to experienced Svelte developers. Instead of starting from scratch, every concept is explained through the lens of what you already know.
 
-Currently, two official plugins are available:
+**[Read it live](https://olekristensen.github.io/react-for-svelte/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What's inside
 
-## React Compiler
+33 chapters across 6 sections, progressing from fundamentals to full-stack frameworks:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Foundations
+Components & JSX, reactivity & state (`$state` vs `useState`), props, events, lifecycle & effects — the core mental model shift from compiler-first to runtime-first.
 
-## Expanding the ESLint configuration
+### Intermediate Patterns
+Conditional rendering, context & stores, form handling, slots vs children, styling strategies, DOM access & refs.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Advanced React
+Custom hooks, performance & memoization, Suspense & error boundaries, HOCs/render props/compound components, TypeScript in React.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### React Ecosystem
+A dedicated section covering the libraries that React projects rely on, with honest trade-offs and guidance on when each brings value:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **State Management** — Redux Toolkit, Zustand, Jotai, Valtio, and the signals convergence
+- **Data Fetching** — TanStack Query, SWR, tRPC, and why `useEffect` + `fetch` breaks
+- **Forms** — React Hook Form, TanStack Form, Zod validation
+- **Routing, Tables & UI** — React Router vs TanStack Router, TanStack Table, Radix UI, Headless UI
+- **Animation & Decision Framework** — Framer Motion, React Spring, plus a capstone guide for choosing libraries by project complexity (simple CRUD / medium SaaS / large enterprise)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Next.js (React's SvelteKit)
+App Router, routing & layouts, data fetching, rendering strategies (SSR/SSG/ISR), Server Actions, middleware.
+
+### Nuxt.js (Vue's SvelteKit)
+A third perspective — Vue reactivity, Nuxt routing & data, and a three-way SvelteKit vs Next.js vs Nuxt comparison.
+
+## Every concept anchored to Svelte
+
+Throughout the tutorial, side-by-side code comparisons show the Svelte way next to the React way:
+
+| Svelte | React |
+|---|---|
+| `$state` / `$derived` | `useState` / `useMemo` |
+| `writable()` / `derived()` | Zustand / Jotai |
+| `bind:value` | Controlled components / React Hook Form |
+| `transition:fade` | Framer Motion |
+| SvelteKit `load` | TanStack Query |
+| `{#if}` / `{#each}` | Ternaries / `.map()` |
+| `<slot>` | `props.children` |
+| `on:click` | `onClick` |
+
+## Tech stack
+
+- **React 19** + **TypeScript**
+- **Vite** for dev server and build
+- **React Router** (HashRouter) for client-side navigation
+- **prism-react-renderer** for syntax highlighting
+- Deployed to **GitHub Pages** via GitHub Actions
+
+## Development
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+Static output goes to `dist/`. The GitHub Actions workflow builds and deploys to Pages on every push to `main`.
+
+## License
+
+MIT

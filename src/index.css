@@ -2,6 +2,7 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
+  /* Dark theme (default) */
   --color-bg: #0f172a;
   --color-bg-secondary: #1e293b;
   --color-bg-tertiary: #334155;
@@ -33,6 +34,33 @@
   --radius-lg: 12px;
 
   color-scheme: dark;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --color-bg: #f8fafc;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #e2e8f0;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+  --color-border: #cbd5e1;
+
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  --color-react: #0284c7;
+  --color-svelte: #ff3e00;
+  --color-next: #171717;
+  --color-nuxt: #00a65a;
+
+  --color-accent: #0284c7;
+  --color-accent-dim: #bae6fd;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-ecosystem: #7c3aed;
+
+  color-scheme: light;
 }
 
 * {
