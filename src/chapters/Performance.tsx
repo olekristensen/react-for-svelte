@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
@@ -10,21 +10,40 @@ const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' 
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
 
+function FlashingList({ items, label, color }: { items: string[]; label: string; color: string }) {
+  const [flash, setFlash] = useState(false);
+  const renderCountRef = React.useRef(0);
+  renderCountRef.current++;
+  React.useEffect(() => {
+    setFlash(true);
+    const t = setTimeout(() => setFlash(false), 300);
+    return () => clearTimeout(t);
+  });
+  return (
+    <div style={{
+      padding: '0.5rem',
+      background: flash ? 'rgba(239, 68, 68, 0.2)' : 'var(--color-bg-secondary)',
+      borderRadius: '6px',
+      fontSize: '0.85rem',
+      transition: 'background 0.3s',
+      border: flash ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent',
+    }}>
+      <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
+      <p style={{ color, fontSize: '0.75rem' }}>{label} (rendered {renderCountRef.current}×)</p>
+    </div>
+  );
+}
+
 function BuggyExpensiveParent() {
   const [count, setCount] = useState(0);
-  const [renderCount, setRenderCount] = useState(0);
   const items = ['Apple', 'Banana', 'Cherry'];
-
   return (
     <div>
-      <button onClick={() => { setCount(c => c + 1); setRenderCount(r => r + 1); }} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
-      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
-        <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
-        <p style={{ color: '#ef4444', fontSize: '0.75rem' }}>⚠ List re-rendered {renderCount} times (every click!)</p>
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>New config object + callback created each render</p>
-      </div>
+      <FlashingList items={items} label="⚠ Red flash = unnecessary re-render!" color="#ef4444" />
+      <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.3rem' }}>Click the button — the list flashes red every time even though it didn't change</p>
     </div>
   );
 }
@@ -32,7 +51,6 @@ function BuggyExpensiveParent() {
 function FixedExpensiveParent() {
   const [count, setCount] = useState(0);
   const items = ['Apple', 'Banana', 'Cherry'];
-
   return (
     <div>
       <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
@@ -40,7 +58,7 @@ function FixedExpensiveParent() {
       </button>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
         <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
-        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>✓ List skips re-render — memoized props are stable</p>
+        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>✓ No flash — memoized props prevent re-render</p>
       </div>
     </div>
   );

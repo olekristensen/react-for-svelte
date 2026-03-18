@@ -7,31 +7,45 @@ import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
 
 function BuggyUserList() {
-  const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }, { id: 3, name: 'Charlie' }, { id: 4, name: 'Diana' }];
-  const [filter, setFilter] = useState('');
-  const filtered = users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
+  const [people, setPeople] = useState([
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ]);
+  const inputStyle = { padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
   return (
     <div>
-      <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Type to filter..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginBottom: '0.5rem', width: '100%' }} />
-      <ul style={{ paddingLeft: '1.2rem', color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
-        {filtered.map((user, index) => <li key={index} style={{ padding: '0.15rem 0' }}>{user.name} <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>(key={index})</span></li>)}
-      </ul>
-      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem' }}>⚠ Try filtering then clearing — indices shift and React confuses elements</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Type a note next to each name, then delete the first person:</p>
+      {people.map((person, index) => (
+        <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.35rem' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', width: '4rem' }}>{person.name}</span>
+          <input placeholder="note..." style={inputStyle} />
+          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
+        </div>
+      ))}
+      <p style={{ fontSize: '0.7rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ Notes stay in the wrong row after deleting — key=index shuffles DOM</p>
     </div>
   );
 }
 
 function FixedUserList() {
-  const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }, { id: 3, name: 'Charlie' }, { id: 4, name: 'Diana' }];
-  const [filter, setFilter] = useState('');
-  const filtered = users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
+  const [people, setPeople] = useState([
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ]);
+  const inputStyle = { padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
   return (
     <div>
-      <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Type to filter..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginBottom: '0.5rem', width: '100%' }} />
-      <ul style={{ paddingLeft: '1.2rem', color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
-        {filtered.map(user => <li key={user.id} style={{ padding: '0.15rem 0' }}>{user.name} <span style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>(key={user.id})</span></li>)}
-      </ul>
-      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>✓ Stable keys — React correctly tracks each element</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Type a note next to each name, then delete the first person:</p>
+      {people.map(person => (
+        <div key={person.id} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.35rem' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', width: '4rem' }}>{person.name}</span>
+          <input placeholder="note..." style={inputStyle} />
+          <button onClick={() => setPeople(p => p.filter(x => x.id !== person.id))} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}>✕</button>
+        </div>
+      ))}
+      <p style={{ fontSize: '0.7rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Notes stay with the correct person — key=id is stable</p>
     </div>
   );
 }
@@ -898,46 +912,56 @@ export default function TodoList({ title = 'My Todos' }: TodoListProps) {
         id="components-fix-key"
         title="Fix the List Key"
         type="fix-the-bug"
-        description="This filterable list uses array index as the key prop. When items are filtered, React confuses which elements changed. Fix the key to use a stable identifier."
-        initialCode={`function UserList({ users }) {
-  const [filter, setFilter] = useState('');
-  const filtered = users.filter(u =>
-    u.name.toLowerCase().includes(filter)
-  );
+        description="Each person has a text input. Type a note next to each name in the preview, then delete the first person. The notes end up on the wrong people! Fix the key prop so React tracks each row correctly."
+        initialCode={`function PeopleList() {
+  const [people, setPeople] = useState([
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ]);
+
+  const remove = (id) =>
+    setPeople(p => p.filter(x => x.id !== id));
 
   return (
-    <div>
-      <input onChange={e => setFilter(e.target.value)} />
-      <ul>
-        {filtered.map((user, index) => (
-          <li key={index}>{user.name}</li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {people.map((person, index) => (
+        <li key={index}>
+          {person.name}
+          <input placeholder="note..." />
+          <button onClick={() => remove(person.id)}>✕</button>
+        </li>
+      ))}
+    </ul>
   );
 }`}
-        solution={`function UserList({ users }) {
-  const [filter, setFilter] = useState('');
-  const filtered = users.filter(u =>
-    u.name.toLowerCase().includes(filter)
-  );
+        solution={`function PeopleList() {
+  const [people, setPeople] = useState([
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ]);
+
+  const remove = (id) =>
+    setPeople(p => p.filter(x => x.id !== id));
 
   return (
-    <div>
-      <input onChange={e => setFilter(e.target.value)} />
-      <ul>
-        {filtered.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {people.map((person) => (
+        <li key={person.id}>
+          {person.name}
+          <input placeholder="note..." />
+          <button onClick={() => remove(person.id)}>✕</button>
+        </li>
+      ))}
+    </ul>
   );
 }`}
-        validationPatterns={["key={user.id}"]}
+        validationPatterns={["key={person.id}"]}
         hints={[
-          "Array indices change when items are filtered, added, or removed",
-          "Use a stable, unique identifier from the data itself",
-          "Replace key={index} with key={user.id}"
+          "Type notes in the preview, then delete Alice — Bob gets Alice's note!",
+          "Array indices shift when items are removed, so React reuses the wrong DOM",
+          "Replace key={index} with key={person.id} — a stable unique identifier"
         ]}
         buggyPreview={<BuggyUserList />}
         solvedPreview={<FixedUserList />}
