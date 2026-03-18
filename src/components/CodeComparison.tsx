@@ -43,17 +43,12 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
     <>
       <style>{`
         .code-cmp {
-          margin: 1.5rem auto;
-          max-width: calc(var(--content-max-width) + 6rem);
-          /* Pull out of the article's max-width centering */
-          width: calc(100% + 6rem);
-          margin-left: -3rem;
+          margin: 1.5rem -3rem;
         }
-        /* When there's not enough room to break out, stay at text width */
-        @media (max-width: 1000px) {
+        @media (max-width: 960px) {
           .code-cmp {
-            width: 100%;
             margin-left: 0;
+            margin-right: 0;
           }
         }
         .code-cmp-cols {
