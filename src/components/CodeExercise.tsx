@@ -398,9 +398,18 @@ function ExerciseContent({
         }}>
           <div>Not quite — try again. {attempts >= 2 && hints.length > hintIndex && 'Try using a hint!'}</div>
           {testErrors.length > 0 && (
-            <div style={{ marginTop: '0.4rem', fontSize: '0.78rem', fontWeight: 400, fontFamily: 'var(--font-mono)' }}>
+            <div style={{ marginTop: '0.4rem', fontSize: '0.78rem', fontWeight: 400 }}>
               {testErrors.map((err, i) => (
-                <div key={i} style={{ marginTop: '0.2rem' }}>{err}</div>
+                <div key={i} style={{ marginTop: '0.3rem', display: 'flex', gap: '0.4rem', alignItems: 'baseline' }}>
+                  <span style={{
+                    fontSize: '0.6rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.05em',
+                    color: 'var(--color-error)',
+                    flexShrink: 0,
+                  }}>FAILED</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>{err}</span>
+                </div>
               ))}
             </div>
           )}
@@ -745,7 +754,10 @@ export function CodeExercise({
       const result = runTests(userCode, exerciseTests);
       passed = result.passed;
       if (!passed) {
-        setTestErrors(result.results.filter(r => !r.passed).map(r => `${r.name}: ${r.error}`));
+        setTestErrors(result.results.filter(r => !r.passed).map(r => {
+          const error = r.error || 'did not produce the expected result';
+          return `${r.name} — ${error}`;
+        }));
       }
     } else {
       // 2. Fall back to AST/pattern matching
