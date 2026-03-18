@@ -64,7 +64,8 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
       // Restore original velocity so gravity arc starts fresh from edge
       p.vx = savedVx;
       p.vy = savedVy;
-      p.life = 0;
+      // Stagger: negative life = delay before becoming visible
+      p.life = -(Math.random() * 0.3);
 
       return p;
     });
@@ -89,6 +90,7 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
         p.life += dt;
         if (p.life > p.maxLife) continue;
         alive++;
+        if (p.life < 0) continue; // waiting to appear
 
         p.vy += gravity * dt;
         p.vx *= friction;
