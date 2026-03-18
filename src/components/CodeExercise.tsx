@@ -817,7 +817,7 @@ export function CodeExercise({
   return (
     <div style={{ margin: '1.5rem 0', position: 'relative' }}>
       {showConfetti && <Confetti boxRef={boxRef} />}
-      <div ref={boxRef} style={{ position: 'relative' }}>
+      <div ref={boxRef} style={{ position: 'relative', background: 'var(--color-bg)' }}>
         <ExerciseContent
           {...sharedProps}
           isModal={false}
