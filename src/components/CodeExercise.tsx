@@ -7,14 +7,34 @@ import { IconCheck, IconExpand, IconCollapse } from './Icons';
 function RevealDown({ show, children }: { show: boolean; children: ReactNode }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
+  const [visible, setVisible] = useState(false);
 
+  // Measure content height whenever show changes or content resizes
   useEffect(() => {
-    if (show && contentRef.current) {
-      setHeight(contentRef.current.scrollHeight);
-    } else {
+    if (!show) {
       setHeight(0);
+      setVisible(false);
+      return;
     }
-  }, [show]);
+    const el = contentRef.current;
+    if (!el) return;
+
+    const measure = () => setHeight(el.scrollHeight);
+    measure();
+
+    // Watch for content size changes (e.g. new hints added)
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [show, children]);
+
+  // Stagger: fade in content after container has grown
+  useEffect(() => {
+    if (height > 0 && show) {
+      const timer = setTimeout(() => setVisible(true), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [height, show]);
 
   return (
     <div style={{
@@ -22,9 +42,25 @@ function RevealDown({ show, children }: { show: boolean; children: ReactNode }) 
       overflow: 'hidden',
       transition: 'max-height 250ms ease',
     }}>
-      <div ref={contentRef}>
+      <div ref={contentRef} style={{
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 200ms ease',
+      }}>
         {children}
       </div>
+    </div>
+  );
+}
+
+function FadeIn({ children }: { children: ReactNode }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const timer = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(timer);
+  }, []);
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: 'opacity 200ms ease' }}>
+      {children}
     </div>
   );
 }
@@ -456,16 +492,18 @@ function ExerciseContent({
             Hints
           </div>
           {hints.slice(0, hintIndex).map((hint, i) => (
-            <div key={i} style={{
-              fontSize: '0.78rem',
-              color: 'var(--color-text-secondary)',
-              padding: '0.2rem 0',
-              paddingLeft: '1rem',
-              borderLeft: '2px solid var(--color-warning)',
-              marginBottom: '0.3rem',
-            }}>
-              {i + 1}. {hint}
-            </div>
+            <FadeIn key={i}>
+              <div style={{
+                fontSize: '0.78rem',
+                color: 'var(--color-text-secondary)',
+                padding: '0.2rem 0',
+                paddingLeft: '1rem',
+                borderLeft: '2px solid var(--color-warning)',
+                marginBottom: '0.3rem',
+              }}>
+                {i + 1}. {hint}
+              </div>
+            </FadeIn>
           ))}
         </div>
       </RevealDown>
