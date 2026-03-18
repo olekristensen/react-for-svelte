@@ -500,11 +500,11 @@ function ExerciseContent({
   } as React.CSSProperties : {};
 
   return (
-    <div style={{
+    <div className="exercise-status-fade" style={{
       border: isModal ? 'none' : `1px solid ${borderColor}`,
       borderRadius: isModal ? 0 : 'var(--radius-lg)',
       overflow: 'hidden',
-      transition: 'border-color 0.3s ease',
+      transition: 'color 250ms ease, background-color 250ms ease, border-color 250ms ease',
       animation: shaking ? 'shake 0.4s ease-in-out' : undefined,
       display: 'flex',
       flexDirection: 'column' as const,
@@ -518,6 +518,12 @@ function ExerciseContent({
           40% { transform: translateX(4px); }
           60% { transform: translateX(-3px); }
           80% { transform: translateX(3px); }
+        }
+        .exercise-status-fade,
+        .exercise-status-fade *,
+        .exercise-status-fade span,
+        .exercise-status-fade code {
+          transition: color 250ms ease, background-color 250ms ease, border-color 250ms ease;
         }
       `}</style>
 
