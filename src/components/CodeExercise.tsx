@@ -417,6 +417,17 @@ function ExerciseContent({
     </div>
   ) : null;
 
+  // When solved, override all accent/code colors to green tones
+  const solvedOverrides = status === 'correct' ? {
+    '--color-accent': isLightMode ? '#2a7a2a' : '#5aaa5a',
+    '--color-accent-dim': isLightMode ? '#e0f0e0' : '#1a2e1a',
+    '--color-code-keyword': isLightMode ? '#1a6a1a' : '#50c050',
+    '--color-code-function': isLightMode ? '#2a7a2a' : '#70d870',
+    '--color-code-string': isLightMode ? '#3a6a3a' : '#40a040',
+    '--color-code-comment': isLightMode ? '#508050' : '#4a8a5a',
+    '--color-code-text': isLightMode ? '#1a1c1a' : '#b8d0b8',
+  } as React.CSSProperties : {};
+
   return (
     <div style={{
       border: isModal ? 'none' : `1px solid ${borderColor}`,
@@ -427,6 +438,7 @@ function ExerciseContent({
       display: 'flex',
       flexDirection: 'column' as const,
       height: isModal ? '100%' : undefined,
+      ...solvedOverrides,
     }}>
       <style>{`
         @keyframes shake {
