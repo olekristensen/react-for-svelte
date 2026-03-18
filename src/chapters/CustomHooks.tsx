@@ -106,7 +106,7 @@ function BuggyLocalStorage() {
   const [value, setValue] = useState('');
   return (
     <div>
-      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
+      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Stored: "{value}"</p>
       <p style={{ fontSize: '0.75rem', color: '#ef4444' }}>Refresh the page — value is lost (not synced to localStorage)</p>
     </div>
@@ -123,7 +123,7 @@ function FixedLocalStorage() {
   }, [value]);
   return (
     <div>
-      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
+      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Stored: "{value}"</p>
       <p style={{ fontSize: '0.75rem', color: 'var(--color-success)' }}>Persisted to localStorage — survives page refresh</p>
     </div>

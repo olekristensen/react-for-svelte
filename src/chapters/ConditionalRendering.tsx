@@ -210,11 +210,11 @@ function BuggyNotifications() {
   return (
     <div>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
-        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
+        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
         <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Messages: {count}</span>
       </div>
-      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
         {count && <p style={{ color: 'var(--color-text)' }}>You have {count} new messages</p>}
         {count === 0 && <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>Bug: renders "0" instead of nothing</p>}
       </div>
@@ -227,11 +227,11 @@ function FixedNotifications() {
   return (
     <div>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
-        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
+        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
         <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Messages: {count}</span>
       </div>
-      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
         {count > 0 && <p style={{ color: 'var(--color-text)' }}>You have {count} new messages</p>}
         {count === 0 && <p style={{ color: 'var(--color-success)', fontSize: '0.8rem' }}>No messages — renders nothing (correct)</p>}
       </div>

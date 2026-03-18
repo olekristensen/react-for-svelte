@@ -251,7 +251,7 @@ function BuggyNameForm() {
   return (
     <div>
       <label style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
-        Name: <input type="text" placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
+        Name: <input type="text" placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
       </label>
       <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--color-text)' }}>Hello, {name || 'stranger'}!</p>
       <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.25rem' }}>Typing doesn't update the greeting — input is uncontrolled</p>
@@ -264,7 +264,7 @@ function FixedNameForm() {
   return (
     <div>
       <label style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
-        Name: <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
+        Name: <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
       </label>
       <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--color-text)' }}>Hello, {name || 'stranger'}!</p>
     </div>

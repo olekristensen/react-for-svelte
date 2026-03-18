@@ -82,7 +82,7 @@ function ExerciseContent({
   const typeBadgeStyle = {
     display: 'inline-block',
     padding: '2px 8px',
-    borderRadius: '4px',
+    borderRadius: 0,
     fontSize: '0.7rem',
     fontWeight: 600 as const,
     textTransform: 'uppercase' as const,

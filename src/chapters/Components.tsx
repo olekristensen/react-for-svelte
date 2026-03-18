@@ -12,7 +12,7 @@ function BuggyUserList() {
     { id: 2, name: 'Bob' },
     { id: 3, name: 'Charlie' },
   ]);
-  const inputStyle = { padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
+  const inputStyle = { padding: '0.3rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
   return (
     <div>
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Type a note next to each name, then delete the first person:</p>
@@ -34,7 +34,7 @@ function FixedUserList() {
     { id: 2, name: 'Bob' },
     { id: 3, name: 'Charlie' },
   ]);
-  const inputStyle = { padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
+  const inputStyle = { padding: '0.3rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '8rem', fontSize: '0.8rem' };
   return (
     <div>
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Type a note next to each name, then delete the first person:</p>
@@ -127,7 +127,7 @@ export default function UserCard({
     <div style={{
       padding: '1rem',
       border: '1px solid #ddd',
-      borderRadius: '8px',
+      borderRadius: 0,
     }}>
       <h2>{greeting}, {name}!</h2>
       <p>You have {count} messages.</p>

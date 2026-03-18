@@ -26,7 +26,7 @@ function CSSTransitionDemo() {
     padding: '1.5rem',
     background: 'var(--color-accent)',
     color: '#fff',
-    borderRadius: '8px',
+    borderRadius: 0,
     fontWeight: 600,
     textAlign: 'center',
     marginTop: '1rem',
@@ -39,7 +39,7 @@ function CSSTransitionDemo() {
     padding: '1.5rem',
     background: 'var(--color-ecosystem)',
     color: '#fff',
-    borderRadius: '8px',
+    borderRadius: 0,
     fontWeight: 600,
     textAlign: 'center',
     marginTop: '1rem',
@@ -52,7 +52,7 @@ function CSSTransitionDemo() {
           onClick={() => setVisible(v => !v)}
           style={{
             padding: '0.5rem 1rem',
-            borderRadius: '6px',
+            borderRadius: 0,
             border: '1px solid var(--color-border)',
             background: 'var(--color-bg-secondary)',
             color: 'var(--color-text)',
@@ -66,7 +66,7 @@ function CSSTransitionDemo() {
           onClick={() => setVariant(v => (v === 'fade' ? 'scale' : 'fade'))}
           style={{
             padding: '0.5rem 1rem',
-            borderRadius: '6px',
+            borderRadius: 0,
             border: '1px solid var(--color-border)',
             background: 'var(--color-bg-secondary)',
             color: 'var(--color-text)',
@@ -117,7 +117,7 @@ function EnterExitDemo() {
         onClick={addNotification}
         style={{
           padding: '0.5rem 1rem',
-          borderRadius: '6px',
+          borderRadius: 0,
           border: '1px solid var(--color-border)',
           background: 'var(--color-success)',
           color: '#fff',
@@ -141,7 +141,7 @@ function EnterExitDemo() {
               padding: '0.75rem 1rem',
               background: 'var(--color-bg-secondary)',
               border: '1px solid var(--color-border)',
-              borderRadius: '8px',
+              borderRadius: 0,
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -299,7 +299,7 @@ function ListAnimationDemo() {
             style={{
               width: 48,
               height: 48,
-              borderRadius: '8px',
+              borderRadius: 0,
               background: item.color,
               display: 'flex',
               alignItems: 'center',
@@ -322,7 +322,7 @@ function ListAnimationDemo() {
 
 const btnStyle: React.CSSProperties = {
   padding: '0.4rem 0.85rem',
-  borderRadius: '6px',
+  borderRadius: 0,
   border: '1px solid var(--color-border)',
   background: 'var(--color-bg-secondary)',
   color: 'var(--color-text)',
@@ -384,7 +384,7 @@ function ScrollFadeDemo() {
           maxHeight: 220,
           overflowY: 'auto',
           border: '1px solid var(--color-border)',
-          borderRadius: '8px',
+          borderRadius: 0,
           padding: '1rem',
         }}
       >
@@ -399,7 +399,7 @@ function ScrollFadeDemo() {
               padding: '1.25rem',
               marginBottom: '1rem',
               background: card.color,
-              borderRadius: '8px',
+              borderRadius: 0,
               color: '#fff',
               fontWeight: 600,
               fontSize: '0.95rem',
@@ -461,7 +461,7 @@ function DragDemo() {
         position: 'relative',
         height: 200,
         border: '2px dashed var(--color-border)',
-        borderRadius: '8px',
+        borderRadius: 0,
         overflow: 'hidden',
         cursor: dragging ? 'grabbing' : 'default',
         touchAction: 'none',
@@ -490,7 +490,7 @@ function DragDemo() {
           top: pos.y,
           width: 60,
           height: 60,
-          borderRadius: '10px',
+          borderRadius: 0,
           background: dragging ? 'var(--color-warning)' : 'var(--color-accent)',
           cursor: dragging ? 'grabbing' : 'grab',
           transition: dragging ? 'none' : 'background 0.2s ease, transform 0.2s ease',
@@ -589,7 +589,7 @@ function SpringDemo() {
           position: 'relative',
           height: 200,
           border: '2px dashed var(--color-border)',
-          borderRadius: '8px',
+          borderRadius: 0,
           cursor: 'crosshair',
           overflow: 'hidden',
         }}
@@ -726,7 +726,7 @@ export default function AnimationTransitions() {
     transition: 'all 0.4s ease',
     padding: '1.5rem',
     background: 'var(--color-accent)',
-    borderRadius: '8px',
+    borderRadius: 0,
   };
 
   const scaleStyle = {
@@ -737,7 +737,7 @@ export default function AnimationTransitions() {
     transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
     padding: '1.5rem',
     background: 'var(--color-ecosystem)',
-    borderRadius: '8px',
+    borderRadius: 0,
   };
 
   return (
@@ -1049,7 +1049,7 @@ function ListAnim() {
             key={item.id}
             style={{
               width: 48, height: 48,
-              borderRadius: '8px',
+              borderRadius: 0,
               background: item.color,
               transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
             }}
@@ -1285,7 +1285,7 @@ function Draggable() {
           position: 'absolute',
           left: pos.x, top: pos.y,
           width: 60, height: 60,
-          borderRadius: '10px',
+          borderRadius: 0,
           background: dragging
             ? 'var(--color-warning)'
             : 'var(--color-accent)',
@@ -1849,7 +1849,7 @@ function Sequence() {
       // TODO: Add transition property here
       padding: '1rem',
       background: '#38bdf8',
-      borderRadius: '8px',
+      borderRadius: 0,
     }}>
       Hello, animation!
     </div>
@@ -1863,7 +1863,7 @@ function Sequence() {
       transition: 'all 0.3s ease',
       padding: '1rem',
       background: '#38bdf8',
-      borderRadius: '8px',
+      borderRadius: 0,
     }}>
       Hello, animation!
     </div>

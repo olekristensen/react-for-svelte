@@ -23,7 +23,7 @@ function FlashingList({ items, label, color }: { items: string[]; label: string;
     <div style={{
       padding: '0.5rem',
       background: flash ? 'rgba(239, 68, 68, 0.2)' : 'var(--color-bg-secondary)',
-      borderRadius: '6px',
+      borderRadius: 0,
       fontSize: '0.85rem',
       transition: 'background 0.3s',
       border: flash ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid transparent',
@@ -39,7 +39,7 @@ function BuggyExpensiveParent() {
   const items = ['Apple', 'Banana', 'Cherry'];
   return (
     <div>
-      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
       <FlashingList items={items} label="Red flash = unnecessary re-render" color="#ef4444" />
@@ -53,10 +53,10 @@ function FixedExpensiveParent() {
   const items = ['Apple', 'Banana', 'Cherry'];
   return (
     <div>
-      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
-      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0, fontSize: '0.85rem' }}>
         <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
         <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>No flash — memoized props prevent re-render</p>
       </div>

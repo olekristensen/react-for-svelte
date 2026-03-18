@@ -11,7 +11,7 @@ const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lin
 
 function BuggyNavigation() {
   return (
-    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0 }}>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>
@@ -22,7 +22,7 @@ function BuggyNavigation() {
 
 function FixedNavigation() {
   return (
-    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0 }}>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
       <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>

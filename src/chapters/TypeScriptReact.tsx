@@ -12,9 +12,9 @@ const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lin
 
 function BuggyUserCard() {
   return (
-    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0 }}>
       <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>User Card</h3>
-      <input placeholder="Update name..." style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
+      <input placeholder="Update name..." style={{ padding: '0.3rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
       <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>Props typed as "any" — no autocomplete, no type safety</p>
     </div>
   );
@@ -23,9 +23,9 @@ function BuggyUserCard() {
 function FixedUserCard() {
   const [name, setName] = useState('Alice');
   return (
-    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: 0 }}>
       <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>{name}</h3>
-      <input value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
+      <input value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.3rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
       <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Properly typed — full IntelliSense support</p>
     </div>
   );
@@ -554,7 +554,7 @@ type NotificationProps =
 function Notification(props: NotificationProps) {
   const baseStyle = {
     padding: '1rem',
-    borderRadius: '8px',
+    borderRadius: 0,
     marginBottom: '1rem',
   };
 
