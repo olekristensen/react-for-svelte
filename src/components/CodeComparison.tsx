@@ -45,7 +45,8 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         .code-cmp {
           margin: 1.5rem -3rem;
         }
-        @media (max-width: 960px) {
+        /* sidebar(280) + padding(80) + article(860) + breakout(96) = 1316 */
+        @media (max-width: 1320px) {
           .code-cmp {
             margin-left: 0;
             margin-right: 0;
