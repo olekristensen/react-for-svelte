@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 
 interface ConsoleEntry {
   id: number;
@@ -14,6 +14,9 @@ interface ConsoleCaptureProps {
 
 let nextId = 0;
 
+// Capture the true console.log once at module load — before any component can wrap it
+const nativeLog = console.log.bind(console);
+
 /**
  * Wraps children and captures console.log calls made within,
  * displaying them in a small inline panel below the content.
@@ -21,25 +24,31 @@ let nextId = 0;
 export function ConsoleCapture({ children, maxEntries = 20 }: ConsoleCaptureProps) {
   const [entries, setEntries] = useState<ConsoleEntry[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const originalLog = useRef<typeof console.log>(console.log);
-
-  const addEntry = useCallback((...args: unknown[]) => {
-    // Still call the real console.log
-    originalLog.current.apply(console, args);
-    setEntries(prev => {
-      const next = [...prev, { id: nextId++, args, timestamp: Date.now() }];
-      return next.slice(-maxEntries);
-    });
-  }, [maxEntries]);
+  const activeRef = useRef(true);
 
   useEffect(() => {
-    const saved = console.log;
-    originalLog.current = saved;
-    console.log = addEntry;
-    return () => {
-      console.log = saved;
+    activeRef.current = true;
+    const prevLog = console.log;
+
+    console.log = (...args: unknown[]) => {
+      // Always forward to the real native log
+      nativeLog(...args);
+      // Only capture if this instance is still mounted
+      if (activeRef.current) {
+        setEntries(prev => {
+          const next = [...prev, { id: nextId++, args, timestamp: Date.now() }];
+          return next.slice(-maxEntries);
+        });
+      }
     };
-  }, [addEntry]);
+
+    return () => {
+      activeRef.current = false;
+      // Only restore if console.log is still our wrapper
+      // (another ConsoleCapture may have wrapped it since)
+      console.log = prevLog;
+    };
+  }, [maxEntries]);
 
   // Auto-scroll to bottom when new entries arrive
   useEffect(() => {

@@ -170,7 +170,7 @@ function createTestContext(code: string): TestContext | null {
       mockReact, mockUseState, mockUseEffect, mockUseRef, mockUseContext,
       mockUseMemo, mockUseCallback, mockUseReducer, mockCreateContext,
       mockSetTimeout, mockSetInterval, mockClearInterval, mockClearTimeout,
-      console, localStorage, JSON, fetch,
+      { ...console, log: (..._args: unknown[]) => {} }, localStorage, JSON, fetch,
     ) as () => ElementNode;
   } catch {
     return null;

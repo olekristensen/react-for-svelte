@@ -405,10 +405,14 @@ function ExerciseContent({
                     fontSize: '0.6rem',
                     fontWeight: 600,
                     letterSpacing: '0.05em',
+                    lineHeight: 1,
                     color: 'var(--color-error)',
                     background: 'color-mix(in srgb, var(--color-error) 12%, transparent)',
-                    padding: '0.15em 0.4em',
+                    padding: '0.2em 0.4em 0.15em',
                     flexShrink: 0,
+                    verticalAlign: 'baseline',
+                    position: 'relative',
+                    top: '-0.05em',
                   }}>FAILED</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>{err}</span>
                 </div>
