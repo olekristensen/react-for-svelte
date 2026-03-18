@@ -5,67 +5,85 @@ import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
 
 function Confetti() {
-  const particles = Array.from({ length: 100 }, (_, i) => {
-    const xSpread = (Math.random() - 0.5) * 1200;
-    const yLaunch = -(200 + Math.random() * 350);
-    const yGravity = 400 + Math.random() * 600;
-    const w = 4 + Math.random() * 6;
+  // Spawn particles along the box edges so they're immediately
+  // visible on the background — no delay crossing the box interior
+  const particles = Array.from({ length: 120 }, (_, i) => {
+    // Pick a random edge: 0=top, 1=right, 2=bottom, 3=left
+    const edge = Math.floor(Math.random() * 4);
+    // Start position relative to center, just inside the edge
+    // Box is roughly 100% wide × ~400px tall; use percentages
+    let startX = 0, startY = 0;
+    if (edge === 0) { startX = (Math.random() - 0.5) * 100; startY = -50; } // top
+    else if (edge === 1) { startX = 50; startY = (Math.random() - 0.5) * 100; } // right
+    else if (edge === 2) { startX = (Math.random() - 0.5) * 100; startY = 50; } // bottom
+    else { startX = -50; startY = (Math.random() - 0.5) * 100; } // left
+
+    // Fly outward from the edge + fall with gravity
+    const outward = 80 + Math.random() * 200;
+    const dx = (startX > 0 ? 1 : startX < 0 ? -1 : (Math.random() - 0.5)) * outward;
+    const dyUp = -(50 + Math.random() * 150);
+    const dyDown = 150 + Math.random() * 350;
+
+    const w = 3 + Math.random() * 5;
     const h = w * (0.4 + Math.random() * 0.6);
-    const delay = Math.random() * 0.3;
-    const duration = 2.0 + Math.random() * 1.5;
+    const delay = Math.random() * 0.15;
+    const duration = 1.4 + Math.random() * 1.2;
     const hue = 125 + Math.random() * 35;
     const sat = 50 + Math.random() * 20;
     const lightness = 35 + Math.random() * 30;
-    const rotation = Math.random() * 1080 - 540;
-    return { xSpread, yLaunch, yGravity, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
+    const rotation = Math.random() * 720 - 360;
+
+    return { startX, startY, dx, dyUp, dyDown, w, h, delay, duration, hue, sat, lightness, rotation, id: i };
   });
 
   return (
     <>
       <style>{`
-        @keyframes confetti-fall {
+        @keyframes confetti-edge {
           0% {
-            transform: translate(0, 0) rotate(0deg) scale(1);
+            transform: translate(0, 0) rotate(0deg);
             opacity: 1;
           }
-          25% {
-            transform: translate(calc(var(--cx) * 0.4), var(--cy-up)) rotate(calc(var(--cr) * 0.3));
+          20% {
+            transform: translate(calc(var(--dx) * 0.3), var(--dy-up)) rotate(calc(var(--dr) * 0.3));
             opacity: 1;
           }
-          75% {
-            opacity: 0.8;
+          80% {
+            opacity: 0.7;
           }
           100% {
-            transform: translate(var(--cx), var(--cy-down)) rotate(var(--cr)) scale(0.6);
+            transform: translate(var(--dx), var(--dy-down)) rotate(var(--dr));
             opacity: 0;
           }
         }
       `}</style>
       <div style={{
         position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: 0,
-        height: 0,
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
         zIndex: -1,
         pointerEvents: 'none',
       }}>
-          {particles.map(p => (
-            <div
-              key={p.id}
-              style={{
-                position: 'absolute',
-                width: p.w,
-                height: p.h,
-                background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
-                animation: `confetti-fall ${p.duration}s cubic-bezier(0.15, 0, 0.75, 1) ${p.delay}s forwards`,
-                '--cx': `${p.xSpread}px`,
-                '--cy-up': `${p.yLaunch}px`,
-                '--cy-down': `${p.yGravity}px`,
-                '--cr': `${p.rotation}deg`,
-              } as React.CSSProperties}
-            />
-          ))}
+        {particles.map(p => (
+          <div
+            key={p.id}
+            style={{
+              position: 'absolute',
+              left: `calc(50% + ${p.startX}%)`,
+              top: `calc(50% + ${p.startY}%)`,
+              width: p.w,
+              height: p.h,
+              background: `hsl(${p.hue}, ${p.sat}%, ${p.lightness}%)`,
+              animation: `confetti-edge ${p.duration}s cubic-bezier(0.1, 0, 0.7, 1) ${p.delay}s forwards`,
+              '--dx': `${p.dx}px`,
+              '--dy-up': `${p.dyUp}px`,
+              '--dy-down': `${p.dyDown}px`,
+              '--dr': `${p.rotation}deg`,
+            } as React.CSSProperties}
+          />
+        ))}
       </div>
     </>
   );
