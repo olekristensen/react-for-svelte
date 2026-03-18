@@ -159,14 +159,7 @@ interface CodeExerciseProps {
   solvedPreview?: ReactNode;
 }
 
-function normalize(code: string): string {
-  return code.replace(/\s+/g, ' ').trim().toLowerCase();
-}
-
-function validate(userCode: string, patterns: string[]): boolean {
-  const normalized = normalize(userCode);
-  return patterns.every(pattern => normalized.includes(normalize(pattern)));
-}
+import { validateCode } from '../utils/codeValidator';
 
 // Shared editor + preview content, used both inline and in modal
 function ExerciseContent({
@@ -729,7 +722,7 @@ export function CodeExercise({
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
 
-    if (validate(userCode, validationPatterns)) {
+    if (validateCode(userCode, solution, validationPatterns)) {
       setStatus('correct');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
