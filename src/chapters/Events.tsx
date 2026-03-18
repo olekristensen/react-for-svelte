@@ -546,6 +546,15 @@ function FancyButton({
   );
 }`}
         validationPatterns={["e.preventDefault()"]}
+        tests={[
+          {
+            name: 'Form submit does not throw',
+            test: (ctx) => {
+              ctx.render();
+              ctx.submit('form');
+            }
+          },
+        ]}
         hints={[
           "Svelte uses on:submit|preventDefault. React has no event modifiers.",
           "You need to call a method on the event object inside the handler",

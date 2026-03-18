@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
+import { expect } from '../utils/codeValidator';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -678,6 +679,15 @@ function Chat() {
   return <p>Elapsed: {seconds}s</p>;
 }`}
         validationPatterns={["return () => clearInterval(id)"]}
+        tests={[
+          {
+            name: 'Effect registers a cleanup function',
+            test: (ctx) => {
+              ctx.render();
+              expect(ctx.hasEffectCleanup).toBeTruthy();
+            }
+          },
+        ]}
         hints={[
           "In Svelte, onDestroy handles cleanup. In React, the useEffect cleanup is the return value.",
           "useEffect can return a function that React calls when the component unmounts",

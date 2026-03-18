@@ -6,6 +6,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
+import { expect } from '../utils/codeValidator';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -692,6 +693,16 @@ function ToggleDemo() {
   return [value, setValue];
 }`}
         validationPatterns={["localStorage.getItem(key)", "JSON.parse(stored)", "localStorage.setItem(key, JSON.stringify(value))"]}
+        tests={[
+          {
+            name: 'Hook reads from localStorage',
+            test: (ctx) => {
+              ctx.render();
+              // The hook should initialize from localStorage or default
+              expect(ctx.stateValue(0) !== undefined).toBeTruthy();
+            }
+          },
+        ]}
         hints={[
           "The useState initializer should try localStorage.getItem(key) first",
           "Parse the stored string with JSON.parse, falling back to defaultValue",

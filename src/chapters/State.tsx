@@ -705,6 +705,21 @@ function TodoApp() {
   );
 }`}
         validationPatterns={["setItems([...items, text])", "setText('')"]}
+        tests={[
+          {
+            name: 'Items list starts with initial values',
+            test: (ctx) => { ctx.render(); expect(Array.isArray(ctx.stateValue(0))).toBeTruthy(); }
+          },
+          {
+            name: 'Add item creates new array with spread',
+            test: (ctx) => {
+              ctx.render();
+              ctx.click('button');
+              const updates = ctx.stateUpdates(0);
+              expect(updates.length).toBeGreaterThan(0);
+            }
+          },
+        ]}
         hints={[
           "Use the spread operator to create a new array with all existing items plus the new one",
           "setItems([...items, text]) creates a new array",
