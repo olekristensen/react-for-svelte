@@ -4,22 +4,28 @@ interface ComparisonTableProps {
   caption?: string;
 }
 
-// These headers contain natural language descriptions, not code
-const PROSE_HEADERS = new Set([
-  'Why',
-  'Notes',
-  'Key Difference',
-  'Pros',
-  'Cons',
-  'Best For',
-  'Scoping',
-  'Accessibility',
+// Per-header mono/prose mapping. A header starting with these
+// prefixes indicates its column contains code, not prose.
+const CODE_HEADERS = new Set([
+  'Svelte',
+  'Svelte 5',
+  'Svelte Template',
+  'Svelte Built-in',
+  'Svelte Concept',
+  'Svelte Pattern',
+  'React',
+  'React Equivalent',
+  'JSX Equivalent',
+  'Zustand Equivalent',
+  'Jotai Equivalent',
 ]);
 
+function isCodeColumn(header: string): boolean {
+  return CODE_HEADERS.has(header);
+}
+
 export function ComparisonTable({ headers, rows, caption }: ComparisonTableProps) {
-  // First column is always the label (sans-serif).
-  // Other columns: monospace unless the header is a known prose header.
-  const columnIsMono = headers.map((h, i) => i > 0 && !PROSE_HEADERS.has(h));
+  const columnIsMono = headers.map((h) => isCodeColumn(h));
 
   return (
     <div style={{ margin: '1.5rem 0', overflowX: 'auto' }}>
