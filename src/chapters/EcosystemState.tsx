@@ -32,7 +32,7 @@ function FixedCartStore() {
       <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.3rem' }}>Shopping Cart</p>
       <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Items: {items.length === 0 ? '(empty)' : items.join(', ')}</p>
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem' }}>
-        <button onClick={() => { setItems(p => [...p, `Item ${nextId}`]); }} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>Add Item</button>
+        <button onClick={() => { setItems(p => [...p, `Item ${nextId}`]); }} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>Add Item</button>
         <button onClick={() => setItems(p => p.slice(0, -1))} disabled={items.length === 0} style={{ padding: '0.3rem 0.6rem', background: items.length ? 'var(--color-bg-tertiary)' : 'var(--color-bg-tertiary)', color: items.length ? 'var(--color-text)' : 'var(--color-text-muted)', border: 'none', borderRadius: '4px', cursor: items.length ? 'pointer' : 'default', fontSize: '0.8rem' }}>Remove</button>
       </div>
       <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Store working — items managed with actions</p>

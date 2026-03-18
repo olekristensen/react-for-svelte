@@ -39,7 +39,7 @@ function BuggyExpensiveParent() {
   const items = ['Apple', 'Banana', 'Cherry'];
   return (
     <div>
-      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
       <FlashingList items={items} label="Red flash = unnecessary re-render" color="#ef4444" />
@@ -53,7 +53,7 @@ function FixedExpensiveParent() {
   const items = ['Apple', 'Banana', 'Cherry'];
   return (
     <div>
-      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
         Count: {count}
       </button>
       <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
