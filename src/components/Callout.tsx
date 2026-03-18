@@ -25,15 +25,24 @@ export function Callout({ type = 'info', title, children }: CalloutProps) {
   const color = typeColors[type] || typeColors.info;
 
   return (
-    <aside style={{
-      margin: '1.5rem 0',
-      paddingTop: '0.75rem',
-      borderTop: `1px solid ${color}`,
-    }}>
+    <aside
+      className="callout-aside"
+      style={{
+        margin: '1.5rem 0',
+        paddingTop: '0.75rem',
+        borderTop: `1px solid ${color}`,
+        color,
+      }}
+    >
+      <style>{`
+        .callout-aside code {
+          color: inherit !important;
+          background: none !important;
+        }
+      `}</style>
       <div style={{
         fontSize: '0.7rem',
         fontWeight: 500,
-        color,
         marginBottom: '0.4rem',
         letterSpacing: '0.02em',
       }}>
@@ -41,7 +50,6 @@ export function Callout({ type = 'info', title, children }: CalloutProps) {
       </div>
       <div style={{
         fontSize: '0.88rem',
-        color: 'var(--color-text-secondary)',
         lineHeight: 1.75,
       }}>
         {children}
