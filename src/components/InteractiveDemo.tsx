@@ -62,8 +62,7 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
           fontFamily: 'var(--font-mono)',
           fontSize: '0.8rem',
           lineHeight: 1.65,
-          color: '#e8eae6',
-          color: '#d6deeb',
+          color: 'var(--color-code-text)',
           overflow: 'auto',
           whiteSpace: 'pre-wrap',
         }}>

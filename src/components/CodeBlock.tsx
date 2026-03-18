@@ -1,5 +1,16 @@
 import { Highlight, themes } from 'prism-react-renderer';
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
+
+function useIsLightMode() {
+  return useSyncExternalStore(
+    (cb) => {
+      const observer = new MutationObserver(cb);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      return () => observer.disconnect();
+    },
+    () => document.documentElement.getAttribute('data-theme') === 'light'
+  );
+}
 
 interface CodeBlockProps {
   code: string;
@@ -12,6 +23,7 @@ interface CodeBlockProps {
 
 export function CodeBlock({ code, language = 'tsx', filename, highlight = [], noMargin, stretch }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const isLight = useIsLightMode();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code.trim());
@@ -56,7 +68,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
         border: '1px solid var(--color-border)',
         ...(stretch ? { flex: 1, display: 'flex', flexDirection: 'column' as const } : {}),
       }}>
-        <Highlight theme={themes.nightOwl} code={code.trim()} language={language}>
+        <Highlight theme={isLight ? themes.github : themes.nightOwl} code={code.trim()} language={language}>
           {({ style, tokens, getLineProps, getTokenProps }) => (
             <pre style={{
               ...style,
@@ -89,7 +101,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
                       if (isComment) {
                         tokenProps.style = {
                           ...tokenProps.style,
-                          color: '#50a0e0',
+                          color: isLight ? '#3a7a3a' : '#50a0e0',
                           fontStyle: 'italic',
                         };
                       }
