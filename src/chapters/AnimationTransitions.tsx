@@ -186,23 +186,101 @@ function shuffle<T>(arr: T[]): T[] {
 let listItemId = 6;
 
 function ListAnimationDemo() {
-  const [items, setItems] = useState(() =>
-    Array.from({ length: 5 }, (_, i) => ({ id: i + 1, color: COLORS[i % COLORS.length] }))
+  interface ListItem {
+    id: number;
+    color: string;
+    entering: boolean;
+    exiting: boolean;
+  }
+
+  const [items, setItems] = useState<ListItem[]>(() =>
+    Array.from({ length: 5 }, (_, i) => ({
+      id: i + 1,
+      color: COLORS[i % COLORS.length],
+      entering: false,
+      exiting: false,
+    }))
   );
 
+  // Refs to store DOM positions for FLIP animation
+  const itemRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const prevPositions = useRef<Record<number, { x: number; y: number }>>({});
+
+  // Capture positions before update
+  const capturePositions = () => {
+    const positions: Record<number, { x: number; y: number }> = {};
+    for (const [id, el] of Object.entries(itemRefs.current)) {
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        positions[Number(id)] = { x: rect.left, y: rect.top };
+      }
+    }
+    prevPositions.current = positions;
+  };
+
+  // Animate from old positions to new positions (FLIP)
+  useEffect(() => {
+    const prev = prevPositions.current;
+    if (Object.keys(prev).length === 0) return;
+
+    for (const [id, el] of Object.entries(itemRefs.current)) {
+      if (!el) continue;
+      const numId = Number(id);
+      const oldPos = prev[numId];
+      if (!oldPos) continue;
+
+      const newRect = el.getBoundingClientRect();
+      const dx = oldPos.x - newRect.left;
+      const dy = oldPos.y - newRect.top;
+
+      if (dx === 0 && dy === 0) continue;
+
+      // Invert: move to old position instantly
+      el.style.transition = 'none';
+      el.style.transform = `translate(${dx}px, ${dy}px)`;
+
+      // Play: animate back to new position
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          el.style.transform = 'translate(0, 0)';
+        });
+      });
+    }
+
+    prevPositions.current = {};
+  });
+
   const addItem = () => {
+    capturePositions();
     listItemId++;
-    setItems(prev => [
-      ...prev,
-      { id: listItemId, color: COLORS[listItemId % COLORS.length] },
-    ]);
+    const newItem: ListItem = {
+      id: listItemId,
+      color: COLORS[listItemId % COLORS.length],
+      entering: true,
+      exiting: false,
+    };
+    setItems(prev => [...prev, newItem]);
+    // Clear entering flag after animation
+    setTimeout(() => {
+      setItems(prev => prev.map(it => it.id === newItem.id ? { ...it, entering: false } : it));
+    }, 50);
   };
 
   const removeItem = () => {
-    setItems(prev => (prev.length > 1 ? prev.slice(0, -1) : prev));
+    if (items.length <= 1) return;
+    const target = items[items.length - 1];
+    // Mark as exiting
+    setItems(prev => prev.map(it => it.id === target.id ? { ...it, exiting: true } : it));
+    // Remove after animation
+    setTimeout(() => {
+      capturePositions();
+      setItems(prev => prev.filter(it => it.id !== target.id));
+    }, 300);
   };
 
   const shuffleItems = () => {
+    capturePositions();
     setItems(prev => shuffle(prev));
   };
 
@@ -213,10 +291,11 @@ function ListAnimationDemo() {
         <button onClick={addItem} style={btnStyle}>Add</button>
         <button onClick={removeItem} style={btnStyle}>Remove</button>
       </div>
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', position: 'relative' }}>
         {items.map(item => (
           <div
             key={item.id}
+            ref={el => { itemRefs.current[item.id] = el; }}
             style={{
               width: 48,
               height: 48,
@@ -228,7 +307,9 @@ function ListAnimationDemo() {
               color: '#fff',
               fontWeight: 700,
               fontSize: '0.85rem',
-              transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              opacity: item.exiting ? 0 : item.entering ? 0 : 1,
+              transform: item.exiting ? 'scale(0.5)' : item.entering ? 'scale(0.5)' : undefined,
+              transition: 'opacity 0.3s ease, transform 0.3s ease',
             }}
           >
             {item.id}
