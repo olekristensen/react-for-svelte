@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -1121,6 +1122,57 @@ function Counter() {
         will know exactly which problem you are solving, and the migration will be targeted and
         incremental.
       </p>
+
+      <CodeExercise
+        id="ecosystem-state-complete-zustand"
+        title="Complete the Zustand Store"
+        type="complete-the-code"
+        description="Complete this Zustand store for a shopping cart. Define the state shape and the addItem/removeItem actions."
+        initialCode={`import { create } from 'zustand';
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const useCartStore = create((set) => ({
+  // TODO: Define items array
+  // TODO: Define addItem action
+  // TODO: Define removeItem action
+}));
+
+// Usage:
+// const items = useCartStore(state => state.items);
+// const addItem = useCartStore(state => state.addItem);`}
+        solution={`import { create } from 'zustand';
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const useCartStore = create((set) => ({
+  items: [],
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  })),
+  removeItem: (id) => set((state) => ({
+    items: state.items.filter(item => item.id !== id)
+  })),
+}));
+
+// Usage:
+// const items = useCartStore(state => state.items);
+// const addItem = useCartStore(state => state.addItem);`}
+        validationPatterns={["items: []", "addItem:", "set((state) =>", "removeItem:", "filter("]}
+        hints={[
+          "Start with items: [] as the initial state",
+          "Actions use set() to update state. set((state) => ({ ... })) gives you the current state.",
+          "addItem should spread the existing items and add the new one. removeItem should filter by id."
+        ]}
+      />
     </ChapterLayout>
   );
 }

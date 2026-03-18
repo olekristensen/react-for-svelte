@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -769,6 +770,63 @@ export default async function DashboardPage() {
         next chapter, we will explore how both frameworks handle different rendering strategies:
         SSR, SSG, and ISR.
       </p>
+
+      <CodeExercise
+        id="nextjs-data-complete-fetch"
+        title="Complete Server Fetch"
+        type="complete-the-code"
+        description="Complete this Next.js Server Component to fetch and display a list of posts. Unlike SvelteKit's load function, Server Components can fetch data directly in the component body."
+        initialCode={`// app/posts/page.tsx (Server Component)
+
+interface Post {
+  id: number;
+  title: string;
+}
+
+export default async function PostsPage() {
+  // TODO: Fetch posts from /api/posts
+  // TODO: Parse the JSON response
+
+  return (
+    <div>
+      <h1>Blog Posts</h1>
+      <ul>
+        {posts.map(post => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}`}
+        solution={`// app/posts/page.tsx (Server Component)
+
+interface Post {
+  id: number;
+  title: string;
+}
+
+export default async function PostsPage() {
+  const res = await fetch('/api/posts');
+  const posts: Post[] = await res.json();
+
+  return (
+    <div>
+      <h1>Blog Posts</h1>
+      <ul>
+        {posts.map(post => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}`}
+        validationPatterns={["await fetch(", "await res.json()"]}
+        hints={[
+          "In SvelteKit, data fetching goes in +page.server.ts load(). In Next.js Server Components, you fetch directly in the component.",
+          "Use await fetch('/api/posts') to get the response",
+          "Then parse it with await res.json() and assign to a typed variable"
+        ]}
+      />
     </ChapterLayout>
   );
 }

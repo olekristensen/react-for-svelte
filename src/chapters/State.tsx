@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -561,6 +562,92 @@ function TodoApp() {
         predictable in large teams. Once you internalize the immutable update pattern and the
         functional setter form, React state management becomes second nature.
       </p>
+
+      <CodeExercise
+        id="state-fix-setter"
+        title="Fix the State Setter"
+        type="fix-the-bug"
+        description="This counter tries to increment using direct mutation. In React, state must be updated immutably using the setter function. Fix the bug."
+        initialCode={`function Counter() {
+  const [count, setCount] = useState(0);
+
+  function increment() {
+    count++;  // Bug: direct mutation!
+  }
+
+  return (
+    <button onClick={increment}>
+      Count: {count}
+    </button>
+  );
+}`}
+        solution={`function Counter() {
+  const [count, setCount] = useState(0);
+
+  function increment() {
+    setCount(count + 1);
+  }
+
+  return (
+    <button onClick={increment}>
+      Count: {count}
+    </button>
+  );
+}`}
+        validationPatterns={["setCount(count + 1)", "function increment()"]}
+        hints={[
+          "In React, you cannot modify state variables directly — they are read-only",
+          "Use the setter function returned by useState to update state",
+          "Replace count++ with setCount(count + 1) or setCount(c => c + 1)"
+        ]}
+      />
+
+      <CodeExercise
+        id="state-complete-array"
+        title="Immutable Array Update"
+        type="complete-the-code"
+        description="Complete the addItem function to add a new todo to the list. Remember: in React, you must create a new array rather than mutating the existing one."
+        initialCode={`function TodoList() {
+  const [items, setItems] = useState(['Learn React', 'Learn Hooks']);
+  const [text, setText] = useState('');
+
+  function addItem() {
+    // TODO: Add text to items immutably
+    // Then clear the text input
+  }
+
+  return (
+    <div>
+      <input value={text} onChange={e => setText(e.target.value)} />
+      <button onClick={addItem}>Add</button>
+      <ul>{items.map(item => <li key={item}>{item}</li>)}</ul>
+    </div>
+  );
+}`}
+        solution={`function TodoList() {
+  const [items, setItems] = useState(['Learn React', 'Learn Hooks']);
+  const [text, setText] = useState('');
+
+  function addItem() {
+    setItems([...items, text]);
+    setText('');
+  }
+
+  return (
+    <div>
+      <input value={text} onChange={e => setText(e.target.value)} />
+      <button onClick={addItem}>Add</button>
+      <ul>{items.map(item => <li key={item}>{item}</li>)}</ul>
+    </div>
+  );
+}`}
+        validationPatterns={["setItems([...items, text])", "setText('')"]}
+        hints={[
+          "Use the spread operator to create a new array with all existing items plus the new one",
+          "setItems([...items, text]) creates a new array",
+          "Don't forget to clear the text input with setText('')"
+        ]}
+      />
     </ChapterLayout>
   );
 }

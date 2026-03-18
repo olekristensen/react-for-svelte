@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -584,6 +585,64 @@ function DoubleDisplay() {
         limitations with excellent third-party libraries, and learning to pick the right tool
         for each type of state is a key skill in React development.
       </p>
+
+      <CodeExercise
+        id="context-complete-provider"
+        title="Complete the Provider"
+        type="complete-the-code"
+        description="The theme context is created and consumed, but the Provider is missing from the component tree. Wrap the children with the Provider and pass the theme value."
+        initialCode={`const ThemeContext = createContext('light');
+
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  return (
+    // TODO: Wrap with ThemeContext.Provider
+    <div>
+      <button onClick={() => setTheme(
+        t => t === 'light' ? 'dark' : 'light'
+      )}>
+        Toggle Theme
+      </button>
+      <ThemedBox />
+    </div>
+  );
+}
+
+function ThemedBox() {
+  const theme = useContext(ThemeContext);
+  return <div className={theme}>Current: {theme}</div>;
+}`}
+        solution={`const ThemeContext = createContext('light');
+
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <div>
+        <button onClick={() => setTheme(
+          t => t === 'light' ? 'dark' : 'light'
+        )}>
+          Toggle Theme
+        </button>
+        <ThemedBox />
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+function ThemedBox() {
+  const theme = useContext(ThemeContext);
+  return <div className={theme}>Current: {theme}</div>;
+}`}
+        validationPatterns={["<ThemeContext.Provider value={theme}>", "</ThemeContext.Provider>"]}
+        hints={[
+          "In Svelte, setContext/getContext works automatically. React needs an explicit Provider component.",
+          "Wrap the JSX tree with <ThemeContext.Provider value={...}>",
+          "The value prop is what useContext(ThemeContext) will return in child components"
+        ]}
+      />
     </ChapterLayout>
   );
 }

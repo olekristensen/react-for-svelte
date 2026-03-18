@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 export default function Components() {
   return (
@@ -861,6 +862,53 @@ export default function TodoList({ title = 'My Todos' }: TodoListProps) {
         vs. context, state lifting, and how React's unidirectional data flow compares to Svelte's
         two-way binding capabilities.
       </p>
+
+      <CodeExercise
+        id="components-fix-key"
+        title="Fix the List Key"
+        type="fix-the-bug"
+        description="This filterable list uses array index as the key prop. When items are filtered, React confuses which elements changed. Fix the key to use a stable identifier."
+        initialCode={`function UserList({ users }) {
+  const [filter, setFilter] = useState('');
+  const filtered = users.filter(u =>
+    u.name.toLowerCase().includes(filter)
+  );
+
+  return (
+    <div>
+      <input onChange={e => setFilter(e.target.value)} />
+      <ul>
+        {filtered.map((user, index) => (
+          <li key={index}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}`}
+        solution={`function UserList({ users }) {
+  const [filter, setFilter] = useState('');
+  const filtered = users.filter(u =>
+    u.name.toLowerCase().includes(filter)
+  );
+
+  return (
+    <div>
+      <input onChange={e => setFilter(e.target.value)} />
+      <ul>
+        {filtered.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}`}
+        validationPatterns={["key={user.id}"]}
+        hints={[
+          "Array indices change when items are filtered, added, or removed",
+          "Use a stable, unique identifier from the data itself",
+          "Replace key={index} with key={user.id}"
+        ]}
+      />
     </ChapterLayout>
   );
 }

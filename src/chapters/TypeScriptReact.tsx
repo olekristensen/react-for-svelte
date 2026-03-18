@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -732,6 +733,57 @@ type FieldValues = Record<string, string | number | boolean>;`}
         a Svelte developer, you already appreciate type safety. In React, that appreciation
         will deepen because the type system reaches into every corner of the framework's API.
       </p>
+
+      <CodeExercise
+        id="typescript-fix-types"
+        title="Fix the Types"
+        type="fix-the-bug"
+        description="This component uses 'any' types which defeats the purpose of TypeScript. Replace them with proper types for the props, state, and event handler."
+        initialCode={`interface UserCardProps {
+  user: any;  // Fix this type
+  onUpdate: any;  // Fix this type
+}
+
+function UserCard({ user, onUpdate }: UserCardProps) {
+  const [editing, setEditing] = useState<any>(false);
+
+  function handleChange(e: any) {
+    onUpdate(user.id, e.target.value);
+  }
+
+  return (
+    <div>
+      <h3>{user.name}</h3>
+      <input onChange={handleChange} />
+    </div>
+  );
+}`}
+        solution={`interface UserCardProps {
+  user: { id: number; name: string };
+  onUpdate: (id: number, value: string) => void;
+}
+
+function UserCard({ user, onUpdate }: UserCardProps) {
+  const [editing, setEditing] = useState<boolean>(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    onUpdate(user.id, e.target.value);
+  }
+
+  return (
+    <div>
+      <h3>{user.name}</h3>
+      <input onChange={handleChange} />
+    </div>
+  );
+}`}
+        validationPatterns={["user: { id: number; name: string }", "onUpdate: (id: number, value: string) => void", "useState<boolean>"]}
+        hints={[
+          "The user prop should describe its shape: { id: number; name: string }",
+          "onUpdate is a function — type it as (id: number, value: string) => void",
+          "useState<boolean> instead of useState<any>, and use React.ChangeEvent<HTMLInputElement> for the event"
+        ]}
+      />
     </ChapterLayout>
   );
 }

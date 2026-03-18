@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -538,6 +539,56 @@ function VirtualList() {
         The art is knowing when optimization matters — and the React DevTools Profiler is your best
         friend for making that judgment empirically rather than guessing.
       </p>
+
+      <CodeExercise
+        id="performance-fix-memo"
+        title="Fix the Re-render"
+        type="fix-the-bug"
+        description="The ExpensiveList re-renders every time the parent's count changes, even though the list data hasn't changed. The inline object and function create new references every render. Fix it."
+        initialCode={`function Parent() {
+  const [count, setCount] = useState(0);
+  const items = ['Apple', 'Banana', 'Cherry'];
+
+  return (
+    <div>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+      <ExpensiveList
+        items={items}
+        config={{ sortOrder: 'asc' }}
+        onSelect={(item) => console.log(item)}
+      />
+    </div>
+  );
+}`}
+        solution={`function Parent() {
+  const [count, setCount] = useState(0);
+  const items = ['Apple', 'Banana', 'Cherry'];
+
+  const config = useMemo(() => ({ sortOrder: 'asc' }), []);
+  const onSelect = useCallback((item) => console.log(item), []);
+
+  return (
+    <div>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+      <ExpensiveList
+        items={items}
+        config={config}
+        onSelect={onSelect}
+      />
+    </div>
+  );
+}`}
+        validationPatterns={["useMemo(() =>", "useCallback("]}
+        hints={[
+          "Inline objects {} and arrow functions () => create new references every render",
+          "React.memo on ExpensiveList won't help if the props are new objects each time",
+          "Wrap the config object with useMemo and the callback with useCallback"
+        ]}
+      />
     </ChapterLayout>
   );
 }

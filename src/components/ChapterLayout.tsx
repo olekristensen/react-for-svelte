@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { allChapters } from '../data/chapters';
+import { useProgress } from '../hooks/useProgress';
 
 interface ChapterLayoutProps {
   id: string;
@@ -10,10 +11,28 @@ interface ChapterLayoutProps {
 export function ChapterLayout({ id, children }: ChapterLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { markVisited } = useProgress();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // Mark chapter as read when user scrolls near the bottom
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      // Trigger when within 200px of the bottom
+      if (pageHeight - scrollPosition < 200) {
+        markVisited(id);
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Also check immediately in case page is short enough to not need scrolling
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [id, markVisited]);
 
   const idx = allChapters.findIndex(c => c.id === id);
   const prev = idx > 0 ? allChapters[idx - 1] : null;

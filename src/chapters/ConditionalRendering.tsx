@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -689,6 +690,39 @@ function StatusViewAlt({ status }: { status: string }) {
         bugs and wasted renders. When in doubt, always key on a stable, unique identifier from
         your data.
       </p>
+
+      <CodeExercise
+        id="conditional-fix-falsy"
+        title="Fix the Falsy Render"
+        type="fix-the-bug"
+        description="When messageCount is 0, this component renders '0' on screen instead of nothing. This is a classic React gotcha with short-circuit evaluation. Fix it."
+        initialCode={`function Notifications({ messageCount }) {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      {messageCount && (
+        <p>You have {messageCount} new messages</p>
+      )}
+    </div>
+  );
+}`}
+        solution={`function Notifications({ messageCount }) {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      {messageCount > 0 && (
+        <p>You have {messageCount} new messages</p>
+      )}
+    </div>
+  );
+}`}
+        validationPatterns={["messageCount > 0 &&"]}
+        hints={[
+          "In JSX, {0 && <Component />} renders the number 0, not nothing",
+          "Svelte's {#if count} treats 0 as falsy and renders nothing. React's JSX renders 0 as text.",
+          "Convert the condition to a boolean: use messageCount > 0 instead of messageCount"
+        ]}
+      />
     </ChapterLayout>
   );
 }

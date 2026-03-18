@@ -4,6 +4,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -470,6 +471,57 @@ function FancyButton({
         is no separate event system. A callback passed as <code>onClick</code> is indistinguishable from any
         other prop, which means the same patterns for composition, typing, and testing apply uniformly.
       </p>
+
+      <CodeExercise
+        id="events-complete-handler"
+        title="Complete the Form Handler"
+        type="complete-the-code"
+        description="This form reloads the page on submit because the default behavior isn't prevented. In Svelte you'd use on:submit|preventDefault. Complete the React equivalent."
+        initialCode={`function SearchForm() {
+  const [query, setQuery] = useState('');
+
+  function handleSubmit(e) {
+    // TODO: Prevent the default form submission
+    console.log('Searching for:', query);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        placeholder="Search..."
+      />
+      <button type="submit">Search</button>
+    </form>
+  );
+}`}
+        solution={`function SearchForm() {
+  const [query, setQuery] = useState('');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('Searching for:', query);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        placeholder="Search..."
+      />
+      <button type="submit">Search</button>
+    </form>
+  );
+}`}
+        validationPatterns={["e.preventDefault()"]}
+        hints={[
+          "Svelte uses on:submit|preventDefault. React has no event modifiers.",
+          "You need to call a method on the event object inside the handler",
+          "Add e.preventDefault() at the start of handleSubmit"
+        ]}
+      />
     </ChapterLayout>
   );
 }

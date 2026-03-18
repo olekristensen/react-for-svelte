@@ -4,6 +4,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -607,6 +608,43 @@ function Chat() {
         regular variable instead. Getting this distinction right is the single most important insight for
         writing clean React code.
       </p>
+
+      <CodeExercise
+        id="lifecycle-fix-cleanup"
+        title="Fix the Effect Cleanup"
+        type="fix-the-bug"
+        description="This timer component leaks memory because the interval is never cleared when the component unmounts. Add the cleanup function."
+        initialCode={`function Timer() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSeconds(s => s + 1);
+    }, 1000);
+    // Bug: no cleanup!
+  }, []);
+
+  return <p>Elapsed: {seconds}s</p>;
+}`}
+        solution={`function Timer() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSeconds(s => s + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <p>Elapsed: {seconds}s</p>;
+}`}
+        validationPatterns={["return () => clearInterval(id)"]}
+        hints={[
+          "In Svelte, onDestroy handles cleanup. In React, the useEffect cleanup is the return value.",
+          "useEffect can return a function that React calls when the component unmounts",
+          "Return a function that calls clearInterval with the interval id"
+        ]}
+      />
     </ChapterLayout>
   );
 }

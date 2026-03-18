@@ -56,7 +56,8 @@ export const sections: Section[] = [
       { id: 'ecosystem-data', title: 'Data Fetching Libraries', section: 'React Ecosystem', description: 'TanStack Query, SWR, tRPC — managing server state in React' },
       { id: 'ecosystem-forms', title: 'Form Libraries in Depth', section: 'React Ecosystem', description: 'React Hook Form, TanStack Form, Zod — beyond controlled components' },
       { id: 'ecosystem-ui', title: 'Routing, Tables & Headless UI', section: 'React Ecosystem', description: 'TanStack Router, TanStack Table, Radix UI — type-safe utilities' },
-      { id: 'ecosystem-decisions', title: 'Animation & Choosing Libraries', section: 'React Ecosystem', description: 'Framer Motion, React Spring, and a framework for library decisions' },
+      { id: 'animation-transitions', title: 'Animation & Transitions', section: 'React Ecosystem', description: 'CSS transitions, Framer Motion, React Spring — comprehensive animation guide' },
+      { id: 'ecosystem-decisions', title: 'Choosing Libraries', section: 'React Ecosystem', description: 'A decision framework for picking the right React libraries by project size' },
     ],
   },
   {

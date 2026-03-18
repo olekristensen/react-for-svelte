@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -678,6 +679,41 @@ export async function POST(request: NextRequest) {
         <code> Link</code> component instead of native anchor tags. In the next chapter, we will
         explore how both frameworks handle data fetching — the other half of the server-side story.
       </p>
+
+      <CodeExercise
+        id="nextjs-routing-fix-link"
+        title="Fix the Navigation"
+        type="fix-the-bug"
+        description="This navigation uses regular <a> tags which cause full page reloads. In Next.js (like SvelteKit), you need the framework's Link component for client-side navigation."
+        initialCode={`import Link from 'next/link';
+
+function Navigation() {
+  return (
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  );
+}`}
+        solution={`import Link from 'next/link';
+
+function Navigation() {
+  return (
+    <nav>
+      <Link href="/">Home</Link>
+      <Link href="/about">About</Link>
+      <Link href="/blog">Blog</Link>
+    </nav>
+  );
+}`}
+        validationPatterns={["<Link href=\"/\">", "<Link href=\"/about\">", "<Link href=\"/blog\">"]}
+        hints={[
+          "In SvelteKit you use <a> tags naturally. In Next.js, <a> causes full page reloads.",
+          "Replace <a href=...> with <Link href=...> from next/link",
+          "Link is already imported at the top — just change the HTML tags"
+        ]}
+      />
     </ChapterLayout>
   );
 }

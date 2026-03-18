@@ -5,6 +5,7 @@ import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -631,6 +632,43 @@ function ToggleDemo() {
         Svelte, the biggest adjustment is the discipline of the dependency array — but once that
         becomes muscle memory, custom hooks will feel like the most natural way to share logic.
       </p>
+
+      <CodeExercise
+        id="hooks-complete-custom"
+        title="Build useLocalStorage"
+        type="complete-the-code"
+        description="Complete this custom hook that syncs state with localStorage. Fill in the useState initializer to read from localStorage, and add a useEffect to write changes back."
+        initialCode={`function useLocalStorage(key, defaultValue) {
+  const [value, setValue] = useState(() => {
+    // TODO: Read from localStorage, parse JSON
+    // Fall back to defaultValue if not found
+  });
+
+  useEffect(() => {
+    // TODO: Write value to localStorage as JSON
+  }, [key, value]);
+
+  return [value, setValue];
+}`}
+        solution={`function useLocalStorage(key, defaultValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : defaultValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}`}
+        validationPatterns={["localStorage.getItem(key)", "JSON.parse(stored)", "localStorage.setItem(key, JSON.stringify(value))"]}
+        hints={[
+          "The useState initializer should try localStorage.getItem(key) first",
+          "Parse the stored string with JSON.parse, falling back to defaultValue",
+          "The useEffect should call localStorage.setItem(key, JSON.stringify(value))"
+        ]}
+      />
     </ChapterLayout>
   );
 }

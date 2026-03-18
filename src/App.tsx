@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { sections, allChapters } from './data/chapters';
+import { useProgress } from './hooks/useProgress';
+import { totalExercisesForChapter } from './data/exercises';
 
 import Welcome from './chapters/Welcome';
 import MentalModel from './chapters/MentalModel';
@@ -24,6 +26,7 @@ import EcosystemState from './chapters/EcosystemState';
 import EcosystemData from './chapters/EcosystemData';
 import EcosystemForms from './chapters/EcosystemForms';
 import EcosystemUI from './chapters/EcosystemUI';
+import AnimationTransitions from './chapters/AnimationTransitions';
 import EcosystemDecisions from './chapters/EcosystemDecisions';
 import NextjsIntro from './chapters/NextjsIntro';
 import NextjsRouting from './chapters/NextjsRouting';
@@ -55,6 +58,7 @@ const chapterComponents: Record<string, React.FC> = {
   'ecosystem-data': EcosystemData,
   'ecosystem-forms': EcosystemForms,
   'ecosystem-ui': EcosystemUI,
+  'animation-transitions': AnimationTransitions,
   'ecosystem-decisions': EcosystemDecisions,
   'nextjs-intro': NextjsIntro,
   'nextjs-routing': NextjsRouting,
@@ -68,6 +72,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname.replace('/', '');
+  const { isVisited, visitedCount, solvedExercisesForChapter, resetProgress } = useProgress();
 
   return (
     <>
@@ -178,7 +183,31 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                       if (!isActive) e.currentTarget.style.background = 'transparent';
                     }}
                   >
-                    {ch.title}
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      {isVisited(ch.id) && (
+                        <span style={{ color: 'var(--color-success)', fontSize: '0.7rem', flexShrink: 0 }}>✓</span>
+                      )}
+                      <span style={{ flex: 1 }}>{ch.title}</span>
+                      {(() => {
+                        const total = totalExercisesForChapter(ch.id);
+                        if (total === 0) return null;
+                        const solved = solvedExercisesForChapter(ch.id);
+                        const allDone = solved === total;
+                        return (
+                          <span style={{
+                            fontSize: '0.6rem',
+                            padding: '1px 5px',
+                            borderRadius: 10,
+                            background: allDone ? 'rgba(74, 222, 128, 0.15)' : 'var(--color-bg-tertiary)',
+                            color: allDone ? 'var(--color-success)' : 'var(--color-text-muted)',
+                            fontWeight: 600,
+                            flexShrink: 0,
+                          }}>
+                            {solved}/{total}
+                          </span>
+                        );
+                      })()}
+                    </span>
                   </button>
                 );
               })}
@@ -193,7 +222,25 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           color: 'var(--color-text-muted)',
           flexShrink: 0,
         }}>
-          {allChapters.length} chapters &middot; Built with React + Vite
+          <span>{visitedCount}/{allChapters.length} chapters read</span>
+          {visitedCount > 0 && (
+            <button
+              onClick={() => { if (confirm('Reset all progress and exercises?')) resetProgress(); }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--color-text-muted)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.65rem',
+                textDecoration: 'underline',
+                padding: 0,
+                marginLeft: '0.5rem',
+              }}
+            >
+              reset
+            </button>
+          )}
         </div>
       </aside>
     </>

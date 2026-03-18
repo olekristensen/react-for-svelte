@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { ComparisonTable } from '../components/ComparisonTable';
+import { CodeExercise } from '../components/CodeExercise';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -757,6 +758,52 @@ function SignupForm() {
         ergonomics with the added bonus of schema-based validation and performant uncontrolled
         rendering under the hood.
       </p>
+
+      <CodeExercise
+        id="forms-complete-controlled"
+        title="Wire Up Controlled Input"
+        type="complete-the-code"
+        description="This input is missing its value and onChange props, making it an uncontrolled component. In Svelte you'd use bind:value. Complete the React controlled input pattern."
+        initialCode={`function NameForm() {
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <label>
+        Name:
+        <input
+          type="text"
+          // TODO: Add value and onChange props
+        />
+      </label>
+      <p>Hello, {name || 'stranger'}!</p>
+    </div>
+  );
+}`}
+        solution={`function NameForm() {
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <label>
+        Name:
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+      </label>
+      <p>Hello, {name || 'stranger'}!</p>
+    </div>
+  );
+}`}
+        validationPatterns={["value={name}", "onChange={e => setName(e.target.value)}"]}
+        hints={[
+          "Svelte uses bind:value={name}. React needs two separate props.",
+          "The value prop sets what the input displays. onChange handles user typing.",
+          "Add value={name} and onChange={e => setName(e.target.value)}"
+        ]}
+      />
     </ChapterLayout>
   );
 }
