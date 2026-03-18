@@ -105,7 +105,7 @@ function ExerciseContent({
           padding: '1rem 0',
           paddingRight: '0.5rem',
           paddingLeft: '0.75rem',
-          background: 'var(--color-bg-secondary)',
+          background: 'var(--color-bg-tertiary)',
           color: 'var(--color-text-muted)',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.78rem',
@@ -132,7 +132,7 @@ function ExerciseContent({
           spellCheck={false}
           style={{
             flex: 1,
-            background: 'var(--color-bg-secondary)',
+            background: 'var(--color-bg-tertiary)',
             color: 'var(--color-text)',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.78rem',
@@ -195,7 +195,7 @@ function ExerciseContent({
       {hintIndex > 0 && (
         <div style={{
           padding: '0.75rem 1rem',
-          background: 'var(--color-bg-secondary)',
+          background: 'var(--color-bg-tertiary)',
           borderTop: '1px solid var(--color-border)',
           flexShrink: 0,
         }}>
@@ -237,7 +237,7 @@ function ExerciseContent({
     }}>
       <div style={{
         padding: '0.5rem 1rem',
-        background: 'var(--color-bg-secondary)',
+        background: 'var(--color-bg-tertiary)',
         borderBottom: '1px solid var(--color-border)',
         fontSize: '0.7rem',
         fontWeight: 600,
@@ -283,7 +283,7 @@ function ExerciseContent({
       {/* Header */}
       <div style={{
         padding: '0.75rem 1rem',
-        background: 'var(--color-bg-secondary)',
+        background: 'var(--color-bg-tertiary)',
         borderBottom: `1px solid ${borderColor}`,
         display: 'flex',
         alignItems: 'center',
@@ -358,7 +358,7 @@ function ExerciseContent({
         gap: '0.5rem',
         flexWrap: 'wrap' as const,
         flexShrink: 0,
-        background: 'var(--color-bg-secondary)',
+        background: 'var(--color-bg-tertiary)',
       }}>
         <button
           onClick={handleCheck}
@@ -570,7 +570,7 @@ export function CodeExercise({
           textAlign: 'center',
           color: 'var(--color-text-muted)',
           fontSize: '0.85rem',
-          background: 'var(--color-bg-secondary)',
+          background: 'var(--color-bg-tertiary)',
         }}>
           Exercise open in fullscreen — <button
             onClick={() => setIsModal(false)}

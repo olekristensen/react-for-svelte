@@ -56,7 +56,7 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
         <pre style={{
           marginTop: '-1px',
           padding: '1rem',
-          background: 'var(--color-bg-secondary)',
+          background: 'var(--color-bg-tertiary)',
           border: '1px solid var(--color-border)',
           borderTop: 'none',
           fontFamily: 'var(--font-mono)',
