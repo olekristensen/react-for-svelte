@@ -105,14 +105,14 @@ function ExerciseContent({
           padding: '1rem 0',
           paddingRight: '0.5rem',
           paddingLeft: '0.75rem',
-          background: '#011627',
-          color: '#637777',
+          background: 'var(--color-bg-secondary)',
+          color: 'var(--color-text-muted)',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.78rem',
           lineHeight: 1.65,
           textAlign: 'right' as const,
           userSelect: 'none' as const,
-          borderRight: '1px solid #1e3a5f',
+          borderRight: '1px solid var(--color-border)',
           minWidth: '2.5rem',
           overflow: 'hidden',
         }}>
@@ -132,8 +132,8 @@ function ExerciseContent({
           spellCheck={false}
           style={{
             flex: 1,
-            background: '#011627',
-            color: '#d6deeb',
+            background: 'var(--color-bg-secondary)',
+            color: 'var(--color-text)',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.78rem',
             lineHeight: 1.65,

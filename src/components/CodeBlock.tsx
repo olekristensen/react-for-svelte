@@ -65,7 +65,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
               fontSize: '0.78rem',
               lineHeight: 1.65,
               overflow: 'auto',
-              background: '#011627',
+              background: 'var(--color-bg-secondary)',
               ...(stretch ? { flex: 1 } : {}),
             }}>
               {tokens.map((line, i) => {
