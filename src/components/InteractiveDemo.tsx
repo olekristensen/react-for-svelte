@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { CodeBlock } from './CodeBlock';
+import { ConsoleCapture } from './ConsoleCapture';
 
 interface InteractiveDemoProps {
   title: string;
@@ -50,7 +51,9 @@ export function InteractiveDemo({ title, children, code }: InteractiveDemoProps)
         padding: '1rem',
         border: '1px solid var(--color-border)',
       }}>
-        {children}
+        <ConsoleCapture>
+          {children}
+        </ConsoleCapture>
       </div>
 
       {showCode && code && (

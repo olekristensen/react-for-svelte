@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Highlight, themes } from 'prism-react-renderer';
 import { useProgress } from '../hooks/useProgress';
 import { IconCheck, IconExpand, IconCollapse } from './Icons';
+import { ConsoleCapture } from './ConsoleCapture';
 
 function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -469,7 +470,9 @@ function ExerciseContent({
         overflow: 'auto',
         background: 'var(--color-bg)',
       }}>
-        {status === 'correct' && solvedPreview ? solvedPreview : (buggyPreview || solvedPreview)}
+        <ConsoleCapture>
+          {status === 'correct' && solvedPreview ? solvedPreview : (buggyPreview || solvedPreview)}
+        </ConsoleCapture>
       </div>
     </div>
   ) : null;
