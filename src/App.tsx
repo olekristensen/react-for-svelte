@@ -138,7 +138,6 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
                     key={ch.id}
                     onClick={() => {
                       navigate(`/${ch.id}`);
-                      onClose();
                     }}
                     style={{
                       display: 'block',
