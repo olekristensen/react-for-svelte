@@ -68,7 +68,7 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
           <Column
             label={svelte.filename || 'Svelte'}
             code={svelte.code}
-            language={svelte.language || 'svelte'}
+            language={svelte.language || 'html'}
             highlight={svelte.highlight}
           />
           <Column

@@ -24,6 +24,8 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language = 'tsx', filename, highlight = [], noMargin, stretch }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const isLight = useIsLightMode();
+  // Svelte isn't in prism-react-renderer's grammar set; HTML covers its syntax
+  const lang = language === 'svelte' ? 'html' : language;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code.trim());
@@ -68,7 +70,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [], no
         border: '1px solid var(--color-border)',
         ...(stretch ? { flex: 1, display: 'flex', flexDirection: 'column' as const } : {}),
       }}>
-        <Highlight theme={isLight ? themes.github : themes.nightOwl} code={code.trim()} language={language}>
+        <Highlight theme={isLight ? themes.github : themes.nightOwl} code={code.trim()} language={lang}>
           {({ style, tokens, getLineProps, getTokenProps }) => (
             <pre style={{
               ...style,
