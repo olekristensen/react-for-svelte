@@ -10,6 +10,7 @@
   --color-surface: #1c1e1c;
   --color-surface-hover: #282a28;
   --color-border: #2a2e2a;
+  --color-code-bg: #181a18;
 
   --color-text: #e8eae6;
   --color-text-secondary: #9a9e98;
@@ -56,6 +57,7 @@
   --color-surface: #ffffff;
   --color-surface-hover: #f0f2ec;
   --color-border: #d8dbd4;
+  --color-code-bg: #181a18;
 
   --color-text: #1a1c1a;
   --color-text-secondary: #5a5e58;

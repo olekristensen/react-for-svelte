@@ -105,7 +105,7 @@ function ExerciseContent({
           padding: '1rem 0',
           paddingRight: '0.5rem',
           paddingLeft: '0.75rem',
-          background: 'var(--color-bg-tertiary)',
+          background: 'var(--color-code-bg)',
           color: 'var(--color-text-muted)',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.78rem',
@@ -132,7 +132,7 @@ function ExerciseContent({
           spellCheck={false}
           style={{
             flex: 1,
-            background: 'var(--color-bg-tertiary)',
+            background: 'var(--color-code-bg)',
             color: 'var(--color-text)',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.78rem',
