@@ -104,7 +104,7 @@ function BuggySearchForm() {
         <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search..." style={{ padding: '0.4rem', borderRadius: 0, border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', flex: 1 }} />
         <button type="submit" style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', borderRadius: 0, cursor: 'pointer', fontWeight: 600 }}>Search</button>
       </div>
-      {submitted && <p style={{ fontSize: '0.8rem', color: '#ef4444', marginTop: '0.5rem' }}>Page would reload — preventDefault missing</p>}
+      {submitted && <p style={{ fontSize: '0.8rem', color: 'var(--color-error)', marginTop: '0.5rem' }}>Page would reload</p>}
       <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Try clicking Search — the page reloads</p>
     </form>
   );
