@@ -605,6 +605,7 @@ function VirtualList() {
         solvedPreview={<FixedExpensiveParent />}
         initialCode={`function Parent() {
   const [count, setCount] = useState(0);
+  const [selected, setSelected] = useState('');
   const items = ['Apple', 'Banana', 'Cherry'];
 
   return (
@@ -615,17 +616,19 @@ function VirtualList() {
       <ExpensiveList
         items={items}
         config={{ sortOrder: 'asc' }}
-        onSelect={(item) => console.log(item)}
+        onSelect={(item) => setSelected(item)}
       />
+      {selected && <p>Selected: {selected}</p>}
     </div>
   );
 }`}
         solution={`function Parent() {
   const [count, setCount] = useState(0);
+  const [selected, setSelected] = useState('');
   const items = ['Apple', 'Banana', 'Cherry'];
 
   const config = useMemo(() => ({ sortOrder: 'asc' }), []);
-  const onSelect = useCallback((item) => console.log(item), []);
+  const onSelect = useCallback((item) => setSelected(item), []);
 
   return (
     <div>
@@ -637,6 +640,7 @@ function VirtualList() {
         config={config}
         onSelect={onSelect}
       />
+      {selected && <p>Selected: {selected}</p>}
     </div>
   );
 }`}

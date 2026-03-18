@@ -510,10 +510,11 @@ function FancyButton({
         description="This form reloads the page on submit because the default behavior isn't prevented. In Svelte you'd use on:submit|preventDefault. Complete the React equivalent."
         initialCode={`function SearchForm() {
   const [query, setQuery] = useState('');
+  const [result, setResult] = useState('');
 
   function handleSubmit(e) {
     // TODO: Prevent the default form submission
-    console.log('Searching for:', query);
+    setResult('Searching for: ' + query);
   }
 
   return (
@@ -524,15 +525,17 @@ function FancyButton({
         placeholder="Search..."
       />
       <button type="submit">Search</button>
+      {result && <p>{result}</p>}
     </form>
   );
 }`}
         solution={`function SearchForm() {
   const [query, setQuery] = useState('');
+  const [result, setResult] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('Searching for:', query);
+    setResult('Searching for: ' + query);
   }
 
   return (
@@ -543,6 +546,7 @@ function FancyButton({
         placeholder="Search..."
       />
       <button type="submit">Search</button>
+      {result && <p>{result}</p>}
     </form>
   );
 }`}
