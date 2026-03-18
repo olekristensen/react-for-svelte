@@ -109,12 +109,28 @@ function structuralMatch(userCode: string, solution: string): boolean {
   return u === s;
 }
 
-// Normalized string comparison as fallback
+// Normalized string comparison as fallback.
+// Strips whitespace AND identifier prefixes before dots/parens
+// so e.preventDefault() matches ev.preventDefault() matches event.preventDefault()
 function normalizedStringMatch(userCode: string, patterns: string[]): boolean {
+  // Collapse whitespace
   const normalized = userCode.replace(/\s+/g, ' ').trim().toLowerCase();
-  return patterns.every(pattern =>
-    normalized.includes(pattern.replace(/\s+/g, ' ').trim().toLowerCase())
-  );
+  return patterns.every(pattern => {
+    const p = pattern.replace(/\s+/g, ' ').trim().toLowerCase();
+    if (normalized.includes(p)) return true;
+    // Try matching with flexible identifier before dots
+    // e.g. "e.preventdefault()" matches "ev.preventdefault()" or "event.preventdefault()"
+    const dotPattern = p.replace(/^[a-z_$][a-z0-9_$]*\./i, '___DOT___.');
+    if (dotPattern !== p) {
+      const flexRegex = new RegExp('[a-z_$][a-z0-9_$]*\\.' + escapeRegex(dotPattern.split('___DOT___.')[1]));
+      return flexRegex.test(normalized);
+    }
+    return false;
+  });
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
