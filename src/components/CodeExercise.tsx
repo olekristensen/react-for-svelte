@@ -41,7 +41,7 @@ function RevealDown({ show, children, background }: { show: boolean; children: R
       maxHeight: height,
       overflow: 'hidden',
       transition: 'max-height 250ms ease',
-      background: show ? background : undefined,
+      background: background,
     }}>
       <div ref={contentRef} style={{
         opacity: visible ? 1 : 0,
