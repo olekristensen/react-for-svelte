@@ -31,56 +31,58 @@ function Column({ label, code, language, highlight }: {
 
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
-    <div style={{
-      margin: '1.5rem 0',
-      width: 'fit-content',
-      minWidth: '100%',
-      maxWidth: 'calc(100% + 6rem)',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      position: 'relative',
-      left: '50%',
-      transform: 'translateX(-50%)',
-    }}>
-      {/* Code columns */}
-      <div style={{
-        display: 'flex',
-        gap: '1.5rem',
-        marginBottom: note ? '0.5rem' : 0,
-      }}>
-        <Column
-          label={svelte.filename || 'Svelte'}
-          code={svelte.code}
-          language={svelte.language || 'svelte'}
-          highlight={svelte.highlight}
-        />
-        <Column
-          label={react.filename || 'React'}
-          code={react.code}
-          language={react.language || 'tsx'}
-          highlight={react.highlight}
-        />
-      </div>
-
-      {/* Insight — same container width as the code */}
-      {note && (
-        <div style={{
-          padding: '0.5rem 0 0.75rem',
-          fontSize: '0.85rem',
-          color: 'var(--color-text-secondary)',
-          lineHeight: 1.7,
-          borderBottom: '1px solid var(--color-border)',
-        }}>
-          <span style={{
-            fontSize: '0.7rem',
-            fontWeight: 500,
-            color: 'var(--color-accent)',
-            marginRight: '0.5rem',
-            letterSpacing: '0.02em',
-          }}>Insight</span>
-          {note}
+    <>
+      <style>{`
+        .code-cmp {
+          margin: 1.5rem 0;
+        }
+        .code-cmp-cols {
+          display: flex;
+          gap: 1.5rem;
+        }
+        /* Stack on narrow viewports */
+        @media (max-width: 680px) {
+          .code-cmp-cols {
+            flex-direction: column;
+            gap: 1rem;
+          }
+        }
+      `}</style>
+      <div className="code-cmp">
+        <div className="code-cmp-cols" style={{ marginBottom: note ? '0.5rem' : 0 }}>
+          <Column
+            label={svelte.filename || 'Svelte'}
+            code={svelte.code}
+            language={svelte.language || 'svelte'}
+            highlight={svelte.highlight}
+          />
+          <Column
+            label={react.filename || 'React'}
+            code={react.code}
+            language={react.language || 'tsx'}
+            highlight={react.highlight}
+          />
         </div>
-      )}
-    </div>
+
+        {note && (
+          <div style={{
+            padding: '0.5rem 0 0.75rem',
+            fontSize: '0.85rem',
+            color: 'var(--color-text-secondary)',
+            lineHeight: 1.7,
+            borderBottom: '1px solid var(--color-border)',
+          }}>
+            <span style={{
+              fontSize: '0.7rem',
+              fontWeight: 500,
+              color: 'var(--color-accent)',
+              marginRight: '0.5rem',
+              letterSpacing: '0.02em',
+            }}>Insight</span>
+            {note}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
