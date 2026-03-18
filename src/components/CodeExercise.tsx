@@ -149,7 +149,8 @@ interface CodeExerciseProps {
   type: 'fix-the-bug' | 'complete-the-code';
   description: string;
   initialCode: string;
-  solution: string;
+  /** One or more accepted solutions — AST-compared against user code */
+  solution: string | string[];
   validationPatterns: string[];
   hints: string[];
   language?: string;
@@ -743,10 +744,11 @@ export function CodeExercise({
   };
 
   const handleShowSolution = () => {
-    setUserCode(solution);
+    const primary = Array.isArray(solution) ? solution[0] : solution;
+    setUserCode(primary);
     setShowSolution(true);
     setStatus('correct');
-    saveExercise(id, { userCode: solution, solved: true, attempts });
+    saveExercise(id, { userCode: primary, solved: true, attempts });
   };
 
   const handleHint = () => {

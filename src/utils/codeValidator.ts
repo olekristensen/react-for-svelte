@@ -90,6 +90,63 @@ function serialize(node: unknown, nameMap: Map<string, string>): unknown {
     return out;
   }
 
+  // Normalize equivalent React patterns before recursing:
+  //
+  // 1. setFoo(c => c + 1) → setFoo($arg + 1)
+  //    Arrow-function updater with single param that just applies
+  //    an operation on that param is equivalent to the direct form.
+  if (type === 'CallExpression') {
+    const args = n.arguments as unknown[];
+    if (args?.length === 1) {
+      const arg = args[0] as Record<string, unknown>;
+      if (arg?.type === 'ArrowFunctionExpression') {
+        const params = arg.params as Record<string, unknown>[];
+        const body = arg.body as Record<string, unknown>;
+        // Arrow with single param and expression body (not block)
+        if (params?.length === 1 && body?.type && body.type !== 'BlockStatement') {
+          const paramName = (params[0] as Record<string, unknown>).name as string;
+          // Create a temporary nameMap entry so the param maps to
+          // the same id as the outer variable would
+          const innerMap = new Map(nameMap);
+          // Find what the outer scope's equivalent variable maps to
+          // by looking at the callee — if it's setFoo, map param to
+          // the same id as foo would get
+          const callee = n.callee as Record<string, unknown>;
+          if (callee?.type === 'Identifier') {
+            const setterName = callee.name as string;
+            // Convention: setter is setX, state is x (lowercase first letter)
+            const stateName = setterName.replace(/^set/, '').replace(/^./, c => c.toLowerCase());
+            if (nameMap.has(stateName)) {
+              innerMap.set(paramName, nameMap.get(stateName)!);
+            }
+          }
+          // Serialize as a direct call with the body expression
+          const serializedCallee = serialize(n.callee, nameMap);
+          const serializedBody = serialize(body, innerMap);
+          return { type: 'CallExpression', callee: serializedCallee, arguments: [serializedBody], optional: false };
+        }
+      }
+    }
+  }
+
+  // 2. x++ / ++x → x + 1 (UpdateExpression → BinaryExpression)
+  if (type === 'UpdateExpression' && n.operator === '++') {
+    return {
+      type: 'BinaryExpression',
+      operator: '+',
+      left: serialize(n.argument, nameMap),
+      right: 1,
+    };
+  }
+  if (type === 'UpdateExpression' && n.operator === '--') {
+    return {
+      type: 'BinaryExpression',
+      operator: '-',
+      left: serialize(n.argument, nameMap),
+      right: 1,
+    };
+  }
+
   // Recurse all keys except positional ones
   for (const [k, v] of Object.entries(n)) {
     if (k === 'type' || SKIP_KEYS.has(k)) continue;
@@ -134,15 +191,18 @@ function escapeRegex(s: string): string {
 }
 
 /**
- * Validate user code against solution.
- * 1. Try full AST structural match (ignores variable names, whitespace, formatting)
+ * Validate user code against one or more accepted solutions.
+ * 1. Try full AST structural match against each solution
  * 2. Fall back to normalized string pattern matching
  */
 export function validateCode(
   userCode: string,
-  solution: string,
+  solution: string | string[],
   validationPatterns: string[]
 ): boolean {
-  if (structuralMatch(userCode, solution)) return true;
+  const solutions = Array.isArray(solution) ? solution : [solution];
+  for (const s of solutions) {
+    if (structuralMatch(userCode, s)) return true;
+  }
   return normalizedStringMatch(userCode, validationPatterns);
 }
