@@ -30,34 +30,36 @@ function Column({ label, code, language, highlight }: {
 }
 
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
+  // The article is max 860px centered in a padded container (2.5rem sides).
+  // We want the comparison to grow wider but never narrower than the text,
+  // and never exceed the padded container (i.e. keep at least the same
+  // margin to the page edge as the text has when it doesn't fill the article).
+  //
+  // Strategy: use a wider max-width on a centered element. The parent's
+  // padding naturally prevents it from touching the page edge. When the
+  // viewport is narrow enough that 860px already fills the space, the
+  // comparison stays flush with the text because it can't grow.
   return (
     <>
       <style>{`
         .code-cmp {
-          margin: 1.5rem 0;
-          /* Break out of text column, centered, capped at available space */
-          margin-left: max(-3rem, calc((var(--content-max-width) - 100vw + var(--sidebar-width) + 5rem) / 2));
-          margin-right: max(-3rem, calc((var(--content-max-width) - 100vw + var(--sidebar-width) + 5rem) / 2));
+          margin: 1.5rem auto;
+          max-width: calc(var(--content-max-width) + 6rem);
+          /* Pull out of the article's max-width centering */
+          width: calc(100% + 6rem);
+          margin-left: -3rem;
+        }
+        /* When there's not enough room to break out, stay at text width */
+        @media (max-width: 1000px) {
+          .code-cmp {
+            width: 100%;
+            margin-left: 0;
+          }
         }
         .code-cmp-cols {
           display: flex;
           gap: 1.5rem;
         }
-        /* When sidebar is closed, recalculate without sidebar width */
-        @media (max-width: 1100px) {
-          .code-cmp {
-            margin-left: max(-1.5rem, calc((var(--content-max-width) - 100vw + 5rem) / 2));
-            margin-right: max(-1.5rem, calc((var(--content-max-width) - 100vw + 5rem) / 2));
-          }
-        }
-        /* No breakout when tight — stay with text margins */
-        @media (max-width: 960px) {
-          .code-cmp {
-            margin-left: 0;
-            margin-right: 0;
-          }
-        }
-        /* Stack columns */
         @media (max-width: 860px) {
           .code-cmp-cols {
             flex-direction: column;
