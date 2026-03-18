@@ -13,45 +13,40 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
       borderBottom: '1px solid var(--color-border)',
       paddingBottom: note ? 0 : '0.5rem',
     }}>
-      {/* Labels */}
+      {/* Single grid for labels + code — columns stay aligned */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '1.5rem',
-        marginBottom: '0.35rem',
+        gap: '0 1.5rem',
       }}>
-        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
+        {/* Row 1: labels */}
+        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)', paddingBottom: '0.35rem' }}>
           {svelte.filename || 'Svelte'}
         </div>
-        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
+        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)', paddingBottom: '0.35rem' }}>
           {react.filename || 'React'}
         </div>
-      </div>
 
-      {/* Code blocks */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '1.5rem',
-        marginBottom: note ? '0.75rem' : 0,
-      }}>
-        <div>
+        {/* Row 2: code blocks — minWidth 0 prevents grid blowout */}
+        <div style={{ minWidth: 0 }}>
           <CodeBlock
             code={svelte.code}
             language={svelte.language || 'svelte'}
             highlight={svelte.highlight}
+            noMargin
           />
         </div>
-        <div>
+        <div style={{ minWidth: 0 }}>
           <CodeBlock
             code={react.code}
             language={react.language || 'tsx'}
             highlight={react.highlight}
+            noMargin
           />
         </div>
       </div>
 
-      {/* Insight — inside the same bordered unit, no separator above */}
+      {/* Insight */}
       {note && (
         <div style={{
           padding: '0.6rem 0 0.75rem',

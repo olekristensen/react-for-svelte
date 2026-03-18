@@ -6,9 +6,10 @@ interface CodeBlockProps {
   language?: string;
   filename?: string;
   highlight?: number[];
+  noMargin?: boolean;
 }
 
-export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: CodeBlockProps) {
+export function CodeBlock({ code, language = 'tsx', filename, highlight = [], noMargin }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -21,7 +22,7 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
     <div style={{
       overflow: 'hidden',
       border: '1px solid var(--color-border)',
-      marginBottom: '1rem',
+      marginBottom: noMargin ? 0 : '1rem',
     }}>
       {filename && (
         <div style={{
