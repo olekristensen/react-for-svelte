@@ -56,10 +56,11 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         />
       </div>
 
-      {/* Insight — stays at text width */}
       {note && (
         <div style={{
-          padding: '0.5rem 0 0.75rem',
+          width: 'calc(100% + 6rem)',
+          marginLeft: '-3rem',
+          padding: '0.5rem 3rem 0.75rem',
           fontSize: '0.85rem',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.7,
