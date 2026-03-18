@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
@@ -8,6 +9,36 @@ import { CodeExercise } from '../components/CodeExercise';
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
+
+function BuggyCartStore() {
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.3rem' }}>Shopping Cart</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Items: (empty)</p>
+      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem' }}>
+        <button disabled style={{ padding: '0.3rem 0.6rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text-muted)', border: 'none', borderRadius: '4px', fontSize: '0.8rem' }}>Add Item</button>
+        <button disabled style={{ padding: '0.3rem 0.6rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text-muted)', border: 'none', borderRadius: '4px', fontSize: '0.8rem' }}>Remove</button>
+      </div>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ Store incomplete — no state or actions defined</p>
+    </div>
+  );
+}
+
+function FixedCartStore() {
+  const [items, setItems] = useState<string[]>([]);
+  let nextId = items.length + 1;
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.3rem' }}>Shopping Cart</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Items: {items.length === 0 ? '(empty)' : items.join(', ')}</p>
+      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.4rem' }}>
+        <button onClick={() => { setItems(p => [...p, `Item ${nextId}`]); }} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>Add Item</button>
+        <button onClick={() => setItems(p => p.slice(0, -1))} disabled={items.length === 0} style={{ padding: '0.3rem 0.6rem', background: items.length ? 'var(--color-bg-tertiary)' : 'var(--color-bg-tertiary)', color: items.length ? 'var(--color-text)' : 'var(--color-text-muted)', border: 'none', borderRadius: '4px', cursor: items.length ? 'pointer' : 'default', fontSize: '0.8rem' }}>Remove</button>
+      </div>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Store working — items managed with actions</p>
+    </div>
+  );
+}
 
 export default function EcosystemState() {
   return (
@@ -1128,6 +1159,8 @@ function Counter() {
         title="Complete the Zustand Store"
         type="complete-the-code"
         description="Complete this Zustand store for a shopping cart. Define the state shape and the addItem/removeItem actions."
+        buggyPreview={<BuggyCartStore />}
+        solvedPreview={<FixedCartStore />}
         initialCode={`import { create } from 'zustand';
 
 interface CartItem {

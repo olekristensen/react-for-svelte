@@ -9,6 +9,29 @@ const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' 
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
 
+function BuggyPostsPage() {
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: '0 0 0.3rem' }}>Blog Posts</h3>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>Loading...</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ No fetch call — data never loads</p>
+    </div>
+  );
+}
+
+function FixedPostsPage() {
+  const posts = [{ id: 1, title: 'Getting Started with React' }, { id: 2, title: 'Server Components Explained' }, { id: 3, title: 'Data Fetching Patterns' }];
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: '0 0 0.3rem' }}>Blog Posts</h3>
+      <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+        {posts.map(post => <li key={post.id} style={{ color: 'var(--color-text-secondary)', fontSize: '0.85rem', padding: '0.1rem 0' }}>{post.title}</li>)}
+      </ul>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Data fetched and rendered on the server</p>
+    </div>
+  );
+}
+
 export default function NextjsData() {
   return (
     <ChapterLayout id="nextjs-data">
@@ -776,6 +799,8 @@ export default async function DashboardPage() {
         title="Complete Server Fetch"
         type="complete-the-code"
         description="Complete this Next.js Server Component to fetch and display a list of posts. Unlike SvelteKit's load function, Server Components can fetch data directly in the component body."
+        buggyPreview={<BuggyPostsPage />}
+        solvedPreview={<FixedPostsPage />}
         initialCode={`// app/posts/page.tsx (Server Component)
 
 interface Post {

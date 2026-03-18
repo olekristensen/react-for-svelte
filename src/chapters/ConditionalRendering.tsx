@@ -205,6 +205,40 @@ const filterableDemoCode = `function FilterableList() {
   );
 }`;
 
+function BuggyNotifications() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
+        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Messages: {count}</span>
+      </div>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+        {count && <p style={{ color: 'var(--color-text)' }}>You have {count} new messages</p>}
+        {count === 0 && <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>⚠ Bug: renders "0" instead of nothing!</p>}
+      </div>
+    </div>
+  );
+}
+
+function FixedNotifications() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setCount(c => Math.max(0, c - 1))} style={{ padding: '0.3rem 0.7rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>-</button>
+        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Messages: {count}</span>
+      </div>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+        {count > 0 && <p style={{ color: 'var(--color-text)' }}>You have {count} new messages</p>}
+        {count === 0 && <p style={{ color: 'var(--color-success)', fontSize: '0.8rem' }}>✓ No messages — renders nothing (correct)</p>}
+      </div>
+    </div>
+  );
+}
+
 export default function ConditionalRendering() {
   return (
     <ChapterLayout id="conditional-rendering">
@@ -722,6 +756,8 @@ function StatusViewAlt({ status }: { status: string }) {
           "Svelte's {#if count} treats 0 as falsy and renders nothing. React's JSX renders 0 as text.",
           "Convert the condition to a boolean: use messageCount > 0 instead of messageCount"
         ]}
+        buggyPreview={<BuggyNotifications />}
+        solvedPreview={<FixedNotifications />}
       />
     </ChapterLayout>
   );

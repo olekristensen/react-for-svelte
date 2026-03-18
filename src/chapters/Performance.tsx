@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
@@ -8,6 +9,42 @@ import { CodeExercise } from '../components/CodeExercise';
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
+
+function BuggyExpensiveParent() {
+  const [count, setCount] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
+  const items = ['Apple', 'Banana', 'Cherry'];
+
+  return (
+    <div>
+      <button onClick={() => { setCount(c => c + 1); setRenderCount(r => r + 1); }} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+        Count: {count}
+      </button>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+        <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
+        <p style={{ color: '#ef4444', fontSize: '0.75rem' }}>⚠ List re-rendered {renderCount} times (every click!)</p>
+        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>New config object + callback created each render</p>
+      </div>
+    </div>
+  );
+}
+
+function FixedExpensiveParent() {
+  const [count, setCount] = useState(0);
+  const items = ['Apple', 'Banana', 'Cherry'];
+
+  return (
+    <div>
+      <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>
+        Count: {count}
+      </button>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+        <p style={{ color: 'var(--color-text)' }}>List: {items.join(', ')}</p>
+        <p style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>✓ List skips re-render — memoized props are stable</p>
+      </div>
+    </div>
+  );
+}
 
 export default function Performance() {
   return (
@@ -545,6 +582,8 @@ function VirtualList() {
         title="Fix the Re-render"
         type="fix-the-bug"
         description="The ExpensiveList re-renders every time the parent's count changes, even though the list data hasn't changed. The inline object and function create new references every render. Fix it."
+        buggyPreview={<BuggyExpensiveParent />}
+        solvedPreview={<FixedExpensiveParent />}
         initialCode={`function Parent() {
   const [count, setCount] = useState(0);
   const items = ['Apple', 'Banana', 'Cherry'];

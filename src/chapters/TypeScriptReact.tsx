@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
@@ -8,6 +9,27 @@ import { CodeExercise } from '../components/CodeExercise';
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
+
+function BuggyUserCard() {
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>User Card</h3>
+      <input placeholder="Update name..." style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.4rem' }}>⚠ Props typed as "any" — no autocomplete, no type safety</p>
+    </div>
+  );
+}
+
+function FixedUserCard() {
+  const [name, setName] = useState('Alice');
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <h3 style={{ fontSize: '0.9rem', color: 'var(--color-text)', margin: 0 }}>{name}</h3>
+      <input value={name} onChange={e => setName(e.target.value)} style={{ padding: '0.3rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginTop: '0.4rem', width: '100%' }} />
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>✓ Properly typed — full IntelliSense support</p>
+    </div>
+  );
+}
 
 export default function TypeScriptReact() {
   return (
@@ -739,6 +761,8 @@ type FieldValues = Record<string, string | number | boolean>;`}
         title="Fix the Types"
         type="fix-the-bug"
         description="This component uses 'any' types which defeats the purpose of TypeScript. Replace them with proper types for the props, state, and event handler."
+        buggyPreview={<BuggyUserCard />}
+        solvedPreview={<FixedUserCard />}
         initialCode={`interface UserCardProps {
   user: any;  // Fix this type
   onUpdate: any;  // Fix this type

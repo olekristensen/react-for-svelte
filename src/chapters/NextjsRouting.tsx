@@ -9,6 +9,28 @@ const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' 
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
 const pStyle = { marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
 
+function BuggyNavigation() {
+  return (
+    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginLeft: 'auto' }}>⚠ Using &lt;a&gt; tags — full page reload</p>
+    </nav>
+  );
+}
+
+function FixedNavigation() {
+  return (
+    <nav style={{ display: 'flex', gap: '1rem', padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px' }}>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Home</span>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>About</span>
+      <span style={{ color: 'var(--color-accent)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem' }}>Blog</span>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginLeft: 'auto' }}>✓ Using &lt;Link&gt; — client-side navigation</p>
+    </nav>
+  );
+}
+
 export default function NextjsRouting() {
   return (
     <ChapterLayout id="nextjs-routing">
@@ -685,6 +707,8 @@ export async function POST(request: NextRequest) {
         title="Fix the Navigation"
         type="fix-the-bug"
         description="This navigation uses regular <a> tags which cause full page reloads. In Next.js (like SvelteKit), you need the framework's Link component for client-side navigation."
+        buggyPreview={<BuggyNavigation />}
+        solvedPreview={<FixedNavigation />}
         initialCode={`import Link from 'next/link';
 
 function Navigation() {

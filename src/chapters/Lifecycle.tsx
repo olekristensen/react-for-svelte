@@ -96,6 +96,44 @@ function TimerDemo() {
   );
 }
 
+function BuggyTimer() {
+  const [seconds, setSeconds] = useState(0);
+  const [active, setActive] = useState(true);
+  useEffect(() => {
+    if (!active) return;
+    setInterval(() => setSeconds(s => s + 1), 1000);
+    // No cleanup! (intentionally leaks)
+  }, [active]);
+  return (
+    <div>
+      <p style={{ fontSize: '0.9rem', color: 'var(--color-text)', marginBottom: '0.5rem' }}>Elapsed: {seconds}s</p>
+      <button onClick={() => setActive(!active)} style={{ padding: '0.4rem 0.8rem', background: active ? '#ef4444' : 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>
+        {active ? 'Unmount Timer' : 'Remount Timer'}
+      </button>
+      {!active && <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem' }}>⚠ Timer keeps running after unmount! Check the console for errors.</p>}
+    </div>
+  );
+}
+
+function FixedTimer() {
+  const [seconds, setSeconds] = useState(0);
+  const [active, setActive] = useState(true);
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => setSeconds(s => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [active]);
+  return (
+    <div>
+      <p style={{ fontSize: '0.9rem', color: 'var(--color-text)', marginBottom: '0.5rem' }}>Elapsed: {seconds}s</p>
+      <button onClick={() => setActive(!active)} style={{ padding: '0.4rem 0.8rem', background: active ? '#ef4444' : 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>
+        {active ? 'Unmount Timer' : 'Remount Timer'}
+      </button>
+      {!active && <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>✓ Timer properly stopped on unmount</p>}
+    </div>
+  );
+}
+
 export default function Lifecycle() {
   return (
     <ChapterLayout id="lifecycle">
@@ -644,6 +682,8 @@ function Chat() {
           "useEffect can return a function that React calls when the component unmounts",
           "Return a function that calls clearInterval with the interval id"
         ]}
+        buggyPreview={<BuggyTimer />}
+        solvedPreview={<FixedTimer />}
       />
     </ChapterLayout>
   );

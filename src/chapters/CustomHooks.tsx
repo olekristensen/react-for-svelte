@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
@@ -98,6 +98,34 @@ function ToggleDemo() {
       }}>
         Both toggles share the same useToggle hook — independent state, reused logic
       </p>
+    </div>
+  );
+}
+
+function BuggyLocalStorage() {
+  const [value, setValue] = useState('');
+  return (
+    <div>
+      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Stored: "{value}"</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444' }}>⚠ Refresh the page — value is lost (not synced to localStorage)</p>
+    </div>
+  );
+}
+
+function FixedLocalStorage() {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem('exercise-demo');
+    return stored ? JSON.parse(stored) : '';
+  });
+  useEffect(() => {
+    localStorage.setItem('exercise-demo', JSON.stringify(value));
+  }, [value]);
+  return (
+    <div>
+      <input value={value} onChange={e => setValue(e.target.value)} placeholder="Type something..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', width: '100%', marginBottom: '0.5rem' }} />
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Stored: "{value}"</p>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)' }}>✓ Persisted to localStorage — survives page refresh</p>
     </div>
   );
 }
@@ -668,6 +696,8 @@ function ToggleDemo() {
           "Parse the stored string with JSON.parse, falling back to defaultValue",
           "The useEffect should call localStorage.setItem(key, JSON.stringify(value))"
         ]}
+        buggyPreview={<BuggyLocalStorage />}
+        solvedPreview={<FixedLocalStorage />}
       />
     </ChapterLayout>
   );

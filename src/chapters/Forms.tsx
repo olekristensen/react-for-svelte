@@ -246,6 +246,31 @@ const signupDemoCode = `function SignupForm() {
   );
 }`;
 
+function BuggyNameForm() {
+  const [name] = useState('');
+  return (
+    <div>
+      <label style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+        Name: <input type="text" placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
+      </label>
+      <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--color-text)' }}>Hello, {name || 'stranger'}!</p>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.25rem' }}>⚠ Typing doesn't update the greeting — input is uncontrolled</p>
+    </div>
+  );
+}
+
+function FixedNameForm() {
+  const [name, setName] = useState('');
+  return (
+    <div>
+      <label style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+        Name: <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Type here..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginLeft: '0.5rem' }} />
+      </label>
+      <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--color-text)' }}>Hello, {name || 'stranger'}!</p>
+    </div>
+  );
+}
+
 export default function Forms() {
   return (
     <ChapterLayout id="forms">
@@ -803,6 +828,8 @@ function SignupForm() {
           "The value prop sets what the input displays. onChange handles user typing.",
           "Add value={name} and onChange={e => setName(e.target.value)}"
         ]}
+        buggyPreview={<BuggyNameForm />}
+        solvedPreview={<FixedNameForm />}
       />
     </ChapterLayout>
   );

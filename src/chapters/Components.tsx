@@ -1,9 +1,40 @@
+import { useState } from 'react';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
+
+function BuggyUserList() {
+  const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }, { id: 3, name: 'Charlie' }, { id: 4, name: 'Diana' }];
+  const [filter, setFilter] = useState('');
+  const filtered = users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
+  return (
+    <div>
+      <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Type to filter..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginBottom: '0.5rem', width: '100%' }} />
+      <ul style={{ paddingLeft: '1.2rem', color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
+        {filtered.map((user, index) => <li key={index} style={{ padding: '0.15rem 0' }}>{user.name} <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>(key={index})</span></li>)}
+      </ul>
+      <p style={{ fontSize: '0.75rem', color: '#ef4444', marginTop: '0.5rem' }}>⚠ Try filtering then clearing — indices shift and React confuses elements</p>
+    </div>
+  );
+}
+
+function FixedUserList() {
+  const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }, { id: 3, name: 'Charlie' }, { id: 4, name: 'Diana' }];
+  const [filter, setFilter] = useState('');
+  const filtered = users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
+  return (
+    <div>
+      <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Type to filter..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', marginBottom: '0.5rem', width: '100%' }} />
+      <ul style={{ paddingLeft: '1.2rem', color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
+        {filtered.map(user => <li key={user.id} style={{ padding: '0.15rem 0' }}>{user.name} <span style={{ color: 'var(--color-success)', fontSize: '0.75rem' }}>(key={user.id})</span></li>)}
+      </ul>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>✓ Stable keys — React correctly tracks each element</p>
+    </div>
+  );
+}
 
 export default function Components() {
   return (
@@ -908,6 +939,8 @@ export default function TodoList({ title = 'My Todos' }: TodoListProps) {
           "Use a stable, unique identifier from the data itself",
           "Replace key={index} with key={user.id}"
         ]}
+        buggyPreview={<BuggyUserList />}
+        solvedPreview={<FixedUserList />}
       />
     </ChapterLayout>
   );

@@ -94,6 +94,35 @@ function EventDemo() {
   );
 }
 
+function BuggySearchForm() {
+  const [query, setQuery] = useState('');
+  const [submitted, setSubmitted] = useState('');
+  return (
+    <form onSubmit={() => setSubmitted(query)}>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', flex: 1 }} />
+        <button type="submit" style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}>Search</button>
+      </div>
+      {submitted && <p style={{ fontSize: '0.8rem', color: '#ef4444', marginTop: '0.5rem' }}>⚠ Page would reload! (preventDefault missing)</p>}
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Try clicking Search — the page reloads</p>
+    </form>
+  );
+}
+
+function FixedSearchForm() {
+  const [query, setQuery] = useState('');
+  const [submitted, setSubmitted] = useState('');
+  return (
+    <form onSubmit={e => { e.preventDefault(); setSubmitted(query); }}>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search..." style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', flex: 1 }} />
+        <button type="submit" style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}>Search</button>
+      </div>
+      {submitted && <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '0.5rem' }}>✓ Searching for: "{submitted}"</p>}
+    </form>
+  );
+}
+
 export default function Events() {
   return (
     <ChapterLayout id="events">
@@ -521,6 +550,8 @@ function FancyButton({
           "You need to call a method on the event object inside the handler",
           "Add e.preventDefault() at the start of handleSubmit"
         ]}
+        buggyPreview={<BuggySearchForm />}
+        solvedPreview={<FixedSearchForm />}
       />
     </ChapterLayout>
   );

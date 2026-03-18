@@ -126,6 +126,31 @@ function App() {
   );
 }`;
 
+function BuggyThemeDemo() {
+  const [theme, setTheme] = useState('light');
+  return (
+    <div>
+      <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>Toggle Theme</button>
+      <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)', borderRadius: '6px', fontSize: '0.85rem' }}>
+        <p style={{ color: 'var(--color-text)' }}>Current: light <span style={{ color: '#ef4444' }}>(always light — no Provider!)</span></p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Button says: {theme}, but child reads default</p>
+      </div>
+    </div>
+  );
+}
+
+function FixedThemeDemo() {
+  const [theme, setTheme] = useState('light');
+  return (
+    <div>
+      <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')} style={{ padding: '0.4rem 0.8rem', background: 'var(--color-accent)', color: '#0f172a', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.5rem' }}>Toggle Theme</button>
+      <div style={{ padding: '0.5rem', background: theme === 'dark' ? '#1e293b' : '#f1f5f9', borderRadius: '6px', fontSize: '0.85rem', transition: 'background 0.3s' }}>
+        <p style={{ color: theme === 'dark' ? '#f1f5f9' : '#0f172a', transition: 'color 0.3s' }}>Current: {theme} <span style={{ color: 'var(--color-success)' }}>✓</span></p>
+      </div>
+    </div>
+  );
+}
+
 export default function Context() {
   return (
     <ChapterLayout id="context">
@@ -642,6 +667,8 @@ function ThemedBox() {
           "Wrap the JSX tree with <ThemeContext.Provider value={...}>",
           "The value prop is what useContext(ThemeContext) will return in child components"
         ]}
+        buggyPreview={<BuggyThemeDemo />}
+        solvedPreview={<FixedThemeDemo />}
       />
     </ChapterLayout>
   );
