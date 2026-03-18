@@ -1,7 +1,7 @@
 :root {
   --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Source Serif 4', 'Georgia', serif;
-  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
 
   /* Dark theme — warm near-black, not cold navy */
   --color-bg: #141614;
