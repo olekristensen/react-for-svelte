@@ -13,7 +13,7 @@ function Column({ label, code, language, highlight }: {
   highlight?: number[];
 }) {
   return (
-    <div style={{ minWidth: 0 }}>
+    <div style={{ minWidth: 0, flex: 1 }}>
       <div style={{
         fontSize: '0.72rem',
         fontWeight: 500,
@@ -28,34 +28,30 @@ function Column({ label, code, language, highlight }: {
 }
 
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
+  // Break out of the max-width article to use available viewport space.
+  // width: 100vw would ignore the sidebar; instead use a large max-width
+  // with negative margins that the article's centering absorbs.
   return (
     <div style={{ margin: '1.5rem 0' }}>
-      {/* Code columns — allowed to grow wider than text */}
       <div style={{
         display: 'flex',
         gap: '1.5rem',
-        marginLeft: '-1.5rem',
-        marginRight: '-1.5rem',
-        paddingLeft: '1.5rem',
-        paddingRight: '1.5rem',
+        width: 'calc(100% + 6rem)',
+        marginLeft: '-3rem',
         marginBottom: '0.5rem',
       }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <Column
-            label={svelte.filename || 'Svelte'}
-            code={svelte.code}
-            language={svelte.language || 'svelte'}
-            highlight={svelte.highlight}
-          />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <Column
-            label={react.filename || 'React'}
-            code={react.code}
-            language={react.language || 'tsx'}
-            highlight={react.highlight}
-          />
-        </div>
+        <Column
+          label={svelte.filename || 'Svelte'}
+          code={svelte.code}
+          language={svelte.language || 'svelte'}
+          highlight={svelte.highlight}
+        />
+        <Column
+          label={react.filename || 'React'}
+          code={react.code}
+          language={react.language || 'tsx'}
+          highlight={react.highlight}
+        />
       </div>
 
       {/* Insight — stays at text width */}
