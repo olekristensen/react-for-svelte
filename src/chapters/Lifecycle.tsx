@@ -621,6 +621,7 @@ function Chat() {
       <ComparisonTable
         caption="Svelte Lifecycle vs React Hooks"
         headers={['Concept', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Run on mount', 'onMount(() => { ... })', 'useEffect(() => { ... }, [])'],
           ['Cleanup on unmount', 'onDestroy(() => { ... })', 'useEffect(() => { return () => { ... } }, [])'],

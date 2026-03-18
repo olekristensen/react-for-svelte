@@ -669,6 +669,7 @@ export async function POST(request: NextRequest) {
       <ComparisonTable
         caption="Routing Feature Comparison: SvelteKit vs Next.js"
         headers={['Feature', 'SvelteKit', 'Next.js App Router']}
+        columnFormat={['prose', 'prose', 'prose']}
         rows={[
           ['Page file', '+page.svelte', 'page.tsx'],
           ['Layout file', '+layout.svelte', 'layout.tsx'],

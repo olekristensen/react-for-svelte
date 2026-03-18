@@ -478,6 +478,7 @@ NEXT_PUBLIC_API_URL=https://api...    # client exposed`,
       <ComparisonTable
         caption="SvelteKit vs Next.js: Complete Concept Map"
         headers={['Concept', 'SvelteKit', 'Next.js App Router']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Page component', '+page.svelte', 'page.tsx'],
           ['Layout', '+layout.svelte', 'layout.tsx'],

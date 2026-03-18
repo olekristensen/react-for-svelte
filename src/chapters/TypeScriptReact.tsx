@@ -681,6 +681,7 @@ function UserProfile({ id }: { id: string }) {
       <ComparisonTable
         caption="TypeScript in Svelte vs React"
         headers={['Feature', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Setup', 'lang="ts" in <script>', '.tsx file extension'],
           ['Prop types', 'interface + $props()', 'interface + function parameter'],

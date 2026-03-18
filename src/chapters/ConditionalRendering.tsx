@@ -698,6 +698,7 @@ function StatusViewAlt({ status }: { status: string }) {
       <ComparisonTable
         caption="Svelte vs React conditional and list rendering"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['If/else', '{#if cond}...{:else}...{/if}', '{cond ? <A /> : <B />}'],
           ['Else if', '{:else if cond2}', 'Nested ternary or early return'],

@@ -140,6 +140,7 @@ export default function Hello() {
 
       <ComparisonTable
         headers={['Svelte Concept', 'React Equivalent', 'Key Difference']}
+        columnFormat={['code', 'code', 'prose']}
         rows={[
           [
             '$state',

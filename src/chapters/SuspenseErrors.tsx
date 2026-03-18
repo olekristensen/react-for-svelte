@@ -484,6 +484,7 @@ function ProductPage() {
       <ComparisonTable
         caption="Svelte vs React Error and Loading Patterns"
         headers={['Concept', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Promise loading state', '{#await promise}...{/await}', '<Suspense fallback={...}>'],
           ['Promise error state', '{#await promise}{:catch error}', '<ErrorBoundary fallback={...}>'],

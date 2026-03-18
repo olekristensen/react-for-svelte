@@ -894,6 +894,7 @@ export default function Dashboard() {
 
       <ComparisonTable
         headers={['Concept', 'SvelteKit', 'React + Libraries']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           [
             'Server-side data fetching',

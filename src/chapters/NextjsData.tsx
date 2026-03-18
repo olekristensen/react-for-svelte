@@ -767,6 +767,7 @@ export default async function DashboardPage() {
       <ComparisonTable
         caption="Data Fetching: SvelteKit vs Next.js"
         headers={['Concept', 'SvelteKit', 'Next.js App Router']}
+        columnFormat={['prose', 'prose', 'prose']}
         rows={[
           ['Server data loading', '+page.server.ts load()', 'async Server Component'],
           ['Universal loading', '+page.ts load()', 'No direct equivalent'],

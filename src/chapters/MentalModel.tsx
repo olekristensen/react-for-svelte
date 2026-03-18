@@ -445,6 +445,7 @@ export default function Mutation() {
 
       <ComparisonTable
         headers={['Dimension', 'Svelte (Compiler)', 'React (Runtime)']}
+        columnFormat={['prose', 'prose', 'prose']}
         rows={[
           [
             'Bundle size',

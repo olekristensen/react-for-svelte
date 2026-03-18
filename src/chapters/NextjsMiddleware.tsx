@@ -767,6 +767,7 @@ export function middleware(request: NextRequest) {
       <ComparisonTable
         caption="Middleware and API Routes: SvelteKit vs Next.js"
         headers={['Feature', 'SvelteKit', 'Next.js']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Middleware file', 'src/hooks.server.ts', 'middleware.ts (project root)'],
           ['Middleware function', 'handle({ event, resolve })', 'middleware(request)'],

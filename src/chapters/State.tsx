@@ -587,6 +587,7 @@ function TodoApp() {
       <ComparisonTable
         caption="Svelte vs React state management approaches"
         headers={['Concept', 'Svelte 5', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Declare state', 'let x = $state(value)', 'const [x, setX] = useState(value)'],
           ['Update state', 'x = newValue (direct mutation)', 'setX(newValue) (setter function)'],

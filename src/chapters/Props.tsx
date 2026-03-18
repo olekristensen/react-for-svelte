@@ -631,6 +631,7 @@ function Parent() {
       <ComparisonTable
         caption="Svelte vs React prop patterns"
         headers={['Pattern', 'Svelte 5', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Declare props', 'let { x } = $props()', 'function Comp({ x })'],
           ['Default value', 'let { x = 5 } = $props()', 'function Comp({ x = 5 })'],

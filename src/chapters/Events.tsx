@@ -477,6 +477,7 @@ function FancyButton({
       <ComparisonTable
         caption="Svelte vs React Event Handling"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Click handler', 'on:click={handler}', 'onClick={handler}'],
           ['Inline handler', 'on:click={() => ...}', 'onClick={() => ...}'],

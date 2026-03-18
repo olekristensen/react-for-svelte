@@ -531,6 +531,7 @@ import styles from './App.module.css';
       <ComparisonTable
         caption="React Styling Strategies — Trade-offs"
         headers={['Approach', 'Scoping', 'Pros', 'Cons']}
+        columnFormat={['prose', 'prose', 'prose', 'prose']}
         rows={[
           [
             'CSS Modules',

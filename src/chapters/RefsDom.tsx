@@ -723,6 +723,7 @@ function VideoPlayer({ ref, src }) {
       <ComparisonTable
         caption="Svelte DOM Access vs React Refs"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['DOM reference', 'bind:this={el}', 'ref={useRef()} + el.current'],
           ['Access after mount', 'onMount / $effect', 'useEffect(() => {}, [])'],

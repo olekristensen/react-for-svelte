@@ -569,6 +569,7 @@ function VirtualList() {
       <ComparisonTable
         caption="Svelte vs React Performance Optimization"
         headers={['Optimization', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Cached derived values', '$derived (automatic)', 'useMemo(() => ..., [deps])'],
           ['Stable function refs', 'Automatic (compiler)', 'useCallback(fn, [deps])'],

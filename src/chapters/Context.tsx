@@ -584,6 +584,7 @@ function DoubleDisplay() {
       <ComparisonTable
         caption="Svelte stores vs React Context and alternatives"
         headers={['Concept', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Basic shared state', 'writable(value)', 'createContext + Provider + useContext'],
           ['Read-only shared state', 'readable(value, start)', 'Context with no setter exposed'],

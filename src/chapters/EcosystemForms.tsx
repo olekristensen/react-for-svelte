@@ -924,6 +924,7 @@ export function safeValidate(body: unknown) {
 
       <ComparisonTable
         headers={['Scenario', 'Approach', 'Why']}
+        columnFormat={['prose', 'code', 'prose']}
         rows={[
           [
             'Login form (email + password)',
@@ -970,6 +971,7 @@ export function safeValidate(body: unknown) {
 
       <ComparisonTable
         headers={['Feature', 'Svelte', 'React Hook Form', 'TanStack Form', 'Raw React']}
+        columnFormat={['prose', 'prose', 'prose', 'prose', 'prose']}
         rows={[
           [
             'Two-way binding',

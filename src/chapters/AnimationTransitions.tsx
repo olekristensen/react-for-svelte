@@ -1819,6 +1819,7 @@ function Sequence() {
 
       <ComparisonTable
         headers={['Feature', 'Svelte Built-in', 'CSS Transitions', 'Framer Motion', 'React Spring']}
+        columnFormat={['prose', 'prose', 'prose', 'prose', 'prose']}
         rows={[
           ['Enter/exit', 'transition:fade/fly/slide', 'Manual onTransitionEnd', 'AnimatePresence', 'useTransition'],
           ['List reorder', 'animate:flip', 'Limited (no FLIP)', 'layout prop', 'useSprings'],

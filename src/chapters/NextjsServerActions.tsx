@@ -766,6 +766,7 @@ export default function AuthPage() {
       <ComparisonTable
         caption="Server Actions: SvelteKit vs Next.js"
         headers={['Feature', 'SvelteKit', 'Next.js']}
+        columnFormat={['prose', 'prose', 'prose']}
         rows={[
           ['Definition', 'actions export in +page.server.ts', '"use server" functions'],
           ['Named actions', 'action="?/name" convention', 'Separate function per action'],

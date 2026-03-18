@@ -41,6 +41,7 @@ export default function EcosystemDecisions() {
       <ComparisonTable
         caption="Recommended stack for a simple CRUD app"
         headers={['Concern', 'Solution', 'Why']}
+        columnFormat={['prose', 'code', 'prose']}
         rows={[
           ['Client state', 'useState + useReducer', 'Built-in, zero dependencies, sufficient for local state'],
           ['Server data', 'fetch + useEffect (or SWR)', 'SWR adds caching with minimal API surface'],
@@ -139,6 +140,7 @@ export function ContactList() {
       <ComparisonTable
         caption="Recommended stack for a medium SaaS application"
         headers={['Concern', 'Solution', 'Why']}
+        columnFormat={['prose', 'code', 'prose']}
         rows={[
           ['Client state', 'Zustand', 'Minimal API, no boilerplate, granular subscriptions'],
           ['Server data', 'TanStack Query', 'Caching, background refetch, optimistic updates, devtools'],
@@ -241,6 +243,7 @@ export function ProjectDashboard() {
       <ComparisonTable
         caption="Recommended stack for a large enterprise application"
         headers={['Concern', 'Solution', 'Why']}
+        columnFormat={['prose', 'code', 'prose']}
         rows={[
           ['Client state', 'Redux Toolkit', 'Enforced conventions, middleware, devtools, time-travel debugging'],
           ['Server data', 'TanStack Query + tRPC', 'End-to-end type safety from API to UI, automatic cache management'],
@@ -353,6 +356,7 @@ export default usersSlice.reducer;`}
       <ComparisonTable
         caption="Mapping Svelte built-ins to React ecosystem equivalents"
         headers={['Svelte Built-in', 'React Equivalent', 'Notes']}
+        columnFormat={['code', 'code', 'prose']}
         rows={[
           ['$state / $derived', 'useState / useMemo', 'Built-in React primitives; Zustand or Jotai for shared state'],
           ['writable() / derived()', 'Zustand or Jotai', 'External stores for state shared across components'],

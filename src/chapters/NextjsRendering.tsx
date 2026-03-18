@@ -551,6 +551,7 @@ module.exports = nextConfig;
       <ComparisonTable
         caption="Rendering Strategies: SvelteKit vs Next.js"
         headers={['Strategy', 'SvelteKit', 'Next.js App Router']}
+        columnFormat={['prose', 'prose', 'prose']}
         rows={[
           ['SSR (default)', 'Default behavior', 'Default for dynamic Server Components'],
           ['SSG (build-time)', 'export const prerender = true', 'Automatic for static pages / generateStaticParams'],

@@ -70,6 +70,7 @@ export default function EcosystemState() {
       <ComparisonTable
         caption="The React state management spectrum at a glance"
         headers={['Library', 'Mental Model', 'Bundle Size', 'Best For']}
+        columnFormat={['code', 'prose', 'prose', 'prose']}
         rows={[
           ['useState', 'Local component state', '0 KB (built-in)', 'Single-component state, forms, toggles'],
           ['Context + useReducer', 'Dependency injection + flux', '0 KB (built-in)', 'Theme, auth, locale -- low-frequency global state'],
@@ -1027,6 +1028,7 @@ function Counter() {
       <ComparisonTable
         caption="Which state management solution for which scenario"
         headers={['Scenario', 'Recommended', 'Why']}
+        columnFormat={['prose', 'code', 'prose']}
         rows={[
           [
             'Simple app (landing pages, blogs, portfolios)',
@@ -1086,6 +1088,7 @@ function Counter() {
       <ComparisonTable
         caption="Svelte store patterns mapped to React state libraries"
         headers={['Svelte Pattern', 'Zustand Equivalent', 'Jotai Equivalent']}
+        columnFormat={['code', 'code', 'code']}
         rows={[
           [
             'writable(value)',

@@ -755,6 +755,7 @@ function SignupForm() {
       <ComparisonTable
         caption="Svelte vs React form patterns"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Text input binding', 'bind:value={name}', 'value={name} onChange={e => setName(e.target.value)}'],
           ['Checkbox binding', 'bind:checked={agreed}', 'checked={agreed} onChange={e => setAgreed(e.target.checked)}'],

@@ -636,6 +636,7 @@ function ToggleDemo() {
       <ComparisonTable
         caption="Svelte vs React Logic Reuse"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Extract stateful logic', 'Function returning stores', 'Custom hook (use* function)'],
           ['Share between components', 'Import store factory, subscribe with $', 'Import hook, call in component'],

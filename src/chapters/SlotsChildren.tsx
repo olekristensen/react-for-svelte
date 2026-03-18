@@ -702,6 +702,7 @@ Card.Footer = function CardFooter({ children }: { children: ReactNode }) {
       <ComparisonTable
         caption="Svelte Slots vs React Composition Patterns"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Default slot', '<slot />', '{children}'],
           ['Named slot', '<slot name="header" />', 'header prop (ReactNode)'],

@@ -667,6 +667,7 @@ maxlength   → maxLength
 
       <ComparisonTable
         headers={['Svelte Template', 'JSX Equivalent', 'Notes']}
+        columnFormat={['code', 'code', 'prose']}
         rows={[
           [
             '{expression}',

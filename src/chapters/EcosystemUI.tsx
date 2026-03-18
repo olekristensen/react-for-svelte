@@ -425,6 +425,7 @@ const usersRoute = createRoute({
       <ComparisonTable
         caption="Routing solutions compared across key features"
         headers={['Feature', 'React Router', 'TanStack Router', 'Next.js App Router', 'SvelteKit']}
+        columnFormat={['prose', 'prose', 'prose', 'prose', 'prose']}
         rows={[
           [
             'File-based routing',
@@ -1288,6 +1289,7 @@ function PeoplePicker() {
       <ComparisonTable
         caption="React UI component libraries compared"
         headers={['Library', 'Approach', 'Styling', 'Accessibility', 'Best For']}
+        columnFormat={['code', 'prose', 'prose', 'prose', 'prose']}
         rows={[
           [
             'Radix UI',

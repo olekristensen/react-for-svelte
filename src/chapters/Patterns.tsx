@@ -489,6 +489,7 @@ function LoginForm() {
       <ComparisonTable
         caption="Design Patterns: Svelte vs React"
         headers={['Pattern', 'Svelte', 'React']}
+        columnFormat={['prose', 'code', 'code']}
         rows={[
           ['Higher-Order Components', 'Not applicable', 'withX(Component) — legacy but still used'],
           ['Render Props', 'Snippets / slot props', 'children-as-function — replaced by hooks'],
