@@ -406,6 +406,8 @@ function ExerciseContent({
                     fontWeight: 600,
                     letterSpacing: '0.05em',
                     color: 'var(--color-error)',
+                    background: 'color-mix(in srgb, var(--color-error) 12%, transparent)',
+                    padding: '0.15em 0.4em',
                     flexShrink: 0,
                   }}>FAILED</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>{err}</span>
