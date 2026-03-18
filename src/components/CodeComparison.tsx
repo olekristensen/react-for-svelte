@@ -30,17 +30,17 @@ function Column({ label, code, language, highlight }: {
 }
 
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
-  // Break out of the max-width article to use available viewport space.
-  // width: 100vw would ignore the sidebar; instead use a large max-width
-  // with negative margins that the article's centering absorbs.
   return (
-    <div style={{ margin: '1.5rem 0' }}>
+    <div style={{
+      margin: '1.5rem 0',
+      marginLeft: 'min(-3rem, calc((100% - 100vw + var(--sidebar-width) + 5rem) / 2))',
+      marginRight: 'min(-3rem, calc((100% - 100vw + var(--sidebar-width) + 5rem) / 2))',
+    }}>
+      {/* Code columns */}
       <div style={{
         display: 'flex',
         gap: '1.5rem',
-        width: 'calc(100% + 6rem)',
-        marginLeft: '-3rem',
-        marginBottom: '0.5rem',
+        marginBottom: note ? '0.5rem' : 0,
       }}>
         <Column
           label={svelte.filename || 'Svelte'}
@@ -56,11 +56,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         />
       </div>
 
+      {/* Insight — same container width as the code */}
       {note && (
         <div style={{
-          width: 'calc(100% + 6rem)',
-          marginLeft: '-3rem',
-          padding: '0.5rem 3rem 0.75rem',
+          padding: '0.5rem 0 0.75rem',
           fontSize: '0.85rem',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.7,
