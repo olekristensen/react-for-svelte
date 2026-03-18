@@ -6,61 +6,66 @@ interface CodeComparisonProps {
   note?: string;
 }
 
+function Column({ label, code, language, highlight }: {
+  label: string;
+  code: string;
+  language: string;
+  highlight?: number[];
+}) {
+  return (
+    <div style={{ minWidth: 0 }}>
+      <div style={{
+        fontSize: '0.72rem',
+        fontWeight: 500,
+        color: 'var(--color-text-muted)',
+        paddingBottom: '0.35rem',
+      }}>
+        {label}
+      </div>
+      <CodeBlock code={code} language={language} highlight={highlight} noMargin />
+    </div>
+  );
+}
+
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
-    <div style={{
-      margin: '1.5rem calc(-2.5rem + 1rem)',
-      padding: '0 1rem',
-      borderBottom: '1px solid var(--color-border)',
-      paddingBottom: note ? 0 : '0.5rem',
-    }}>
-      <style>{`
-        .code-comparison-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0 1.5rem;
-        }
-        @media (max-width: 700px) {
-          .code-comparison-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-      <div className="code-comparison-grid">
-        {/* Row 1: labels */}
-        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)', paddingBottom: '0.35rem' }}>
-          {svelte.filename || 'Svelte'}
-        </div>
-        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)', paddingBottom: '0.35rem' }}>
-          {react.filename || 'React'}
-        </div>
-
-        {/* Row 2: code blocks */}
-        <div style={{ minWidth: 0 }}>
-          <CodeBlock
+    <div style={{ margin: '1.5rem 0' }}>
+      {/* Code columns — allowed to grow wider than text */}
+      <div style={{
+        display: 'flex',
+        gap: '1.5rem',
+        marginLeft: '-1.5rem',
+        marginRight: '-1.5rem',
+        paddingLeft: '1.5rem',
+        paddingRight: '1.5rem',
+        marginBottom: '0.5rem',
+      }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <Column
+            label={svelte.filename || 'Svelte'}
             code={svelte.code}
             language={svelte.language || 'svelte'}
             highlight={svelte.highlight}
-            noMargin
           />
         </div>
-        <div style={{ minWidth: 0 }}>
-          <CodeBlock
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <Column
+            label={react.filename || 'React'}
             code={react.code}
             language={react.language || 'tsx'}
             highlight={react.highlight}
-            noMargin
           />
         </div>
       </div>
 
-      {/* Insight */}
+      {/* Insight — stays at text width */}
       {note && (
         <div style={{
-          padding: '0.6rem 0 0.75rem',
+          padding: '0.5rem 0 0.75rem',
           fontSize: '0.85rem',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.7,
+          borderBottom: '1px solid var(--color-border)',
         }}>
           <span style={{
             fontSize: '0.7rem',
