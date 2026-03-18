@@ -143,6 +143,8 @@ function useIsLightMode() {
   return light;
 }
 
+import { runTests, validateCode, type ExerciseTest } from '../utils/codeValidator';
+
 interface CodeExerciseProps {
   id: string;
   title: string;
@@ -153,14 +155,12 @@ interface CodeExerciseProps {
   solution: string | string[];
   validationPatterns: string[];
   hints: string[];
+  /** Behavioral tests — if provided, these take priority over pattern matching */
+  tests?: ExerciseTest[];
   language?: string;
-  /** Live preview of the BROKEN/incomplete version */
   buggyPreview?: ReactNode;
-  /** Live preview of the CORRECT version (shown when solved or as goal) */
   solvedPreview?: ReactNode;
 }
-
-import { validateCode } from '../utils/codeValidator';
 
 // Shared editor + preview content, used both inline and in modal
 function ExerciseContent({
@@ -182,6 +182,7 @@ function ExerciseContent({
   handleReset,
   handleShowSolution,
   textareaRef,
+  testErrors,
   buggyPreview,
   solvedPreview,
   isModal,
@@ -205,6 +206,7 @@ function ExerciseContent({
   handleReset: () => void;
   handleShowSolution: () => void;
   textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+  testErrors: string[];
   buggyPreview?: ReactNode;
   solvedPreview?: ReactNode;
   isModal: boolean;
@@ -393,7 +395,14 @@ function ExerciseContent({
           fontWeight: 500,
           flexShrink: 0,
         }}>
-          Not quite — try again. {attempts >= 2 && hints.length > hintIndex && 'Try using a hint!'}
+          <div>Not quite — try again. {attempts >= 2 && hints.length > hintIndex && 'Try using a hint!'}</div>
+          {testErrors.length > 0 && (
+            <div style={{ marginTop: '0.4rem', fontSize: '0.78rem', fontWeight: 400, fontFamily: 'var(--font-mono)' }}>
+              {testErrors.map((err, i) => (
+                <div key={i} style={{ marginTop: '0.2rem' }}>{err}</div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -662,6 +671,7 @@ export function CodeExercise({
   solution,
   validationPatterns,
   hints,
+  tests: exerciseTests,
   buggyPreview,
   solvedPreview,
 }: CodeExerciseProps) {
@@ -678,6 +688,7 @@ export function CodeExercise({
   const [shaking, setShaking] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [testErrors, setTestErrors] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -722,8 +733,23 @@ export function CodeExercise({
   const handleCheck = () => {
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
+    setTestErrors([]);
 
-    if (validateCode(userCode, solution, validationPatterns)) {
+    let passed = false;
+
+    // 1. Run behavioral tests if available
+    if (exerciseTests && exerciseTests.length > 0) {
+      const result = runTests(userCode, exerciseTests);
+      passed = result.passed;
+      if (!passed) {
+        setTestErrors(result.results.filter(r => !r.passed).map(r => `${r.name}: ${r.error}`));
+      }
+    } else {
+      // 2. Fall back to AST/pattern matching
+      passed = validateCode(userCode, solution, validationPatterns);
+    }
+
+    if (passed) {
       setStatus('correct');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
@@ -776,6 +802,7 @@ export function CodeExercise({
     handleReset,
     handleShowSolution,
     textareaRef,
+    testErrors,
     buggyPreview,
     solvedPreview,
   };

@@ -1,158 +1,367 @@
+import { transform } from 'sucrase';
+
+// ─────────────────────────────────────────────────────────────────
+// Exercise test runner
+// Compiles user JSX, runs it with mocked React, checks behavior
+// ─────────────────────────────────────────────────────────────────
+
+export interface ExerciseTest {
+  name: string;
+  test: (ctx: TestContext) => void;
+}
+
+export interface TestResult {
+  passed: boolean;
+  results: { name: string; passed: boolean; error?: string }[];
+}
+
+interface StateSlot {
+  value: unknown;
+  setter: (v: unknown) => void;
+  updates: unknown[];
+}
+
+interface TestContext {
+  /** Call the component function, returns the element tree */
+  render: () => ElementNode;
+  /** Find an element by type name and simulate a click */
+  click: (selector: string) => void;
+  /** Find an element by type and call onSubmit */
+  submit: (selector: string) => void;
+  /** Get all state updates for the nth useState call */
+  stateUpdates: (index?: number) => unknown[];
+  /** Get current state value for the nth useState call */
+  stateValue: (index?: number) => unknown;
+  /** Re-render after state changes */
+  rerender: () => ElementNode;
+  /** Check if an effect cleanup was registered */
+  hasEffectCleanup: boolean;
+  /** Run effect cleanups */
+  runCleanups: () => void;
+  /** Advance time for setTimeout/setInterval */
+  advanceTime: (ms: number) => void;
+}
+
+interface ElementNode {
+  type: string;
+  props: Record<string, unknown>;
+  children: unknown[];
+}
+
+function compileJSX(code: string): string | null {
+  try {
+    const result = transform(code, {
+      transforms: ['jsx', 'typescript'],
+      jsxRuntime: 'classic',
+      production: true,
+    });
+    return result.code;
+  } catch {
+    return null;
+  }
+}
+
+function createTestContext(code: string): TestContext | null {
+  const compiled = compileJSX(code);
+  if (!compiled) return null;
+
+  const states: StateSlot[] = [];
+  let stateIndex = 0;
+  const effectCleanups: (() => void)[] = [];
+  let hasCleanup = false;
+  const timers: { id: number; fn: () => void; delay: number; interval: boolean; elapsed: number }[] = [];
+  let timerIdCounter = 1;
+  let lastElement: ElementNode | null = null;
+
+  // Mock React API
+  const mockReact = {
+    createElement: (type: unknown, props: Record<string, unknown> | null, ...children: unknown[]): ElementNode => ({
+      type: typeof type === 'function' ? type.name || 'Anonymous' : String(type),
+      props: props || {},
+      children: children.flat(),
+    }),
+  };
+
+  const mockUseState = (initialValue: unknown) => {
+    const idx = stateIndex++;
+    if (idx >= states.length) {
+      const slot: StateSlot = {
+        value: typeof initialValue === 'function' ? (initialValue as () => unknown)() : initialValue,
+        setter: () => {},
+        updates: [],
+      };
+      slot.setter = (update: unknown) => {
+        const newVal = typeof update === 'function'
+          ? (update as (prev: unknown) => unknown)(slot.value)
+          : update;
+        slot.updates.push(newVal);
+        slot.value = newVal;
+      };
+      states.push(slot);
+    }
+    return [states[idx].value, states[idx].setter];
+  };
+
+  const mockUseEffect = (fn: () => (() => void) | void, _deps?: unknown[]) => {
+    const cleanup = fn();
+    if (typeof cleanup === 'function') {
+      hasCleanup = true;
+      effectCleanups.push(cleanup);
+    }
+  };
+
+  const mockUseRef = (initial: unknown) => ({ current: initial });
+  const mockUseContext = () => undefined;
+  const mockUseMemo = (fn: () => unknown) => fn();
+  const mockUseCallback = (fn: unknown) => fn;
+  const mockUseReducer = (reducer: (s: unknown, a: unknown) => unknown, initial: unknown) => {
+    const [state, setState] = mockUseState(initial);
+    const dispatch = (action: unknown) => {
+      (setState as (v: unknown) => void)(reducer(state, action));
+    };
+    return [state, dispatch];
+  };
+  const mockCreateContext = (defaultValue: unknown) => ({
+    Provider: ({ children }: { children: unknown }) => children,
+    Consumer: () => null,
+    _defaultValue: defaultValue,
+  });
+
+  const mockSetTimeout = (fn: () => void, delay: number) => {
+    const id = timerIdCounter++;
+    timers.push({ id, fn, delay, interval: false, elapsed: 0 });
+    return id;
+  };
+  const mockSetInterval = (fn: () => void, delay: number) => {
+    const id = timerIdCounter++;
+    timers.push({ id, fn, delay, interval: true, elapsed: 0 });
+    return id;
+  };
+  const mockClearInterval = (id: number) => {
+    const idx = timers.findIndex(t => t.id === id);
+    if (idx >= 0) timers.splice(idx, 1);
+  };
+  const mockClearTimeout = mockClearInterval;
+
+  // Build the execution scope
+  let ComponentFn: (() => ElementNode) | null = null;
+
+  try {
+    // Extract function name from compiled code
+    const fnMatch = compiled.match(/function\s+(\w+)\s*\(/);
+    const fnName = fnMatch?.[1] || 'Component';
+
+    const wrappedCode = `
+      ${compiled}
+      return ${fnName};
+    `;
+
+    const factory = new Function(
+      'React', 'useState', 'useEffect', 'useRef', 'useContext',
+      'useMemo', 'useCallback', 'useReducer', 'createContext',
+      'setTimeout', 'setInterval', 'clearInterval', 'clearTimeout',
+      'console', 'localStorage', 'JSON', 'fetch',
+      wrappedCode
+    );
+
+    ComponentFn = factory(
+      mockReact, mockUseState, mockUseEffect, mockUseRef, mockUseContext,
+      mockUseMemo, mockUseCallback, mockUseReducer, mockCreateContext,
+      mockSetTimeout, mockSetInterval, mockClearInterval, mockClearTimeout,
+      console, localStorage, JSON, fetch,
+    ) as () => ElementNode;
+  } catch {
+    return null;
+  }
+
+  if (!ComponentFn) return null;
+
+  function findElement(node: unknown, selector: string): ElementNode | null {
+    if (!node || typeof node !== 'object') return null;
+    const el = node as ElementNode;
+    if (el.type === selector) return el;
+    if (el.children) {
+      for (const child of el.children) {
+        const found = findElement(child, selector);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  const render = () => {
+    stateIndex = 0;
+    lastElement = ComponentFn!();
+    return lastElement;
+  };
+
+  return {
+    render,
+    rerender: render,
+    click: (selector: string) => {
+      const el = lastElement ? findElement(lastElement, selector) : null;
+      if (el?.props?.onClick) {
+        (el.props.onClick as (e?: unknown) => void)();
+      }
+    },
+    submit: (selector: string) => {
+      const el = lastElement ? findElement(lastElement, selector) : null;
+      if (el?.props?.onSubmit) {
+        const mockEvent = {
+          preventDefault: () => {},
+          target: {},
+          currentTarget: {},
+        };
+        (el.props.onSubmit as (e: unknown) => void)(mockEvent);
+      }
+    },
+    stateUpdates: (index = 0) => states[index]?.updates || [],
+    stateValue: (index = 0) => states[index]?.value,
+    get hasEffectCleanup() { return hasCleanup; },
+    runCleanups: () => { effectCleanups.forEach(fn => fn()); },
+    advanceTime: (ms: number) => {
+      for (const t of timers) {
+        t.elapsed += ms;
+        while (t.elapsed >= t.delay) {
+          t.fn();
+          t.elapsed -= t.delay;
+          if (!t.interval) break;
+        }
+      }
+    },
+  };
+}
+
+/**
+ * Run exercise tests against user code.
+ * Returns detailed results for each test.
+ */
+export function runTests(code: string, tests: ExerciseTest[]): TestResult {
+  const results: TestResult['results'] = [];
+
+  for (const t of tests) {
+    const ctx = createTestContext(code);
+    if (!ctx) {
+      results.push({ name: t.name, passed: false, error: 'Code could not be compiled' });
+      continue;
+    }
+    try {
+      t.test(ctx);
+      results.push({ name: t.name, passed: true });
+    } catch (e) {
+      results.push({
+        name: t.name,
+        passed: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+  }
+
+  return {
+    passed: results.every(r => r.passed),
+    results,
+  };
+}
+
+/**
+ * Simple assertion helper for use in tests
+ */
+export function expect(actual: unknown) {
+  return {
+    toBe(expected: unknown) {
+      if (actual !== expected) {
+        throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+      }
+    },
+    toBeTruthy() {
+      if (!actual) {
+        throw new Error(`Expected truthy value, got ${JSON.stringify(actual)}`);
+      }
+    },
+    toBeGreaterThan(n: number) {
+      if (typeof actual !== 'number' || actual <= n) {
+        throw new Error(`Expected value greater than ${n}, got ${JSON.stringify(actual)}`);
+      }
+    },
+    toContain(item: unknown) {
+      if (!Array.isArray(actual) || !actual.includes(item)) {
+        throw new Error(`Expected array to contain ${JSON.stringify(item)}`);
+      }
+    },
+    toHaveLength(n: number) {
+      if (!Array.isArray(actual) || actual.length !== n) {
+        throw new Error(`Expected length ${n}, got ${Array.isArray(actual) ? actual.length : 'non-array'}`);
+      }
+    },
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Legacy validation (pattern matching + AST comparison)
+// Used as fallback when tests aren't defined
+// ─────────────────────────────────────────────────────────────────
+
 import * as acorn from 'acorn';
 import jsx from 'acorn-jsx';
 
 const JsxParser = acorn.Parser.extend(jsx());
-
 const PARSE_OPTS = { ecmaVersion: 2022 as const, sourceType: 'module' as const, allowReturnOutsideFunction: true };
 
 function tryParse(code: string): acorn.Node | null {
   try { return JsxParser.parse(code, PARSE_OPTS); } catch { /* */ }
   try { return JsxParser.parse(`function __w__(){\n${code}\n}`, PARSE_OPTS); } catch { /* */ }
-  try { return JsxParser.parseExpressionAt(code, 0, PARSE_OPTS) as acorn.Node; } catch { /* */ }
   return null;
 }
 
-// Well-known identifiers that should NOT be renamed during normalization
 const WELL_KNOWN = new Set([
   'React', 'useState', 'useEffect', 'useRef', 'useContext', 'useMemo',
-  'useCallback', 'useReducer', 'createContext', 'forwardRef',
-  'console', 'log', 'error', 'warn', 'document', 'window',
-  'localStorage', 'JSON', 'parse', 'stringify', 'getItem', 'setItem',
-  'removeItem', 'preventDefault', 'stopPropagation', 'target', 'value',
-  'currentTarget', 'map', 'filter', 'reduce', 'forEach', 'find',
-  'includes', 'push', 'pop', 'shift', 'slice', 'splice', 'concat',
-  'length', 'trim', 'split', 'join', 'keys', 'values', 'entries',
+  'useCallback', 'useReducer', 'createContext',
+  'console', 'log', 'document', 'window', 'localStorage', 'JSON',
+  'parse', 'stringify', 'getItem', 'setItem',
+  'preventDefault', 'target', 'value',
+  'map', 'filter', 'forEach', 'find', 'includes', 'length',
   'setTimeout', 'setInterval', 'clearInterval', 'clearTimeout',
-  'requestAnimationFrame', 'Promise', 'fetch', 'then', 'catch',
-  'true', 'false', 'null', 'undefined', 'NaN', 'Infinity',
+  'fetch', 'then', 'catch',
   'Array', 'Object', 'String', 'Number', 'Boolean', 'Math',
-  'props', 'children', 'className', 'style', 'onClick', 'onChange',
-  'onSubmit', 'onMouseDown', 'onMouseUp', 'onMouseMove', 'onKeyDown',
-  'href', 'type', 'key', 'ref', 'id', 'name', 'placeholder',
-  'disabled', 'checked', 'selected', 'readOnly',
-  'Link', 'Component', 'Fragment', 'Provider',
-  'set', 'get', 'create', 'from', 'of', 'is',
-  'json', 'ok', 'status', 'headers', 'body', 'method',
+  'props', 'children', 'onClick', 'onChange', 'onSubmit',
+  'href', 'type', 'key', 'ref', 'id', 'name',
+  'Link', 'Provider',
 ]);
+const SKIP_KEYS = new Set(['start', 'end', 'loc', 'range', 'raw', 'sourceType']);
 
-// Keys to skip when serializing — positional/source info
-const SKIP_KEYS = new Set(['start', 'end', 'loc', 'range', 'raw', 'sourceType', 'extra', 'trailingComments', 'leadingComments', 'comments']);
-
-/**
- * Serialize an AST node into a canonical JSON-like structure.
- * Variable names are mapped to positional ids ($0, $1, ...).
- * Positions/comments are stripped. Everything else is preserved.
- */
 function serialize(node: unknown, nameMap: Map<string, string>): unknown {
   if (node === null || node === undefined) return null;
   if (typeof node === 'string' || typeof node === 'number' || typeof node === 'boolean') return node;
   if (Array.isArray(node)) {
-    return node
-      .map(n => serialize(n, nameMap))
-      .filter(n => {
-        // Remove whitespace-only JSXText nodes
-        if (n && typeof n === 'object' && (n as Record<string, unknown>).type === 'JSXText') {
-          const val = (n as Record<string, unknown>).value as string;
-          return val !== '';
-        }
-        return true;
-      });
+    return node.map(n => serialize(n, nameMap)).filter(n => {
+      if (n && typeof n === 'object' && (n as Record<string, unknown>).type === 'JSXText') {
+        return (n as Record<string, unknown>).value !== '';
+      }
+      return true;
+    });
   }
   if (typeof node !== 'object') return null;
-
   const n = node as Record<string, unknown>;
   const type = n.type as string | undefined;
   if (!type) return null;
-
   const out: Record<string, unknown> = { type };
 
-  // Handle identifiers: rename user-defined, keep well-known
   if (type === 'Identifier') {
     const name = n.name as string;
-    if (WELL_KNOWN.has(name)) {
-      out.name = name;
-    } else {
-      if (!nameMap.has(name)) nameMap.set(name, `$${nameMap.size}`);
-      out.name = nameMap.get(name);
-    }
+    if (WELL_KNOWN.has(name)) { out.name = name; }
+    else { if (!nameMap.has(name)) nameMap.set(name, `$${nameMap.size}`); out.name = nameMap.get(name); }
     return out;
   }
-
-  // JSX identifiers are always kept as-is (tag names, attribute names)
-  if (type === 'JSXIdentifier') {
-    out.name = n.name;
-    return out;
+  if (type === 'JSXIdentifier') { out.name = n.name; return out; }
+  if (type === 'JSXText') { out.value = (n.value as string).replace(/\s+/g, ' ').trim(); return out; }
+  if (type === 'UpdateExpression' && (n.operator === '++' || n.operator === '--')) {
+    return { type: 'BinaryExpression', operator: n.operator === '++' ? '+' : '-', left: serialize(n.argument, nameMap), right: 1 };
   }
 
-  // JSX text: normalize whitespace
-  if (type === 'JSXText') {
-    out.value = (n.value as string).replace(/\s+/g, ' ').trim();
-    return out;
-  }
-
-  // Normalize equivalent React patterns before recursing:
-  //
-  // 1. setFoo(c => c + 1) → setFoo($arg + 1)
-  //    Arrow-function updater with single param that just applies
-  //    an operation on that param is equivalent to the direct form.
-  if (type === 'CallExpression') {
-    const args = n.arguments as unknown[];
-    if (args?.length === 1) {
-      const arg = args[0] as Record<string, unknown>;
-      if (arg?.type === 'ArrowFunctionExpression') {
-        const params = arg.params as Record<string, unknown>[];
-        const body = arg.body as Record<string, unknown>;
-        // Arrow with single param and expression body (not block)
-        if (params?.length === 1 && body?.type && body.type !== 'BlockStatement') {
-          const paramName = (params[0] as Record<string, unknown>).name as string;
-          // Create a temporary nameMap entry so the param maps to
-          // the same id as the outer variable would
-          const innerMap = new Map(nameMap);
-          // Find what the outer scope's equivalent variable maps to
-          // by looking at the callee — if it's setFoo, map param to
-          // the same id as foo would get
-          const callee = n.callee as Record<string, unknown>;
-          if (callee?.type === 'Identifier') {
-            const setterName = callee.name as string;
-            // Convention: setter is setX, state is x (lowercase first letter)
-            const stateName = setterName.replace(/^set/, '').replace(/^./, c => c.toLowerCase());
-            if (nameMap.has(stateName)) {
-              innerMap.set(paramName, nameMap.get(stateName)!);
-            }
-          }
-          // Serialize as a direct call with the body expression
-          const serializedCallee = serialize(n.callee, nameMap);
-          const serializedBody = serialize(body, innerMap);
-          return { type: 'CallExpression', callee: serializedCallee, arguments: [serializedBody], optional: false };
-        }
-      }
-    }
-  }
-
-  // 2. x++ / ++x → x + 1 (UpdateExpression → BinaryExpression)
-  if (type === 'UpdateExpression' && n.operator === '++') {
-    return {
-      type: 'BinaryExpression',
-      operator: '+',
-      left: serialize(n.argument, nameMap),
-      right: 1,
-    };
-  }
-  if (type === 'UpdateExpression' && n.operator === '--') {
-    return {
-      type: 'BinaryExpression',
-      operator: '-',
-      left: serialize(n.argument, nameMap),
-      right: 1,
-    };
-  }
-
-  // Recurse all keys except positional ones
   for (const [k, v] of Object.entries(n)) {
     if (k === 'type' || SKIP_KEYS.has(k)) continue;
     out[k] = serialize(v, nameMap);
   }
-
   return out;
 }
 
@@ -160,41 +369,23 @@ function structuralMatch(userCode: string, solution: string): boolean {
   const userAst = tryParse(userCode);
   const solutionAst = tryParse(solution);
   if (!userAst || !solutionAst) return false;
-
-  const u = JSON.stringify(serialize(userAst, new Map()));
-  const s = JSON.stringify(serialize(solutionAst, new Map()));
-  return u === s;
+  return JSON.stringify(serialize(userAst, new Map())) === JSON.stringify(serialize(solutionAst, new Map()));
 }
 
-// Normalized string comparison as fallback.
-// Strips whitespace AND identifier prefixes before dots/parens
-// so e.preventDefault() matches ev.preventDefault() matches event.preventDefault()
 function normalizedStringMatch(userCode: string, patterns: string[]): boolean {
-  // Collapse whitespace
   const normalized = userCode.replace(/\s+/g, ' ').trim().toLowerCase();
   return patterns.every(pattern => {
     const p = pattern.replace(/\s+/g, ' ').trim().toLowerCase();
     if (normalized.includes(p)) return true;
-    // Try matching with flexible identifier before dots
-    // e.g. "e.preventdefault()" matches "ev.preventdefault()" or "event.preventdefault()"
     const dotPattern = p.replace(/^[a-z_$][a-z0-9_$]*\./i, '___DOT___.');
     if (dotPattern !== p) {
-      const flexRegex = new RegExp('[a-z_$][a-z0-9_$]*\\.' + escapeRegex(dotPattern.split('___DOT___.')[1]));
+      const flexRegex = new RegExp('[a-z_$][a-z0-9_$]*\\.' + p.split('.').slice(1).join('.').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
       return flexRegex.test(normalized);
     }
     return false;
   });
 }
 
-function escapeRegex(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/**
- * Validate user code against one or more accepted solutions.
- * 1. Try full AST structural match against each solution
- * 2. Fall back to normalized string pattern matching
- */
 export function validateCode(
   userCode: string,
   solution: string | string[],

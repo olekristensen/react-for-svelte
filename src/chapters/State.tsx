@@ -3,6 +3,7 @@ import { CodeComparison } from '../components/CodeComparison';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
+import { expect } from '../utils/codeValidator';
 import { ChapterLayout } from '../components/ChapterLayout';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
@@ -644,7 +645,17 @@ function TodoApp() {
     </button>
   );
 }`}
-        validationPatterns={["setCount(count + 1)", "function increment()"]}
+        validationPatterns={["setCount("]}
+        tests={[
+          {
+            name: 'Counter starts at 0',
+            test: (ctx) => { ctx.render(); expect(ctx.stateValue(0)).toBe(0); }
+          },
+          {
+            name: 'Counter increments on click',
+            test: (ctx) => { ctx.render(); ctx.click('button'); expect(ctx.stateUpdates(0)[0]).toBe(1); }
+          },
+        ]}
         hints={[
           "In React, you cannot modify state variables directly — they are read-only",
           "Use the setter function returned by useState to update state",
