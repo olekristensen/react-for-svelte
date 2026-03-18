@@ -363,7 +363,7 @@ export default function App() {
         transition: 'margin-left 0.25s ease',
         minHeight: '100vh',
       }}>
-        <div style={{ padding: '2rem 2.5rem 4rem', overflow: 'hidden' }}>
+        <div style={{ padding: '2rem 2.5rem 4rem' }}>
           <Routes>
             <Route path="/" element={<Navigate to="/welcome" replace />} />
             {allChapters.map(ch => {

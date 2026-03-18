@@ -43,18 +43,13 @@ function Confetti() {
       `}</style>
       <div style={{
         position: 'absolute',
-        inset: '-200px -400px',
+        top: '50%',
+        left: '50%',
+        width: 0,
+        height: 0,
         zIndex: -1,
         pointerEvents: 'none',
-        overflow: 'visible',
       }}>
-        <div style={{
-          position: 'absolute',
-          top: 'calc(50% + 200px)',
-          left: 'calc(50% + 400px)',
-          width: 0,
-          height: 0,
-        }}>
           {particles.map(p => (
             <div
               key={p.id}
@@ -71,7 +66,6 @@ function Confetti() {
               } as React.CSSProperties}
             />
           ))}
-        </div>
       </div>
     </>
   );
