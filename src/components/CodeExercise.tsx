@@ -31,12 +31,12 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
       color: string; life: number; maxLife: number;
     }
 
-    const particles: P[] = Array.from({ length: 100 }, () => {
-      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4; // upward fan
+    const particles: P[] = Array.from({ length: 120 }, () => {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4;
       const speed = 500 + Math.random() * 500;
       const hue = 125 + Math.random() * 35;
       const lightness = 35 + Math.random() * 30;
-      return {
+      const p: P = {
         x: ox, y: oy,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
@@ -46,8 +46,23 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
         vr: (Math.random() - 0.5) * 12,
         color: `hsl(${hue}, ${55 + Math.random() * 15}%, ${lightness}%)`,
         life: 0,
-        maxLife: 1.5 + Math.random() * 1.5,
+        maxLife: 2.0 + Math.random() * 1.5,
       };
+
+      // Fast-forward physics until particle clears the box,
+      // then reset life to 0 so fade starts from the edge
+      const simDt = 1 / 120;
+      for (let s = 0; s < 300; s++) {
+        p.vy += gravity * simDt;
+        p.vx *= friction;
+        p.x += p.vx * simDt;
+        p.y += p.vy * simDt;
+        p.r += p.vr * simDt;
+        if (p.x < rect.left || p.x > rect.right || p.y < rect.top || p.y > rect.bottom) break;
+      }
+      p.life = 0; // fresh start — full opacity from the edge
+
+      return p;
     });
 
     let lastTime = performance.now();
