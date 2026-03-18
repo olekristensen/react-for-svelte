@@ -5,6 +5,7 @@ import { Callout } from '../components/Callout';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { CodeExercise } from '../components/CodeExercise';
+import { expect } from '../utils/codeValidator';
 
 const h2Style = { marginTop: '2.5rem', marginBottom: '1rem', fontSize: '1.4rem' };
 const h3Style = { marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '1.1rem', color: 'var(--color-text-secondary)' };
@@ -548,10 +549,11 @@ function FancyButton({
         validationPatterns={["e.preventDefault()"]}
         tests={[
           {
-            name: 'Form submit does not throw',
+            name: 'preventDefault is called on form submit',
             test: (ctx) => {
               ctx.render();
               ctx.submit('form');
+              expect(ctx.preventDefaultCalled).toBeTruthy();
             }
           },
         ]}

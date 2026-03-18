@@ -40,6 +40,8 @@ interface TestContext {
   runCleanups: () => void;
   /** Advance time for setTimeout/setInterval */
   advanceTime: (ms: number) => void;
+  /** Whether preventDefault was called during the last submit */
+  preventDefaultCalled: boolean;
 }
 
 interface ElementNode {
@@ -195,6 +197,8 @@ function createTestContext(code: string): TestContext | null {
     return lastElement;
   };
 
+  let _preventDefaultCalled = false;
+
   return {
     render,
     rerender: render,
@@ -205,10 +209,11 @@ function createTestContext(code: string): TestContext | null {
       }
     },
     submit: (selector: string) => {
+      _preventDefaultCalled = false;
       const el = lastElement ? findElement(lastElement, selector) : null;
       if (el?.props?.onSubmit) {
         const mockEvent = {
-          preventDefault: () => {},
+          preventDefault: () => { _preventDefaultCalled = true; },
           target: {},
           currentTarget: {},
         };
@@ -217,6 +222,7 @@ function createTestContext(code: string): TestContext | null {
     },
     stateUpdates: (index = 0) => states[index]?.updates || [],
     stateValue: (index = 0) => states[index]?.value,
+    get preventDefaultCalled() { return _preventDefaultCalled; },
     get hasEffectCleanup() { return hasCleanup; },
     runCleanups: () => { effectCleanups.forEach(fn => fn()); },
     advanceTime: (ms: number) => {
