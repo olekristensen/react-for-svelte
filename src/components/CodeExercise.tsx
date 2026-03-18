@@ -31,7 +31,7 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
       color: string; life: number; maxLife: number;
     }
 
-    const particles: P[] = Array.from({ length: 120 }, () => {
+    const particles: P[] = Array.from({ length: 200 }, () => {
       const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4;
       const speed = 500 + Math.random() * 500;
       const hue = 125 + Math.random() * 35;
@@ -64,8 +64,8 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
       // Restore original velocity so gravity arc starts fresh from edge
       p.vx = savedVx;
       p.vy = savedVy;
-      // Stagger: negative life = delay before becoming visible
-      p.life = -(Math.random() * 0.3);
+      // Stagger over ~1 second
+      p.life = -(Math.random() * 1.0);
 
       return p;
     });
@@ -732,7 +732,7 @@ export function CodeExercise({
     if (validate(userCode, validationPatterns)) {
       setStatus('correct');
       setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3500);
+      setTimeout(() => setShowConfetti(false), 5000);
       saveExercise(id, { userCode, solved: true, attempts: newAttempts });
     } else {
       setStatus('incorrect');
