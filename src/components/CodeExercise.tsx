@@ -49,18 +49,22 @@ function Confetti({ boxRef }: { boxRef: React.RefObject<HTMLDivElement | null> }
         maxLife: 2.0 + Math.random() * 1.5,
       };
 
-      // Fast-forward physics until particle clears the box,
-      // then reset life to 0 so fade starts from the edge
-      const simDt = 1 / 120;
-      for (let s = 0; s < 300; s++) {
-        p.vy += gravity * simDt;
-        p.vx *= friction;
+      // Advance along initial trajectory (no gravity) until the
+      // particle clears the box, so it appears at the edge with
+      // its original launch velocity intact
+      const simDt = 1 / 240;
+      const savedVx = p.vx;
+      const savedVy = p.vy;
+      for (let s = 0; s < 500; s++) {
         p.x += p.vx * simDt;
         p.y += p.vy * simDt;
         p.r += p.vr * simDt;
         if (p.x < rect.left || p.x > rect.right || p.y < rect.top || p.y > rect.bottom) break;
       }
-      p.life = 0; // fresh start — full opacity from the edge
+      // Restore original velocity so gravity arc starts fresh from edge
+      p.vx = savedVx;
+      p.vy = savedVy;
+      p.life = 0;
 
       return p;
     });
