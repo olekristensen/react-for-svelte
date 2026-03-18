@@ -23,12 +23,17 @@ const typeColors: Record<string, string> = {
 export function Callout({ type = 'info', title, children }: CalloutProps) {
   const label = title || typeLabels[type];
   const color = typeColors[type] || typeColors.info;
+  const isInsight = type === 'insight';
 
   return (
     <aside style={{
       margin: '1.5rem 0',
       paddingTop: '0.75rem',
+      paddingBottom: isInsight ? '0.85rem' : undefined,
+      paddingLeft: isInsight ? '1rem' : undefined,
+      paddingRight: isInsight ? '1rem' : undefined,
       borderTop: `1px solid ${color}`,
+      background: isInsight ? 'var(--color-accent-dim)' : undefined,
     }}>
       <div style={{
         fontSize: '0.7rem',

@@ -8,55 +8,62 @@ interface CodeComparisonProps {
 
 export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
-    <div style={{ marginBottom: '1.5rem' }}>
+    <div style={{
+      marginBottom: '1.5rem',
+      marginLeft: '-1rem',
+      marginRight: '-1rem',
+    }}>
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '0.75rem',
+        gap: '1px',
+        background: 'var(--color-border)',
       }}>
-        <div>
+        <div style={{ background: 'var(--color-bg)' }}>
           <div style={{
-            marginBottom: '0.5rem',
-            fontSize: '0.75rem',
+            padding: '0.4rem 0.75rem',
+            fontSize: '0.7rem',
             fontWeight: 500,
             color: 'var(--color-text-muted)',
+            background: 'var(--color-bg-tertiary)',
+            borderBottom: '1px solid var(--color-border)',
           }}>
-            Svelte
+            {svelte.filename || 'Svelte'}
           </div>
           <CodeBlock
             code={svelte.code}
             language={svelte.language || 'svelte'}
-            filename={svelte.filename}
             highlight={svelte.highlight}
           />
         </div>
-        <div>
+        <div style={{ background: 'var(--color-bg)' }}>
           <div style={{
-            marginBottom: '0.5rem',
-            fontSize: '0.75rem',
+            padding: '0.4rem 0.75rem',
+            fontSize: '0.7rem',
             fontWeight: 500,
             color: 'var(--color-text-muted)',
+            background: 'var(--color-bg-tertiary)',
+            borderBottom: '1px solid var(--color-border)',
           }}>
-            React
+            {react.filename || 'React'}
           </div>
           <CodeBlock
             code={react.code}
             language={react.language || 'tsx'}
-            filename={react.filename}
             highlight={react.highlight}
           />
         </div>
       </div>
       {note && (
         <div style={{
-          paddingTop: '0.6rem',
-          marginTop: '0.5rem',
-          borderTop: '1px solid var(--color-border)',
+          padding: '0.75rem 1rem',
+          background: 'var(--color-accent-dim)',
           fontSize: '0.82rem',
           color: 'var(--color-text-secondary)',
-          lineHeight: 1.6,
+          lineHeight: 1.65,
         }}>
-          <span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--color-accent)', marginRight: '0.4rem', letterSpacing: '0.02em' }}>Insight</span>{note}
+          <span style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--color-accent)', marginRight: '0.4rem', letterSpacing: '0.02em' }}>Insight</span>
+          {note}
         </div>
       )}
     </div>

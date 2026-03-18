@@ -41,11 +41,20 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
 
   return (
     <article style={{ maxWidth: 'var(--content-max-width)', margin: '0 auto', width: '100%' }}>
+      <style>{`
+        .nav-link { transition: color 0.2s ease; }
+        .nav-link:hover { color: var(--color-accent) !important; }
+        .nav-link .nav-arrow { transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0; }
+        .nav-link:hover .nav-arrow { opacity: 1; }
+        .nav-link:hover .nav-arrow-left { transform: translateX(-3px); }
+        .nav-link:hover .nav-arrow-right { transform: translateX(3px); }
+      `}</style>
       <header style={{ marginBottom: '2.5rem' }}>
         <div style={{
           fontSize: '0.75rem',
           color: 'var(--color-text-muted)',
           marginBottom: '0.5rem',
+          letterSpacing: '0.02em',
         }}>
           {chapter?.section}
         </div>
@@ -80,6 +89,7 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
       }}>
         {prev ? (
           <button
+            className="nav-link"
             onClick={() => navigate(`/${prev.id}`)}
             style={{
               background: 'none',
@@ -91,12 +101,16 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
               padding: 0,
             }}
           >
-            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Previous</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>
+              <span className="nav-arrow nav-arrow-left" style={{ display: 'inline-block', marginRight: '0.25rem' }}>&larr;</span>
+              Previous
+            </div>
             <div style={{ fontSize: '0.88rem' }}>{prev.title}</div>
           </button>
         ) : <div />}
         {next ? (
           <button
+            className="nav-link"
             onClick={() => navigate(`/${next.id}`)}
             style={{
               background: 'none',
@@ -108,7 +122,10 @@ export function ChapterLayout({ id, children }: ChapterLayoutProps) {
               padding: 0,
             }}
           >
-            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>Next</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginBottom: 2 }}>
+              Next
+              <span className="nav-arrow nav-arrow-right" style={{ display: 'inline-block', marginLeft: '0.25rem' }}>&rarr;</span>
+            </div>
             <div style={{ fontSize: '0.88rem' }}>{next.title}</div>
           </button>
         ) : <div />}

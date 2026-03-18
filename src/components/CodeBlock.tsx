@@ -19,7 +19,6 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
 
   return (
     <div style={{
-      borderRadius: 'var(--radius-md)',
       overflow: 'hidden',
       border: '1px solid var(--color-border)',
       marginBottom: '1rem',
@@ -29,10 +28,12 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
           display: 'flex',
           alignItems: 'baseline',
           justifyContent: 'space-between',
-          padding: '0 0 0.3rem 0',
-          fontSize: '0.72rem',
+          padding: '0.4rem 0.75rem',
+          fontSize: '0.7rem',
           fontFamily: 'var(--font-mono)',
           color: 'var(--color-text-muted)',
+          background: 'var(--color-bg-tertiary)',
+          borderBottom: '1px solid var(--color-border)',
         }}>
           <span>{filename}</span>
           <button
@@ -42,12 +43,12 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
               border: 'none',
               color: 'var(--color-text-muted)',
               cursor: 'pointer',
-              fontSize: '0.72rem',
+              fontSize: '0.7rem',
               fontFamily: 'var(--font-sans)',
               padding: 0,
             }}
           >
-            {copied ? 'Copied!' : 'Copy'}
+            {copied ? 'Copied' : 'Copy'}
           </button>
         </div>
       )}
@@ -77,9 +78,19 @@ export function CodeBlock({ code, language = 'tsx', filename, highlight = [] }: 
                     marginLeft: '-0.75rem',
                   }}
                 >
-                  {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token })} />
-                  ))}
+                  {line.map((token, key) => {
+                    const tokenProps = getTokenProps({ token });
+                    // Brighten comments — they carry meaning in this tutorial
+                    const isComment = token.types.includes('comment');
+                    if (isComment) {
+                      tokenProps.style = {
+                        ...tokenProps.style,
+                        color: '#7faacc',
+                        fontStyle: 'italic',
+                      };
+                    }
+                    return <span key={key} {...tokenProps} />;
+                  })}
                 </div>
               );
             })}
