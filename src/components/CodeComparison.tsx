@@ -10,6 +10,8 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
   return (
     <div style={{
       margin: '1.5rem 0',
+      borderBottom: '1px solid var(--color-border)',
+      paddingBottom: note ? 0 : '0.5rem',
     }}>
       {/* Labels */}
       <div style={{
@@ -18,27 +20,20 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         gap: '1.5rem',
         marginBottom: '0.35rem',
       }}>
-        <div style={{
-          fontSize: '0.72rem',
-          fontWeight: 500,
-          color: 'var(--color-text-muted)',
-        }}>
+        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
           {svelte.filename || 'Svelte'}
         </div>
-        <div style={{
-          fontSize: '0.72rem',
-          fontWeight: 500,
-          color: 'var(--color-text-muted)',
-        }}>
+        <div style={{ fontSize: '0.72rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
           {react.filename || 'React'}
         </div>
       </div>
 
-      {/* Code blocks side by side */}
+      {/* Code blocks */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '1.5rem',
+        marginBottom: note ? '0.75rem' : 0,
       }}>
         <div>
           <CodeBlock
@@ -56,12 +51,10 @@ export function CodeComparison({ svelte, react, note }: CodeComparisonProps) {
         </div>
       </div>
 
-      {/* Insight note — sits directly below as a continuation */}
+      {/* Insight — inside the same bordered unit, no separator above */}
       {note && (
         <div style={{
-          marginTop: '-0.5rem',
-          paddingTop: '0.6rem',
-          borderTop: '1px solid var(--color-accent)',
+          padding: '0.6rem 0 0.75rem',
           fontSize: '0.85rem',
           color: 'var(--color-text-secondary)',
           lineHeight: 1.7,
