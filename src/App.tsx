@@ -22,6 +22,7 @@ import Performance from './chapters/Performance';
 import SuspenseErrors from './chapters/SuspenseErrors';
 import Patterns from './chapters/Patterns';
 import TypeScriptReact from './chapters/TypeScriptReact';
+import StyleDemo from './chapters/StyleDemo';
 import EcosystemState from './chapters/EcosystemState';
 import EcosystemData from './chapters/EcosystemData';
 import EcosystemForms from './chapters/EcosystemForms';
@@ -54,6 +55,7 @@ const chapterComponents: Record<string, React.FC> = {
   'suspense-errors': SuspenseErrors,
   'patterns': Patterns,
   'typescript': TypeScriptReact,
+  'style-demo': StyleDemo,
   'ecosystem-state': EcosystemState,
   'ecosystem-data': EcosystemData,
   'ecosystem-forms': EcosystemForms,

@@ -52,6 +52,7 @@ export const sections: Section[] = [
     title: 'React Ecosystem',
     color: 'var(--color-ecosystem)',
     chapters: [
+      { id: 'style-demo', title: '✦ Style Directions', section: 'React Ecosystem', description: 'Three design directions to choose from' },
       { id: 'ecosystem-state', title: 'State Management Libraries', section: 'React Ecosystem', description: 'Redux Toolkit, Zustand, Jotai, Valtio — choosing the right tool' },
       { id: 'ecosystem-data', title: 'Data Fetching Libraries', section: 'React Ecosystem', description: 'TanStack Query, SWR, tRPC — managing server state in React' },
       { id: 'ecosystem-forms', title: 'Form Libraries in Depth', section: 'React Ecosystem', description: 'React Hook Form, TanStack Form, Zod — beyond controlled components' },
