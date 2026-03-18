@@ -31,10 +31,6 @@ import NextjsData from './chapters/NextjsData';
 import NextjsRendering from './chapters/NextjsRendering';
 import NextjsServerActions from './chapters/NextjsServerActions';
 import NextjsMiddleware from './chapters/NextjsMiddleware';
-import NuxtIntro from './chapters/NuxtIntro';
-import NuxtReactivity from './chapters/NuxtReactivity';
-import NuxtRouting from './chapters/NuxtRouting';
-import NuxtComparison from './chapters/NuxtComparison';
 
 const chapterComponents: Record<string, React.FC> = {
   'welcome': Welcome,
@@ -66,10 +62,6 @@ const chapterComponents: Record<string, React.FC> = {
   'nextjs-rendering': NextjsRendering,
   'nextjs-server-actions': NextjsServerActions,
   'nextjs-middleware': NextjsMiddleware,
-  'nuxt-intro': NuxtIntro,
-  'nuxt-reactivity': NuxtReactivity,
-  'nuxt-routing': NuxtRouting,
-  'nuxt-comparison': NuxtComparison,
 };
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {

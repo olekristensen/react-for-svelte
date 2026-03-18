@@ -71,16 +71,6 @@ export const sections: Section[] = [
       { id: 'nextjs-middleware', title: 'Middleware & API Routes', section: 'Next.js', description: 'hooks.server.ts vs middleware.ts' },
     ],
   },
-  {
-    title: 'Nuxt.js (Vue\'s SvelteKit)',
-    color: 'var(--color-nuxt)',
-    chapters: [
-      { id: 'nuxt-intro', title: 'Nuxt Overview', section: 'Nuxt.js', description: 'Vue + Nuxt for Svelte developers — the third perspective' },
-      { id: 'nuxt-reactivity', title: 'Vue Reactivity for Svelte Devs', section: 'Nuxt.js', description: 'ref(), reactive(), computed() vs runes' },
-      { id: 'nuxt-routing', title: 'Nuxt Routing & Data', section: 'Nuxt.js', description: 'File-based routing, useFetch, useAsyncData' },
-      { id: 'nuxt-comparison', title: 'Three-Way Comparison', section: 'Nuxt.js', description: 'SvelteKit vs Next.js vs Nuxt — the comprehensive matrix' },
-    ],
-  },
 ];
 
 export const allChapters = sections.flatMap(s => s.chapters);

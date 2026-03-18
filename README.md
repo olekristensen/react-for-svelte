@@ -6,7 +6,7 @@ An interactive tutorial that teaches React to experienced Svelte developers. Ins
 
 ## What's inside
 
-33 chapters across 6 sections, progressing from fundamentals to full-stack frameworks:
+29 chapters across 5 sections, progressing from fundamentals to full-stack frameworks:
 
 ### Foundations
 Components & JSX, reactivity & state (`$state` vs `useState`), props, events, lifecycle & effects — the core mental model shift from compiler-first to runtime-first.
@@ -28,9 +28,6 @@ A dedicated section covering the libraries that React projects rely on, with hon
 
 ### Next.js (React's SvelteKit)
 App Router, routing & layouts, data fetching, rendering strategies (SSR/SSG/ISR), Server Actions, middleware.
-
-### Nuxt.js (Vue's SvelteKit)
-A third perspective — Vue reactivity, Nuxt routing & data, and a three-way SvelteKit vs Next.js vs Nuxt comparison.
 
 ## Every concept anchored to Svelte
 
