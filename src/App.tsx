@@ -36,6 +36,7 @@ import NextjsData from './chapters/NextjsData';
 import NextjsRendering from './chapters/NextjsRendering';
 import NextjsServerActions from './chapters/NextjsServerActions';
 import NextjsMiddleware from './chapters/NextjsMiddleware';
+import ReactEvolution from './chapters/ReactEvolution';
 
 const chapterComponents: Record<string, React.FC> = {
   'welcome': Welcome,
@@ -69,6 +70,7 @@ const chapterComponents: Record<string, React.FC> = {
   'nextjs-rendering': NextjsRendering,
   'nextjs-server-actions': NextjsServerActions,
   'nextjs-middleware': NextjsMiddleware,
+  'react-evolution': ReactEvolution,
 };
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {

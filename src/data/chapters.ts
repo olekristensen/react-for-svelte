@@ -73,6 +73,13 @@ export const sections: Section[] = [
       { id: 'nextjs-middleware', title: 'Middleware & API Routes', section: 'Next.js', description: 'hooks.server.ts vs middleware.ts' },
     ],
   },
+  {
+    title: 'The Road Ahead',
+    color: 'var(--color-accent)',
+    chapters: [
+      { id: 'react-evolution', title: 'React\'s Evolution & Roadmap', section: 'The Road Ahead', description: 'React 19, the React Compiler, Server Components, and where React is heading' },
+    ],
+  },
 ];
 
 export const allChapters = sections.flatMap(s => s.chapters);
