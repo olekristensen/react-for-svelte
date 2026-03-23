@@ -245,7 +245,7 @@ export function ProjectDashboard() {
         headers={['Concern', 'Solution', 'Why']}
         columnFormat={['prose', 'code', 'prose']}
         rows={[
-          ['Client state', 'Redux Toolkit', 'Enforced conventions, middleware, devtools, time-travel debugging'],
+          ['Client state', 'Redux Toolkit or MobX', 'Redux for flux-style conventions; MobX for rich domain models with computed properties and reactions'],
           ['Server data', 'TanStack Query + tRPC', 'End-to-end type safety from API to UI, automatic cache management'],
           ['Routing', 'TanStack Router', 'Type-safe params, search params, loaders, preloading'],
           ['Forms', 'React Hook Form + Zod', 'Performance at scale, composable schemas, field-level validation'],
@@ -359,7 +359,7 @@ export default usersSlice.reducer;`}
         columnFormat={['code', 'code', 'prose']}
         rows={[
           ['$state / $derived', 'useState / useMemo', 'Built-in React primitives; Zustand or Jotai for shared state'],
-          ['writable() / derived()', 'Zustand or Jotai', 'External stores for state shared across components'],
+          ['writable() / derived()', 'Zustand, Jotai, or MobX', 'Zustand/Jotai for simple shared state; MobX for class-based domain models'],
           ['SvelteKit load functions', 'TanStack Query', 'Server data fetching with caching, revalidation, and devtools'],
           ['bind:value', 'React Hook Form', 'Controlled inputs are built-in; RHF adds validation and performance'],
           ['transition: / in: / out:', 'Framer Motion', 'AnimatePresence for exit animations, motion.* for enter/animate'],

@@ -40,6 +40,37 @@ function FixedCartStore() {
   );
 }
 
+function BuggyMobxCounter() {
+  const [, setRender] = useState(0);
+  const [count] = useState(0);
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.3rem' }}>Count: {count}</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>Doubled: {count * 2}</p>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button onClick={() => setRender(r => r)} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setRender(r => r)} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>-</button>
+      </div>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-error)', marginTop: '0.4rem' }}>Clicks have no visible effect</p>
+    </div>
+  );
+}
+
+function FixedMobxCounter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div style={{ padding: '0.5rem', background: 'var(--color-bg-secondary)' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '0.3rem' }}>Count: {count}</p>
+      <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>Doubled: {count * 2}</p>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button onClick={() => setCount(c => c + 1)} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-accent)', color: '#ffffff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem' }}>+</button>
+        <button onClick={() => setCount(c => c - 1)} style={{ padding: '0.3rem 0.6rem', background: 'var(--color-bg-tertiary)', color: 'var(--color-text)', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>-</button>
+      </div>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.4rem' }}>Counter updates on every click</p>
+    </div>
+  );
+}
+
 export default function EcosystemState() {
   return (
     <ChapterLayout id="ecosystem-state">
@@ -960,6 +991,293 @@ function TodoApp() {
         <code> $state</code> mutations vs explicit store updates.
       </Callout>
 
+      {/* ===== MobX ===== */}
+      <h2 style={h2Style}>MobX -- Observable Classes and Transparent Reactivity</h2>
+      <p style={pStyle}>
+        MobX is the veteran of proxy-based state management in React, predating Valtio by
+        several years. While Valtio wraps plain objects in proxies, MobX uses a class-based
+        approach with decorators and explicit observability annotations. It is the most
+        "object-oriented" state management option in the React ecosystem and remains popular
+        in enterprise codebases, particularly those with complex domain models.
+      </p>
+
+      <p style={pStyle}>
+        For Svelte developers, MobX shares the same fundamental insight as Svelte's reactivity:
+        state should be mutable, and the framework should figure out what to re-render. The key
+        difference is that MobX works at runtime through proxies, while Svelte works at compile
+        time through the Svelte compiler.
+      </p>
+
+      <CodeComparison
+        svelte={{
+          code: `<!-- Svelte 5 — reactive class-like pattern -->
+<script>
+  class TodoStore {
+    todos = $state([]);
+
+    get completed() {
+      return $derived(this.todos.filter(t => t.done));
+    }
+
+    add(text) {
+      this.todos.push({ text, done: false });
+    }
+
+    toggle(index) {
+      this.todos[index].done = !this.todos[index].done;
+    }
+  }
+
+  const store = new TodoStore();
+</script>
+
+<input onkeydown={e => {
+  if (e.key === 'Enter') {
+    store.add(e.target.value);
+    e.target.value = '';
+  }
+}} />
+<p>{store.completed.length} done</p>
+{#each store.todos as todo, i}
+  <label>
+    <input type="checkbox" checked={todo.done}
+      onchange={() => store.toggle(i)} />
+    {todo.text}
+  </label>
+{/each}`,
+          filename: 'TodoApp.svelte',
+        }}
+        react={{
+          code: `// MobX — observable classes with decorators
+import { makeAutoObservable } from 'mobx';
+import { observer } from 'mobx-react-lite';
+
+class TodoStore {
+  todos: { text: string; done: boolean }[] = [];
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  get completed() {
+    return this.todos.filter(t => t.done);
+  }
+
+  add(text: string) {
+    this.todos.push({ text, done: false });
+  }
+
+  toggle(index: number) {
+    this.todos[index].done = !this.todos[index].done;
+  }
+}
+
+const store = new TodoStore();
+
+const TodoApp = observer(() => (
+  <div>
+    <input onKeyDown={e => {
+      if (e.key === 'Enter') {
+        store.add(e.currentTarget.value);
+        e.currentTarget.value = '';
+      }
+    }} />
+    <p>{store.completed.length} done</p>
+    {store.todos.map((todo, i) => (
+      <label key={i}>
+        <input type="checkbox" checked={todo.done}
+          onChange={() => store.toggle(i)} />
+        {todo.text}
+      </label>
+    ))}
+  </div>
+));`,
+          filename: 'TodoApp.tsx',
+          highlight: [2, 3, 9, 30],
+        }}
+        note="MobX's makeAutoObservable turns a plain class into a reactive store. The observer() HOC is required — it tells React which components should re-render when observables change. Without it, mutations happen but the UI won't update."
+      />
+
+      <p style={pStyle}>
+        MobX introduces two concepts that distinguish it from simpler alternatives like Zustand:
+      </p>
+      <p style={pStyle}>
+        <strong>makeAutoObservable</strong> inspects a class and automatically
+        marks properties as observable, getters as computed values, and methods as actions. This
+        eliminates boilerplate but requires understanding the observable/computed/action
+        distinction.
+      </p>
+      <p style={pStyle}>
+        <strong>observer()</strong> is a higher-order component that wraps your React component
+        and subscribes it to any observables accessed during rendering. Only the specific
+        observables read during the last render cause re-renders — this is similar to how Svelte
+        tracks reactive dependencies at compile time, but MobX does it at runtime.
+      </p>
+
+      <CodeBlock
+        code={`// MobX reactions — side effects when observables change
+import { autorun, reaction, when } from 'mobx';
+
+// autorun: runs immediately, re-runs when any accessed observable changes
+// Similar to Svelte's $effect
+const dispose1 = autorun(() => {
+  console.log(\`Total todos: \${store.todos.length}\`);
+});
+
+// reaction: more targeted — only reacts to specific data
+// Similar to Svelte's $effect with explicit dependencies
+const dispose2 = reaction(
+  () => store.completed.length,
+  (count) => {
+    document.title = \`\${count} completed\`;
+  }
+);
+
+// when: fires once when a condition becomes true, then disposes
+const dispose3 = when(
+  () => store.todos.length > 10,
+  () => {
+    alert('You have a lot of todos!');
+  }
+);
+
+// Clean up (like effect cleanup in React/Svelte)
+dispose1();
+dispose2();
+dispose3();`}
+        language="typescript"
+        filename="reactions.ts"
+      />
+
+      <Callout type="info" title="When MobX Makes Sense">
+        MobX shines in codebases with complex domain models — think ERP systems, financial
+        dashboards, or apps where business logic naturally lives in classes with computed
+        properties and methods. If your team thinks in object-oriented patterns and has domain
+        models with many derived values, MobX can be more natural than Zustand or Redux. The
+        trade-off is a larger bundle (~16 KB) and the requirement to wrap every React component
+        in <code>observer()</code>.
+      </Callout>
+
+      <Callout type="warning" title="MobX vs Valtio — Different Proxy Philosophies">
+        Both use JavaScript proxies for reactivity, but they serve different use cases.
+        Valtio is minimal (~3 KB), wraps plain objects, and feels like a simpler Zustand.
+        MobX is full-featured (~16 KB), uses classes with computed values and reactions, and
+        provides a complete reactive programming model. Choose Valtio for simplicity, MobX for
+        rich domain modeling.
+      </Callout>
+
+      <h3 style={h3Style}>Common MobX Pitfall: Forgetting observer()</h3>
+      <p style={pStyle}>
+        The single most common mistake with MobX is forgetting to wrap your component
+        in <code>observer()</code>. Without it, MobX has no way to know which components use
+        which observables, and mutations will change state without triggering re-renders. This
+        is particularly confusing because the state <em>is</em> changing — if you log it, you
+        will see the new values — but the UI stays frozen.
+      </p>
+
+      <CodeBlock
+        code={`// The #1 MobX mistake: forgetting observer()
+import { makeAutoObservable } from 'mobx';
+
+class Timer {
+  seconds = 0;
+  constructor() { makeAutoObservable(this); }
+  tick() { this.seconds++; }
+  reset() { this.seconds = 0; }
+}
+
+const timer = new Timer();
+setInterval(() => timer.tick(), 1000);
+
+// BUG: This component will never update!
+// It reads timer.seconds, but MobX doesn't know to re-render it.
+function TimerDisplay() {
+  return <p>Elapsed: {timer.seconds}s</p>;
+}
+
+// FIX: Wrap in observer() — now MobX tracks the read
+import { observer } from 'mobx-react-lite';
+
+const TimerDisplay = observer(() => {
+  return <p>Elapsed: {timer.seconds}s</p>;
+});`}
+        language="tsx"
+        filename="observer-pitfall.tsx"
+        highlight={[16, 17, 18, 24, 25, 26]}
+      />
+
+      <Callout type="gotcha" title="observer() Is Not Optional">
+        In Svelte, reactivity tracking is automatic — the compiler handles it. In MobX,
+        you must explicitly opt in every component
+        with <code>observer()</code>. If your MobX component is not updating, the answer
+        is almost always: you forgot <code>observer()</code>. Make it a habit to always
+        export <code>observer(YourComponent)</code> from every file that reads MobX state.
+      </Callout>
+
+      <CodeExercise
+        id="ecosystem-state-fix-mobx-observer"
+        title="Fix the MobX Counter"
+        type="fix-the-bug"
+        description="This counter uses MobX for state, but clicking the button does nothing visible. The state is updating correctly — the UI just doesn't know about it."
+        initialCode={`import { makeAutoObservable } from 'mobx';
+
+class CounterStore {
+  count = 0;
+  constructor() { makeAutoObservable(this); }
+  increment() { this.count++; }
+  decrement() { this.count--; }
+  get doubled() { return this.count * 2; }
+}
+
+const store = new CounterStore();
+
+function Counter() {
+  return (
+    <div>
+      <p>Count: {store.count}</p>
+      <p>Doubled: {store.doubled}</p>
+      <button onClick={() => store.increment()}>+</button>
+      <button onClick={() => store.decrement()}>-</button>
+    </div>
+  );
+}`}
+        solution={`import { makeAutoObservable } from 'mobx';
+import { observer } from 'mobx-react-lite';
+
+class CounterStore {
+  count = 0;
+  constructor() { makeAutoObservable(this); }
+  increment() { this.count++; }
+  decrement() { this.count--; }
+  get doubled() { return this.count * 2; }
+}
+
+const store = new CounterStore();
+
+const Counter = observer(function Counter() {
+  return (
+    <div>
+      <p>Count: {store.count}</p>
+      <p>Doubled: {store.doubled}</p>
+      <button onClick={() => store.increment()}>+</button>
+      <button onClick={() => store.decrement()}>-</button>
+    </div>
+  );
+});`}
+        validationPatterns={['observer']}
+        hints={[
+          "The state is changing — try adding console.log(store.count) after the mutation to confirm",
+          "MobX needs a way to know which components read which observables",
+          "Wrap the component function with observer() from mobx-react-lite"
+        ]}
+        buggyPreview={
+          <BuggyMobxCounter />
+        }
+        solvedPreview={
+          <FixedMobxCounter />
+        }
+      />
+
       {/* ===== Signals in React ===== */}
       <h3 style={h3Style}>Signals in React</h3>
       <p style={pStyle}>
@@ -1051,6 +1369,11 @@ function Counter() {
             'Strict conventions scale across large teams, middleware for logging/analytics, time-travel debugging, RTK Query for API layer',
           ],
           [
+            'Complex domain model (ERP, finance, simulation)',
+            'MobX',
+            'Observable classes with computed values and reactions map naturally to rich domain objects with many derived properties',
+          ],
+          [
             'Real-time collaborative app (whiteboards, editors)',
             'Valtio or Zustand',
             'Valtio\'s mutable model maps naturally to CRDT operations; Zustand works if you prefer explicit updates with transient state',
@@ -1087,43 +1410,50 @@ function Counter() {
 
       <ComparisonTable
         caption="Svelte store patterns mapped to React state libraries"
-        headers={['Svelte Pattern', 'Zustand Equivalent', 'Jotai Equivalent']}
-        columnFormat={['code', 'code', 'code']}
+        headers={['Svelte Pattern', 'Zustand Equivalent', 'Jotai Equivalent', 'MobX Equivalent']}
+        columnFormat={['code', 'code', 'code', 'code']}
         rows={[
           [
             'writable(value)',
             'create(() => ({ value, setValue }))',
             'atom(value)',
+            'observable property in class',
           ],
           [
             'derived(store, fn)',
             'useStore(s => fn(s))',
             'atom((get) => fn(get(baseAtom)))',
+            'get computed() in class',
           ],
           [
             '$store (subscribe)',
             'useStore(s => s.field)',
             'useAtomValue(myAtom)',
+            'observer(() => store.field)',
           ],
           [
             '$store = newValue (set)',
             'useStore(s => s.setValue)(newValue)',
             'useSetAtom(myAtom)(newValue)',
+            'store.field = newValue',
           ],
           [
             'store.update(fn)',
             'set((state) => ({ ...state, ...fn(state) }))',
             'set with useAtom write function',
+            'action method on class',
           ],
           [
             'Custom store (writable + methods)',
             'create with actions alongside state',
             'Write-only atom with (get, set) signature',
+            'class with makeAutoObservable',
           ],
           [
             'Store outside components',
             'create() returns hook, store is external',
             'atom() defined at module level',
+            'new Store() at module level',
           ],
         ]}
       />

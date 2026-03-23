@@ -25,6 +25,7 @@ export const exercises: ExerciseInfo[] = [
 
   // Ecosystem
   { id: 'ecosystem-state-complete-zustand', chapterId: 'ecosystem-state', title: 'Complete the Zustand Store', type: 'complete-the-code' },
+  { id: 'ecosystem-state-fix-mobx-observer', chapterId: 'ecosystem-state', title: 'Fix the MobX Counter', type: 'fix-the-bug' },
   { id: 'animation-complete-transition', chapterId: 'animation-transitions', title: 'Add CSS Transition', type: 'complete-the-code' },
 
   // Next.js
