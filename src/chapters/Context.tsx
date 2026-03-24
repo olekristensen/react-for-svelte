@@ -560,10 +560,11 @@ function DoubleDisplay() {
 
       <Callout type="insight" title="When to Use What">
         Use React Context for low-frequency updates like themes, locale, and authentication.
-        Use Zustand or Jotai for high-frequency updates like form state, real-time data, or
-        any state that many components subscribe to. The ecosystem has settled on this pragmatic
-        split because React Context was never designed to be a general-purpose state manager --
-        it was designed for dependency injection.
+        Use Zustand, Jotai, or MobX for high-frequency updates like form state, real-time data, or
+        any state that many components subscribe to. MobX is particularly strong when your state
+        has complex derived values and class-based domain models. The ecosystem has settled on this
+        pragmatic split because React Context was never designed to be a general-purpose state
+        manager -- it was designed for dependency injection.
       </Callout>
 
       {/* ===== Interactive Demo ===== */}
@@ -596,7 +597,7 @@ function DoubleDisplay() {
           ['Default value', 'Initial value in writable()', 'createContext(default)'],
           ['Custom methods', 'Custom store with set/update', 'Functions in context value'],
           ['DevTools', 'Svelte DevTools', 'React DevTools (Context tab)'],
-          ['External alternative', 'Built-in stores suffice', 'Zustand, Jotai, Valtio'],
+          ['External alternative', 'Built-in stores suffice', 'Zustand, Jotai, MobX, Valtio'],
         ]}
       />
 
@@ -607,8 +608,10 @@ function DoubleDisplay() {
         The biggest gotcha is the re-render behavior: React Context re-renders every consumer
         on every change, regardless of which property they read. For simple, infrequent updates
         (themes, auth, locale), this is fine. For complex, high-frequency state, reach for
-        Zustand or Jotai -- they bring Svelte-store-like ergonomics to React, with selector-based
-        subscriptions and minimal boilerplate. The React ecosystem compensates for the core API's
+        Zustand, Jotai, or MobX -- they bring Svelte-store-like ergonomics to React. Zustand and
+        Jotai offer selector-based subscriptions with minimal boilerplate. MobX provides
+        transparent reactivity through observable classes, making it ideal for complex domain
+        models with many computed properties. The React ecosystem compensates for the core API's
         limitations with excellent third-party libraries, and learning to pick the right tool
         for each type of state is a key skill in React development.
       </p>

@@ -990,8 +990,11 @@ export function LikeButton({
         When an external library is needed, the trend is toward simplicity. Zustand
         adoption is rising rapidly because it provides a minimal, hooks-based API with
         almost no boilerplate. Redux Toolkit remains a solid choice for large teams that
-        need strict patterns, but its share in new projects is declining. Jotai and Valtio
-        serve niche use cases &mdash; atomic state and proxy-based state, respectively.
+        need strict patterns, but its share in new projects is declining. MobX continues
+        to be the go-to for enterprise codebases with complex domain models &mdash; its
+        observable classes with computed values and reactions map naturally to rich business
+        logic. Jotai and Valtio serve niche use cases &mdash; atomic state and proxy-based
+        state, respectively.
       </p>
 
       <p style={pStyle}>
@@ -1024,7 +1027,7 @@ export function LikeButton({
         headers={['Concept', 'Svelte (Pioneer)', 'React (Adopting)']}
         rows={[
           ['Compiler-first optimization', 'Core architecture since v1 (2016)', 'React Compiler (stable 2025)'],
-          ['Signals / fine-grained reactivity', '$state runes in Svelte 5', 'TC39 Signals proposal (in progress)'],
+          ['Signals / fine-grained reactivity', '$state runes in Svelte 5', 'TC39 Signals proposal; MobX pioneered observable reactivity in React'],
           ['Server-side data loading', 'SvelteKit load functions', 'React Server Components'],
           ['Built-in form actions', 'SvelteKit form actions', 'React 19 Actions + useActionState'],
           ['No manual memoization', 'Never needed it', 'React Compiler eliminates it'],
@@ -1152,7 +1155,9 @@ export function LikeButton({
         developer experience feels like. Apply that taste to your React work. Start simple.
         Use built-in hooks before reaching for libraries. Let the compiler handle
         performance. Write server components when you need server data. Reach for Zustand
-        when <code>useContext</code> gets unwieldy. Reach for TanStack Query when your{' '}
+        or MobX when <code>useContext</code> gets unwieldy &mdash; Zustand for lightweight
+        shared state, MobX when your domain model has rich computed properties and
+        reactions. Reach for TanStack Query when your{' '}
         <code>useEffect</code> data fetching becomes a tangle. Let the pain guide the
         architecture, not blog posts or conference talks.
       </p>

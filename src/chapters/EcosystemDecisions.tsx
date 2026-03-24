@@ -142,7 +142,7 @@ export function ContactList() {
         headers={['Concern', 'Solution', 'Why']}
         columnFormat={['prose', 'code', 'prose']}
         rows={[
-          ['Client state', 'Zustand', 'Minimal API, no boilerplate, granular subscriptions'],
+          ['Client state', 'Zustand or MobX', 'Zustand for minimal API; MobX when domain logic has many computed values'],
           ['Server data', 'TanStack Query', 'Caching, background refetch, optimistic updates, devtools'],
           ['Routing', 'React Router or TanStack Router', 'TanStack Router adds type-safe params and search params'],
           ['Forms', 'React Hook Form + Zod', 'Uncontrolled for performance, schema validation, great DX'],

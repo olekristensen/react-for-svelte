@@ -124,7 +124,7 @@ export default function Hello() {
         Ecosystem and Tooling
       </h3>
       <p style={{ marginBottom: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
-        State management libraries (Zustand, Jotai, Redux Toolkit), styling approaches
+        State management libraries (Zustand, Jotai, MobX, Redux Toolkit), styling approaches
         (Tailwind, styled-components, CSS Modules), testing with Vitest and React Testing Library,
         and the broader React ecosystem you will be working within.
       </p>
